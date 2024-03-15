@@ -28,11 +28,12 @@ public class ClientsController {
     public ResponseGlobalPagination<List<Clients>> findAllClients(
             @RequestParam(value = "page", defaultValue = "0", required = false) int page,
             @RequestParam(value = "limit", defaultValue = "10", required = false) int limit,
-            @RequestParam(value = "sort", defaultValue = "id", required = false) String sort,
+            @RequestParam(value = "sort", defaultValue = "createdAt", required = false) String sort,
             @RequestParam(value = "filterCriteriaText", defaultValue = "", required = false) String filterCriteriaText,
-            @RequestParam(value = "identification", defaultValue = "", required = false) String identification,
-            @RequestParam(value = "orderBy", defaultValue = "", required = false) OrderBy orderBy) {
-        return clientsService.findAllClients(new ParamsClients(page, limit, Sort.by(sort), filterCriteriaText, identification,orderBy));
+            @RequestParam(value = "orderBy", defaultValue = "", required = false) OrderBy orderBy,
+            @RequestParam(value = "startDate", defaultValue = "", required = false) String startDate,
+            @RequestParam(value = "endDate", defaultValue = "", required = false) String endDate) {
+        return clientsService.findAllClients(new ParamsClients(page, limit, Sort.by(sort), filterCriteriaText, orderBy, startDate, endDate));
     }
 
     @GetMapping(path = "/{id}")

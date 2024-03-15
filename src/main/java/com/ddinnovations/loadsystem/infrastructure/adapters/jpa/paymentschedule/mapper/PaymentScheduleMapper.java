@@ -19,6 +19,8 @@ public class PaymentScheduleMapper {
                 .paymentCycle(paymentSchedule.getPaymentCycle())
                 .paymentStatus(paymentSchedule.getPaymentStatus())
                 .searchKey(paymentSchedule.getSearchKey())
+                .createdAt(paymentSchedule.getCreatedAt())
+                .updatedAt(paymentSchedule.getUpdatedAt())
                 .build();
     }
 

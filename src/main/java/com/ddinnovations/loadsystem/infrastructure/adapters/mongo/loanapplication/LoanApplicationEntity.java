@@ -19,5 +19,13 @@ public class LoanApplicationEntity {
     private Loan loan;
     private BankAccount bankAccount;
     private PersonalReference personalReference;
+    private String searchKey;
     private LocalDateTime createAt;
+
+    public void insert(){
+        this.searchKey = (this.client.getFullName() + "|" + this.client.getIdentification() + "|" + this.loan.getAmount() +  '|' + this.loan.getPaymentCycle().name() + '|' + this.client.getEmail()).toLowerCase();
+
+    }
+
+
 }

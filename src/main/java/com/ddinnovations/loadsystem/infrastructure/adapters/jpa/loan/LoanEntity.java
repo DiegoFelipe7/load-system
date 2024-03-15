@@ -27,6 +27,7 @@ public class LoanEntity {
     private PaymentOfPayroll paymentCycle;
     private double interest;
     private int deadline;
+    private int numberOfPayments;
     private String description;
     private String searchKey;
     private LoanState loanState;
@@ -43,20 +44,21 @@ public class LoanEntity {
     @PrePersist()
     public void insert() {
         this.interest = 0;
+        this.numberOfPayments = 0;
         this.earnings = BigDecimal.ZERO;
         this.loanState = LoanState.Pendiente;
-        this.searchKey = (this.client.getEmail() + "|" + this.client.getIdentification() + "|" + this.amount.toString() +  '|' + this.paymentCycle.name() + '|' + this.createdAt + '|' + this.deadline).toLowerCase();
+        this.searchKey = (this.client.getEmail() + "|" + this.client.getIdentification() + "|" + this.amount.toString() + '|' + this.paymentCycle.name() + '|' + this.createdAt + '|' + this.deadline).toLowerCase();
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
 
     @PreUpdate()
     public void update() {
-      this.searchKey = (this.client.getEmail() + "|" + this.client.getIdentification() + "|" + this.amount.toString() + '|' + this.paymentCycle.name() + '|' + this.description + '|' + this.createdAt + '|' + this.deadline).toLowerCase();
+        this.searchKey = (this.client.getEmail() + "|" + this.client.getIdentification() + "|" + this.amount.toString() + '|' + this.paymentCycle.name() + '|' + this.description + '|' + this.createdAt + '|' + this.deadline).toLowerCase();
         this.updatedAt = LocalDateTime.now();
     }
 
-    public BigDecimal earnings(){
+    public BigDecimal earnings() {
         double interestRate = interest / 100.0;
         return this.amount.multiply(BigDecimal.valueOf(interestRate))
                 .multiply(BigDecimal.valueOf(this.deadline));

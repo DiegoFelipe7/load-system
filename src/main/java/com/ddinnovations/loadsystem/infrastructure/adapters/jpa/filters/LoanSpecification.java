@@ -1,5 +1,6 @@
 package com.ddinnovations.loadsystem.infrastructure.adapters.jpa.filters;
 
+import com.ddinnovations.loadsystem.domain.entity.enums.LoanState;
 import com.ddinnovations.loadsystem.domain.entity.enums.PaymentOfPayroll;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.helpers.GenerateDates;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.loan.LoanEntity;
@@ -21,6 +22,7 @@ import java.util.List;
 public class LoanSpecification implements Specification<LoanEntity> {
     private String filterCriteriaText;
     private PaymentOfPayroll paymentMethod;
+    private LoanState loanState;
     private String startDate;
 
     @Override
@@ -32,16 +34,19 @@ public class LoanSpecification implements Specification<LoanEntity> {
             predicates.add(filter);
         }
 
-        if (getPaymentMethod()!=null) {
-            Predicate paymentStatus = criteriaBuilder.equal(root.get("paymentMethod"), getPaymentMethod());
+        if (getPaymentMethod() != null) {
+            Predicate paymentStatus = criteriaBuilder.equal(root.get("paymentCycle"), getPaymentMethod());
             predicates.add(paymentStatus);
         }
-       /*
-        if (StringUtils.hasText(getStartDate()) && StringUtils.hasText(getEndDate())) {
-            System.out.println(GenerateDates.convertDate(getStartDate()));
-            Predicate dateRange = criteriaBuilder.between(root.get("createdAt"), GenerateDates.convertDate(getStartDate()), GenerateDates.convertDate(getEndDate()));
+
+        if (getLoanState() != null) {
+            Predicate paymentStatus = criteriaBuilder.equal(root.get("loanState"), getLoanState());
+            predicates.add(paymentStatus);
+        }
+       if (StringUtils.hasText(startDate)) {
+            Predicate dateRange = criteriaBuilder.between(root.get("createdAt"), GenerateDates.starDate(getStartDate()),GenerateDates.endDate(getStartDate()));
             predicates.add(dateRange);
-        }*/
+        }
 
         return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
     }

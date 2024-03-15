@@ -1,13 +1,11 @@
 package com.ddinnovations.loadsystem.infrastructure.adapters.mongo.loanapplication;
 
 import com.ddinnovations.loadsystem.domain.entity.LoanApplication;
-import com.ddinnovations.loadsystem.domain.entity.PaymentSchedule;
 import com.ddinnovations.loadsystem.domain.entity.common.BusinessException;
 import com.ddinnovations.loadsystem.domain.entity.dto.Id;
 import com.ddinnovations.loadsystem.domain.entity.dto.LoanRequestDTO;
 import com.ddinnovations.loadsystem.domain.entity.params.ParamsLoan;
 import com.ddinnovations.loadsystem.domain.entity.response.Pagination;
-import com.ddinnovations.loadsystem.domain.entity.response.Params;
 import com.ddinnovations.loadsystem.domain.entity.response.ResponseGlobal;
 import com.ddinnovations.loadsystem.domain.entity.response.ResponseGlobalPagination;
 import com.ddinnovations.loadsystem.domain.repository.LoanApplicationRepository;
@@ -15,12 +13,14 @@ import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.clients.ClientsD
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.clients.ClientsEntity;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.clients.ClientsRepositoryAdapter;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.clients.mapper.ClientMapper;
-import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.filters.LoanSpecification;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.loan.LoanRepositoryAdapter;
 import com.ddinnovations.loadsystem.infrastructure.adapters.mongo.helpers.AdapterOperations;
 import com.ddinnovations.loadsystem.infrastructure.adapters.mongo.loanapplication.mapper.LoanApplicationMapper;
 import org.reactivecommons.utils.ObjectMapper;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +32,7 @@ public class LoanApplicationRepositoryAdapter extends AdapterOperations<LoanAppl
     private final ClientsDtoRepository clientsDtoRepository;
     private final LoanRepositoryAdapter loanRepositoryAdapter;
 
-    protected LoanApplicationRepositoryAdapter(LoanApplicationDtoRepository repository, ObjectMapper mapper, ClientsDtoRepository clientsDtoRepository, ClientsRepositoryAdapter clientsRepositoryAdapter, LoanRepositoryAdapter loanRepositoryAdapter) {
+    protected LoanApplicationRepositoryAdapter(LoanApplicationDtoRepository repository, ObjectMapper mapper, ClientsDtoRepository clientsDtoRepository, ClientsRepositoryAdapter clientsRepositoryAdapter, LoanRepositoryAdapter loanRepositoryAdapter, MongoTemplate mongoTemplate) {
         super(repository, mapper, d -> mapper.map(d, LoanApplication.LoanApplicationBuilder.class).build());
         this.clientsDtoRepository = clientsDtoRepository;
         this.loanRepositoryAdapter = loanRepositoryAdapter;
@@ -45,11 +45,11 @@ public class LoanApplicationRepositoryAdapter extends AdapterOperations<LoanAppl
             throw new BusinessException(BusinessException.Type.THERE_IS_A_LOAN_APPLICATION);
         }
         LoanApplicationEntity loanApplicationEntity = LoanApplicationMapper.loanApplicationDtoLoanApplication(loanApplication);
+        loanApplicationEntity.insert();
         repository.save(loanApplicationEntity);
     }
 
 
-    //TODO: FALTA ORGANIZAR LA PARTE DEL SORT
     @Override
     public ResponseGlobalPagination<List<LoanRequestDTO>> findAllLoanApplication(ParamsLoan params) {
         PageRequest pages = PageRequest.of(params.getPage(), params.getLimit(), params.getSort());

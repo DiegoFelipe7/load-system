@@ -2,7 +2,7 @@ package com.ddinnovations.loadsystem.domain.entity.enums;
 
 public enum LoanState {
     Pendiente,
-    Aprovado,
+    Aprobado,
     Cancelado,
     Pagado,
 }

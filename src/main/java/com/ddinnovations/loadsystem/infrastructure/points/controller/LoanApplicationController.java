@@ -4,6 +4,7 @@ import com.ddinnovations.loadsystem.application.service.LoanApplicationService;
 import com.ddinnovations.loadsystem.domain.entity.LoanApplication;
 import com.ddinnovations.loadsystem.domain.entity.dto.Id;
 import com.ddinnovations.loadsystem.domain.entity.dto.LoanRequestDTO;
+import com.ddinnovations.loadsystem.domain.entity.enums.LoanState;
 import com.ddinnovations.loadsystem.domain.entity.enums.PaymentOfPayroll;
 import com.ddinnovations.loadsystem.domain.entity.params.ParamsLoan;
 import com.ddinnovations.loadsystem.domain.entity.response.Params;
@@ -39,7 +40,7 @@ public class LoanApplicationController {
             @RequestParam(value = "filterCriteriaText", defaultValue = "", required = false) String filterCriteriaText,
             @RequestParam(value = "sort", defaultValue = "createAt", required = false) String sort) {
 
-        return loanApplicationService.findAllLoanApplication(new ParamsLoan(page, limit, Sort.by(sort), filterCriteriaText, PaymentOfPayroll.Mensual,""));
+        return loanApplicationService.findAllLoanApplication(new ParamsLoan(page, limit, Sort.by(sort), filterCriteriaText, PaymentOfPayroll.Mensual, LoanState.Pagado,""));
     }
 
     @PatchMapping(path = "/approve/{id}")

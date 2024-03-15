@@ -4,6 +4,7 @@ import com.ddinnovations.loadsystem.domain.entity.LoanApplication;
 import com.ddinnovations.loadsystem.domain.entity.dto.LoanRequestDTO;
 import com.ddinnovations.loadsystem.infrastructure.adapters.mongo.loanapplication.LoanApplicationEntity;
 
+import java.text.DateFormat;
 import java.time.LocalDateTime;
 
 public class LoanApplicationMapper {
@@ -46,7 +47,7 @@ public class LoanApplicationMapper {
                 .amount(loanApplication.getLoan().getAmount())
                 .state("Pendiente")
                 .paymentCycle(loanApplication.getLoan().getPaymentCycle())
-                .createdAt(loanApplication.getCreateAt())
+                .createdAt(loanApplication.getCreateAt().toString())
                 .build();
     }
 }

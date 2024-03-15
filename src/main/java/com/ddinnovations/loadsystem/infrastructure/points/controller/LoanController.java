@@ -3,10 +3,10 @@ package com.ddinnovations.loadsystem.infrastructure.points.controller;
 import com.ddinnovations.loadsystem.application.service.LoanService;
 import com.ddinnovations.loadsystem.domain.entity.Loan;
 import com.ddinnovations.loadsystem.domain.entity.PaymentSchedule;
-import com.ddinnovations.loadsystem.domain.entity.enums.PaymentMethod;
+import com.ddinnovations.loadsystem.domain.entity.dto.LoanIndicatorDTO;
+import com.ddinnovations.loadsystem.domain.entity.enums.LoanState;
 import com.ddinnovations.loadsystem.domain.entity.enums.PaymentOfPayroll;
 import com.ddinnovations.loadsystem.domain.entity.params.ParamsLoan;
-import com.ddinnovations.loadsystem.domain.entity.response.Params;
 import com.ddinnovations.loadsystem.domain.entity.response.ResponseGlobal;
 import com.ddinnovations.loadsystem.domain.entity.response.ResponseGlobalPagination;
 import lombok.RequiredArgsConstructor;
@@ -39,9 +39,15 @@ public class LoanController {
             @RequestParam(value = "filterCriteriaText", defaultValue = "", required = false) String filterCriteriaText,
             @RequestParam(value = "startDate", defaultValue = "", required = false) String startDate,
             @RequestParam(value = "sort", defaultValue = "createdAt", required = false) String sort,
-            @RequestParam(value = "paymentCycle", required = false) PaymentOfPayroll paymentMethod) {
+            @RequestParam(value = "paymentCycle", required = false) PaymentOfPayroll paymentCycle,
+            @RequestParam(value = "loanState", required = false) LoanState loanState) {
 
-        return loanService.findAllLoan(new ParamsLoan(page, limit, Sort.by(sort), filterCriteriaText, paymentMethod, startDate));
+        return loanService.findAllLoan(new ParamsLoan(page, limit, Sort.by(sort), filterCriteriaText, paymentCycle, loanState, startDate));
+    }
+
+    @GetMapping(path = "/indicators")
+    public ResponseGlobal<LoanIndicatorDTO> loanIndicators() {
+        return loanService.loanIndicators();
     }
 
     @GetMapping(path = "/{id}")
@@ -54,4 +60,9 @@ public class LoanController {
         return loanService.approveLoan(id, loan);
     }
 
+
+    @DeleteMapping(path = "/cancel/{id}")
+    public ResponseGlobal<Loan> cancelLoan(@PathVariable("id") String id) {
+        return loanService.cancelLoan(id);
+    }
 }

@@ -1,14 +1,26 @@
 package com.ddinnovations.loadsystem.infrastructure.adapters.jpa.loan;
 
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.QueryByExampleExecutor;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Repository
-public interface LoanDtoRepository extends JpaRepository<LoanEntity,String>, QueryByExampleExecutor<LoanEntity>, JpaSpecificationExecutor<LoanEntity> {
-    List<LoanEntity> findAllBy(PageRequest pageRequest);
+public interface LoanDtoRepository extends JpaRepository<LoanEntity, String>, QueryByExampleExecutor<LoanEntity>, JpaSpecificationExecutor<LoanEntity> {
+    @Query(nativeQuery = true, value =
+            "SELECT " +
+                    "    SUM(CASE WHEN l.loan_state IN (1, 3) THEN l.amount ELSE 0 END) AS totalInvestedCapital, " +
+                    "    SUM(CASE WHEN l.loan_state IN (1, 3) THEN l.amount ELSE 0 END) AS investedCapital, " +
+                    "    SUM(CASE WHEN l.loan_state IN (1) THEN 1 ELSE 0 END) AS totalActiveLoans, " +
+                    "    SUM(CASE WHEN l.loan_state IN (1) THEN 1 ELSE 0 END) AS activeLoans, " +
+                    "    SUM(CASE WHEN l.loan_state IN (3) THEN 1 ELSE 0 END) AS totalLoansPaid, " +
+                    "    SUM(CASE WHEN l.loan_state IN (3) THEN 1 ELSE 0 END) AS loansPaid " +
+                    "FROM " +
+                    "    loan l " +
+                    "WHERE " +
+                    "    (l.loan_state IN (1, 3) OR l.created_at BETWEEN :startDate AND :endDate)")
+    Object getLoanStatistics(LocalDateTime startDate, LocalDateTime endDate);
 }

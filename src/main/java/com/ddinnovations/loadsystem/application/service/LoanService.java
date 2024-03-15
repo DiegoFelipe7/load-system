@@ -3,6 +3,7 @@ package com.ddinnovations.loadsystem.application.service;
 import com.ddinnovations.loadsystem.application.usecase.LoanUseCase;
 import com.ddinnovations.loadsystem.domain.entity.Loan;
 import com.ddinnovations.loadsystem.domain.entity.PaymentSchedule;
+import com.ddinnovations.loadsystem.domain.entity.dto.LoanIndicatorDTO;
 import com.ddinnovations.loadsystem.domain.entity.params.ParamsLoan;
 import com.ddinnovations.loadsystem.domain.entity.response.ResponseGlobal;
 import com.ddinnovations.loadsystem.domain.entity.response.ResponseGlobalPagination;
@@ -40,5 +41,16 @@ public class LoanService implements LoanUseCase {
     @Override
     public ResponseGlobal<Loan> findByIdLoan(String id) {
         return loanRepository.findByIdLoan(id);
+    }
+
+    @Override
+    public ResponseGlobal<Loan> cancelLoan(String id) {
+        return loanRepository.cancelLoan(id);
+        
+    }
+
+    @Override
+    public ResponseGlobal<LoanIndicatorDTO> loanIndicators() {
+        return loanRepository.loanIndicators();
     }
 }

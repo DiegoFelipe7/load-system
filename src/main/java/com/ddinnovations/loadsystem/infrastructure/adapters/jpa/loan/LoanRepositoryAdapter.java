@@ -1,24 +1,24 @@
 package com.ddinnovations.loadsystem.infrastructure.adapters.jpa.loan;
 
 import com.ddinnovations.loadsystem.domain.entity.Loan;
-import com.ddinnovations.loadsystem.domain.entity.LoanApplication;
 import com.ddinnovations.loadsystem.domain.entity.PaymentSchedule;
 import com.ddinnovations.loadsystem.domain.entity.common.BusinessException;
-import com.ddinnovations.loadsystem.domain.entity.enums.PaymentOfPayroll;
+import com.ddinnovations.loadsystem.domain.entity.dto.LoanIndicatorDTO;
+import com.ddinnovations.loadsystem.domain.entity.dto.LoanRequestDTO;
+import com.ddinnovations.loadsystem.domain.entity.enums.LoanState;
 import com.ddinnovations.loadsystem.domain.entity.enums.PaymentStatus;
 import com.ddinnovations.loadsystem.domain.entity.params.ParamsLoan;
 import com.ddinnovations.loadsystem.domain.entity.response.Pagination;
-import com.ddinnovations.loadsystem.domain.entity.response.Params;
 import com.ddinnovations.loadsystem.domain.entity.response.ResponseGlobal;
 import com.ddinnovations.loadsystem.domain.entity.response.ResponseGlobalPagination;
 import com.ddinnovations.loadsystem.domain.repository.LoanRepository;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.filters.LoanSpecification;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.helpers.AdapterOperations;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.helpers.GenerateCalendar;
+import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.helpers.GenerateDates;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.loan.mapper.LoanMapper;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.paymentschedule.PaymentScheduleEntity;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.paymentschedule.mapper.PaymentScheduleMapper;
-import com.ddinnovations.loadsystem.infrastructure.adapters.mongo.loanapplication.mapper.LoanApplicationMapper;
 import org.reactivecommons.utils.ObjectMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
@@ -26,8 +26,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -55,18 +55,19 @@ public class LoanRepositoryAdapter extends AdapterOperations<Loan, LoanEntity, S
         loanEntity.setDeadline(loan.getDeadline());
         loanEntity.setPaymentCycle(loan.getPaymentCycle());
         loanEntity.setFirstPaymentDate(loan.getFirstPaymentDate());
-
+        loanEntity.setLoanState(LoanState.Aprobado);
         generatePaymentSchedule(loan).getBody().forEach(ele -> {
             PaymentScheduleEntity paymentSchedule = PaymentScheduleMapper.paymentScheduleAPaymentScheduleDto(ele, loanEntity);
             loanEntity.getPaymentSchedule().add(paymentSchedule);
         });
         loanEntity.setEarnings(loanEntity.earnings());
+
         return new ResponseGlobal<>(LoanMapper.loanDtoALoansAPaymentSchedule(repository.save(loanEntity)));
     }
 
     @Override
     public ResponseGlobalPagination<List<Loan>> findAllLoan(ParamsLoan params) {
-        LoanSpecification specification = new LoanSpecification(params.getFilterCriteriaText(), params.getPaymentCycle(), params.getStartDate());
+        LoanSpecification specification = new LoanSpecification(params.getFilterCriteriaText(), params.getPaymentCycle(), params.getLoanState(), params.getStartDate());
         PageRequest pages = PageRequest.of(params.getPage(), params.getLimit(), params.getSort());
         List<Loan> loanApplications = repository.findAll(specification, pages)
                 .stream()
@@ -80,7 +81,7 @@ public class LoanRepositoryAdapter extends AdapterOperations<Loan, LoanEntity, S
     public ResponseGlobal<List<PaymentSchedule>> generatePaymentSchedule(Loan loan) {
         List<PaymentSchedule> paymentSchedules = new ArrayList<>();
         Calendar calendar = GenerateCalendar.generateCalendar(loan.getFirstPaymentDate());
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         BigDecimal amount = GenerateCalendar.calculateFee(loan.getAmount(), loan.getInterest(), loan.getDeadline());
         for (int i = 0; i < loan.getDeadline(); i++) {
             calendar.add(Calendar.DAY_OF_WEEK, GenerateCalendar.calculateDaysBetweenPayments(loan.getPaymentCycle()));
@@ -97,9 +98,43 @@ public class LoanRepositoryAdapter extends AdapterOperations<Loan, LoanEntity, S
         return new ResponseGlobal<>(LoanMapper.loanDtoALoansAPaymentSchedule(loanEntity));
     }
 
+    @Override
+    public ResponseGlobal<Loan> cancelLoan(String id) {
+        LoanEntity loanEntity = this.getByIdLoan(id);
+        loanEntity.setLoanState(LoanState.Cancelado);
+        loanEntity.getPaymentSchedule().forEach(ele -> ele.setPaymentStatus(PaymentStatus.Cancelado));
+        return new ResponseGlobal<>(LoanMapper.loanDtoALoan(repository.save(loanEntity)));
+    }
+
+    @Override
+    public ResponseGlobal<LoanIndicatorDTO> loanIndicators() {
+        Object object = repository.getLoanStatistics(GenerateDates.starDateFilter(), GenerateDates.endDateFilter());
+        if (object instanceof Object[] array) {
+            BigDecimal totalInvestedCapital = (BigDecimal) array[0];
+            BigDecimal investedCapital = (BigDecimal) array[1];
+            Long totalActiveLoans = ((Number) array[2]).longValue();
+            Long activeLoans = ((Number) array[3]).longValue();
+            Long totalLoansPaid = ((Number) array[4]).longValue();
+            Long loansPaid = ((Number) array[5]).longValue();
+            return new ResponseGlobal<>(new LoanIndicatorDTO(totalInvestedCapital, investedCapital, totalActiveLoans, activeLoans, totalLoansPaid, loansPaid));
+        }
+        return new ResponseGlobal<>(new LoanIndicatorDTO(BigDecimal.ZERO, BigDecimal.ZERO, 0L, 0L, 0L, 0L));
+    }
+
+
     private LoanEntity getByIdLoan(String id) {
         return repository.findById(id)
                 .orElseThrow(() -> new BusinessException(BusinessException.Type.LOAN_NOT_FOUND));
+    }
+
+    public void updatePaymentNumber(String id) {
+        LoanEntity loanEntity = this.getByIdLoan(id);
+        loanEntity.setNumberOfPayments(loanEntity.getNumberOfPayments() + 1);
+        if (loanEntity.getNumberOfPayments() == loanEntity.getDeadline()) {
+            loanEntity.setLoanState(LoanState.Pagado);
+            repository.save(loanEntity);
+        }
+        repository.save(loanEntity);
     }
 
 }

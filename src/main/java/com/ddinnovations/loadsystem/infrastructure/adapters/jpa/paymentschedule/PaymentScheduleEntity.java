@@ -1,10 +1,7 @@
 package com.ddinnovations.loadsystem.infrastructure.adapters.jpa.paymentschedule;
 
-import com.ddinnovations.loadsystem.domain.entity.Loan;
-import com.ddinnovations.loadsystem.domain.entity.enums.LoanState;
 import com.ddinnovations.loadsystem.domain.entity.enums.PaymentOfPayroll;
 import com.ddinnovations.loadsystem.domain.entity.enums.PaymentStatus;
-import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.clients.ClientsEntity;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.loan.LoanEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
@@ -35,9 +32,20 @@ public class PaymentScheduleEntity {
     private PaymentOfPayroll paymentCycle;
     private PaymentStatus paymentStatus;
     private String searchKey;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
 
     @PrePersist()
     public void insert() {
+        this.createdAt=LocalDateTime.now();
+        this.updatedAt=LocalDateTime.now();
+        this.searchKey = (this.paymentDate + "|" + this.amount + "|" + this.quotaNumber + '|' + this.paymentStatus.name() + '|' + this.paymentCycle.name()).toLowerCase();
+    }
+
+    @PreUpdate()
+    public void update() {
+        this.updatedAt=LocalDateTime.now();
         this.searchKey = (this.paymentDate + "|" + this.amount + "|" + this.quotaNumber + '|' + this.paymentStatus.name() + '|' + this.paymentCycle.name()).toLowerCase();
     }
 

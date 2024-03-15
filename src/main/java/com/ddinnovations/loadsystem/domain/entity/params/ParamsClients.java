@@ -12,12 +12,14 @@ import org.springframework.data.domain.Sort;
 @Builder(toBuilder = true)
 @ToString
 public class ParamsClients extends Params {
-    private String identification;
     private OrderBy orderBy;
+    private String startDate;
+    private String endDate;
 
-    public ParamsClients(int page, int limit, Sort sort, String filterCriteriaText, String identification, OrderBy orderBy) {
+    public ParamsClients(int page, int limit, Sort sort, String filterCriteriaText, OrderBy orderBy, String startDate, String endDate) {
         super(page, limit, sort, filterCriteriaText);
-        this.identification = identification;
-        this.orderBy=orderBy;
+        this.orderBy = orderBy;
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 }

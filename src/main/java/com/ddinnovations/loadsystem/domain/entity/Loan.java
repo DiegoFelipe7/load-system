@@ -24,6 +24,7 @@ public class Loan {
     private PaymentOfPayroll paymentCycle;
     private double interest;
     private int deadline;
+    private int numberOfPayments;
     private String description;
     private String searchKey;
     private LoanState loanState;

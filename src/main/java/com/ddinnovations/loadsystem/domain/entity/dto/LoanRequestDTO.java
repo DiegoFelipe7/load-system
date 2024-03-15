@@ -4,7 +4,6 @@ import com.ddinnovations.loadsystem.domain.entity.enums.PaymentOfPayroll;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,6 +16,6 @@ public class LoanRequestDTO {
     private BigDecimal amount;
     private String state;
     private PaymentOfPayroll paymentCycle;
-    private LocalDateTime createdAt;
+    private String createdAt;
 
 }

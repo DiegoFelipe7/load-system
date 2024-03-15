@@ -35,7 +35,7 @@ public class GenerateCalendar {
     public static Calendar generateCalendar(String valueDate) {
         try {
             Calendar calendar = Calendar.getInstance();
-            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date date = dateFormat.parse(valueDate);
             calendar.setTime(date);
             return calendar;

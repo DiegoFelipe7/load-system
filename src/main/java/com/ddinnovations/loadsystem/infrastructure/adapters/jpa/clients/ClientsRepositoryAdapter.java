@@ -8,12 +8,15 @@ import com.ddinnovations.loadsystem.domain.entity.response.Pagination;
 import com.ddinnovations.loadsystem.domain.entity.response.ResponseGlobal;
 import com.ddinnovations.loadsystem.domain.entity.response.ResponseGlobalPagination;
 import com.ddinnovations.loadsystem.domain.repository.ClientsRepository;
+import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.backaccount.mapper.BackAccountMapper;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.clients.mapper.ClientMapper;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.filters.ClientSpecification;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.helpers.AdapterOperations;
+import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.workininformation.mapper.WorkingInformationMapper;
 import org.reactivecommons.utils.ObjectMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -27,7 +30,7 @@ public class ClientsRepositoryAdapter extends AdapterOperations<Clients, Clients
 
     @Override
     public ResponseGlobalPagination<List<Clients>> findAllClients(ParamsClients params) {
-        ClientSpecification specification = new ClientSpecification(params.getFilterCriteriaText(), params.getIdentification(),params.getOrderBy());
+        ClientSpecification specification = new ClientSpecification(params.getFilterCriteriaText(), params.getOrderBy(), params.getStartDate(), params.getEndDate());
         PageRequest pages = PageRequest.of(params.getPage(), params.getLimit(), params.getSort());
         List<Clients> clientList = repository.findAll(specification, pages)
                 .stream()
@@ -52,15 +55,21 @@ public class ClientsRepositoryAdapter extends AdapterOperations<Clients, Clients
         return new ResponseGlobal<>(ClientMapper.clientDtoAClient(clientEntity));
     }
 
-    //TODO: ACTUALIZAR EL CLIENTE
     @Override
+    @Transactional
     public ResponseGlobal<Clients> update(String id, Clients client) {
         ClientsEntity clientEntity = this.getByIdClient(id);
-        clientEntity.setAddress(client.getAddress());
-        clientEntity.setPhone(client.getPhone());
+        clientEntity.setId(client.getId());
         clientEntity.setEmail(client.getEmail());
+        clientEntity.setFullName(client.getFullName());
         clientEntity.setTypeOfIdentification(client.getTypeOfIdentification());
         clientEntity.setIdentification(client.getIdentification());
+        clientEntity.setPhone(client.getPhone());
+        clientEntity.setCivilStatus(client.getCivilStatus());
+        clientEntity.setProfession(client.getProfession());
+        clientEntity.setAddress(client.getAddress());
+        clientEntity.setWorkingInformation(WorkingInformationMapper.workingInformationAWorkingInformationDto(client.getWorkingInformation()));
+        clientEntity.setBackAccount(BackAccountMapper.bankAccountABacKAccountDto(client.getBankAccount()));
         return new ResponseGlobal<>(ClientMapper.clientDtoAClient(repository.save(clientEntity)));
     }
 
@@ -70,7 +79,6 @@ public class ClientsRepositoryAdapter extends AdapterOperations<Clients, Clients
     }
 
     private ClientsEntity getByIdClient(String id) {
-        System.out.println(id);
         return this.repository.findById(id)
                 .orElseThrow(() -> new BusinessException(BusinessException.Type.USER_NOT_EXIST));
     }
