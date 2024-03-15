@@ -2,6 +2,7 @@ package com.ddinnovations.loadsystem.application.service;
 
 import com.ddinnovations.loadsystem.application.usecase.ClientsUseCase;
 import com.ddinnovations.loadsystem.domain.entity.Clients;
+import com.ddinnovations.loadsystem.domain.entity.dto.CustomerIndicatorDto;
 import com.ddinnovations.loadsystem.domain.entity.params.ParamsClients;
 import com.ddinnovations.loadsystem.domain.entity.response.ResponseGlobal;
 import com.ddinnovations.loadsystem.domain.entity.response.ResponseGlobalPagination;
@@ -39,5 +40,10 @@ public class ClientsService implements ClientsUseCase {
     @Override
     public ResponseGlobal<Boolean> searchById(String identification) {
         return clientsRepository.searchById(identification);
+    }
+
+    @Override
+    public ResponseGlobal<CustomerIndicatorDto> customerIndicators() {
+        return clientsRepository.customerIndicators();
     }
 }

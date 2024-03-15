@@ -4,11 +4,10 @@ package com.ddinnovations.loadsystem.infrastructure.adapters.jpa.clients;
 import com.ddinnovations.loadsystem.domain.entity.enums.CivilStatus;
 import com.ddinnovations.loadsystem.domain.entity.enums.TypeOfIdentification;
 import com.ddinnovations.loadsystem.domain.entity.enums.TypeOfResidence;
-import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.backaccount.BackAccountEntity;
+import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.back.account.BackAccountEntity;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.loan.LoanEntity;
-import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.personalreference.PersonalReferenceEntity;
-import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.workininformation.WorkingInformationEntity;
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.personal.reference.PersonalReferenceEntity;
+import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.workin.information.WorkingInformationEntity;
 import jakarta.persistence.*;
 import lombok.*;
 

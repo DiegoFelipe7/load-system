@@ -1,13 +1,12 @@
 package com.ddinnovations.loadsystem.infrastructure.adapters.jpa.clients.mapper;
 
 import com.ddinnovations.loadsystem.domain.entity.Clients;
-import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.backaccount.BackAccountEntity;
-import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.backaccount.mapper.BackAccountMapper;
+import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.back.account.BackAccountEntity;
+import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.back.account.mapper.BackAccountMapper;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.clients.ClientsEntity;
-import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.personalreference.PersonalReferenceEntity;
-import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.personalreference.mapper.PersonalReferenceMapper;
-import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.workininformation.WorkingInformationEntity;
-import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.workininformation.mapper.WorkingInformationMapper;
+import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.personal.reference.PersonalReferenceEntity;
+import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.workin.information.WorkingInformationEntity;
+import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.workin.information.mapper.WorkingInformationMapper;
 
 public class ClientMapper {
     private ClientMapper() {

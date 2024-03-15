@@ -3,16 +3,18 @@ package com.ddinnovations.loadsystem.infrastructure.adapters.jpa.clients;
 
 import com.ddinnovations.loadsystem.domain.entity.Clients;
 import com.ddinnovations.loadsystem.domain.entity.common.BusinessException;
+import com.ddinnovations.loadsystem.domain.entity.dto.CustomerIndicatorDto;
 import com.ddinnovations.loadsystem.domain.entity.params.ParamsClients;
 import com.ddinnovations.loadsystem.domain.entity.response.Pagination;
 import com.ddinnovations.loadsystem.domain.entity.response.ResponseGlobal;
 import com.ddinnovations.loadsystem.domain.entity.response.ResponseGlobalPagination;
 import com.ddinnovations.loadsystem.domain.repository.ClientsRepository;
-import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.backaccount.mapper.BackAccountMapper;
+import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.back.account.mapper.BackAccountMapper;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.clients.mapper.ClientMapper;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.filters.ClientSpecification;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.helpers.AdapterOperations;
-import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.workininformation.mapper.WorkingInformationMapper;
+import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.helpers.GenerateDates;
+import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.workin.information.mapper.WorkingInformationMapper;
 import org.reactivecommons.utils.ObjectMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
@@ -76,6 +78,17 @@ public class ClientsRepositoryAdapter extends AdapterOperations<Clients, Clients
     @Override
     public ResponseGlobal<Boolean> searchById(String identification) {
         return new ResponseGlobal<>(this.repository.existsByIdentification(identification));
+    }
+
+    @Override
+    public ResponseGlobal<CustomerIndicatorDto> customerIndicators() {
+        Object object = repository.getIndicators(GenerateDates.starDateFilter(), GenerateDates.endDateFilter());
+        if (object instanceof Object[] array) {
+            long totalClients = (long) array[0];
+            long totalNewClients = (long) array[1];
+            return new ResponseGlobal<>(new CustomerIndicatorDto(totalClients, totalNewClients));
+        }
+        return new ResponseGlobal<>(new CustomerIndicatorDto(0, 0));
     }
 
     private ClientsEntity getByIdClient(String id) {

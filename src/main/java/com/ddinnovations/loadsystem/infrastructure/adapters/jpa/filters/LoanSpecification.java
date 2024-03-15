@@ -27,25 +27,28 @@ public class LoanSpecification implements Specification<LoanEntity> {
 
     @Override
     public Predicate toPredicate(Root<LoanEntity> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
-        query.orderBy(criteriaBuilder.asc(root.get("createdAt")));
+        query.orderBy(criteriaBuilder.desc(root.get("createdAt")));
         List<Predicate> predicates = new ArrayList<>();
+        Predicate notCancelled = criteriaBuilder.notEqual(root.get("loanState"), LoanState.Cancelado);
+        predicates.add(notCancelled);
+
         if (StringUtils.hasText(getFilterCriteriaText())) {
-            Predicate filter = criteriaBuilder.like(root.get("searchKey"), "%".concat(getFilterCriteriaText().toLowerCase()).concat("%"));
-            predicates.add(filter);
+            Predicate filterByText = criteriaBuilder.like(root.get("searchKey"), "%".concat(getFilterCriteriaText().toLowerCase()).concat("%"));
+            predicates.add(filterByText);
         }
 
         if (getPaymentMethod() != null) {
-            Predicate paymentStatus = criteriaBuilder.equal(root.get("paymentCycle"), getPaymentMethod());
-            predicates.add(paymentStatus);
+            Predicate paymentMethodPredicate = criteriaBuilder.equal(root.get("paymentCycle"), getPaymentMethod());
+            predicates.add(paymentMethodPredicate);
         }
 
         if (getLoanState() != null) {
-            Predicate paymentStatus = criteriaBuilder.equal(root.get("loanState"), getLoanState());
-            predicates.add(paymentStatus);
+            Predicate loanStatePredicate = criteriaBuilder.equal(root.get("loanState"), getLoanState());
+            predicates.add(loanStatePredicate);
         }
-       if (StringUtils.hasText(startDate)) {
-            Predicate dateRange = criteriaBuilder.between(root.get("createdAt"), GenerateDates.starDate(getStartDate()),GenerateDates.endDate(getStartDate()));
-            predicates.add(dateRange);
+        if (StringUtils.hasText(getStartDate())) {
+            Predicate dateRangePredicate = criteriaBuilder.between(root.get("createdAt"), GenerateDates.starDate(getStartDate()), GenerateDates.endDate(getStartDate()));
+            predicates.add(dateRangePredicate);
         }
 
         return criteriaBuilder.and(predicates.toArray(new Predicate[0]));

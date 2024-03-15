@@ -32,19 +32,19 @@ public class ClientSpecification implements Specification<ClientsEntity> {
         String createdAt = "createdAt";
         List<Predicate> predicates = new ArrayList<>();
         if (StringUtils.hasText(getFilterCriteriaText())) {
-            Predicate filter = criteriaBuilder.like(root.get("searchKey"), "%".concat(getFilterCriteriaText().toLowerCase()).concat("%"));
-            predicates.add(filter);
+            Predicate filterByText = criteriaBuilder.like(root.get("searchKey"), "%".concat(getFilterCriteriaText().toLowerCase()).concat("%"));
+            predicates.add(filterByText);
         }
-        //TODO:NO FUNCIONA
-        if (orderBy != null) {
-            query.orderBy(orderBy.equals(OrderBy.DESC) ?
+        // Se aplica la ordenación si se proporciona
+        if (getOrderBy() != null) {
+            /*Predicate orderByPredicate = orderBy.equals(OrderBy.DESC) ?
                     criteriaBuilder.desc(root.<LocalDateTime>get(createdAt)) :
-                    criteriaBuilder.asc(root.<LocalDateTime>get(createdAt))
-            );
+                    criteriaBuilder.asc(root.<LocalDateTime>get(createdAt));
+            query.orderBy(orderByPredicate);*/
         }
-        if (StringUtils.hasText(startDate) && StringUtils.hasText(endDate)) {
-            Predicate dateRange = criteriaBuilder.between(root.get(createdAt), GenerateDates.starDate(getStartDate()), GenerateDates.endDate(getEndDate()));
-            predicates.add(dateRange);
+        if (StringUtils.hasText(getStartDate()) && StringUtils.hasText(getEndDate())) {
+            Predicate dateRangePredicate = criteriaBuilder.between(root.get(createdAt), GenerateDates.starDate(getStartDate()), GenerateDates.endDate(getEndDate()));
+            predicates.add(dateRangePredicate);
         }
         return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
     }

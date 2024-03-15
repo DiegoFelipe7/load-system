@@ -4,8 +4,7 @@ import com.ddinnovations.loadsystem.application.usecase.LoanApplicationUseCase;
 import com.ddinnovations.loadsystem.domain.entity.LoanApplication;
 import com.ddinnovations.loadsystem.domain.entity.dto.Id;
 import com.ddinnovations.loadsystem.domain.entity.dto.LoanRequestDTO;
-import com.ddinnovations.loadsystem.domain.entity.params.ParamsLoan;
-import com.ddinnovations.loadsystem.domain.entity.response.Params;
+import com.ddinnovations.loadsystem.domain.entity.params.ParamsLoanRequest;
 import com.ddinnovations.loadsystem.domain.entity.response.ResponseGlobal;
 import com.ddinnovations.loadsystem.domain.entity.response.ResponseGlobalPagination;
 import com.ddinnovations.loadsystem.domain.repository.LoanApplicationRepository;
@@ -23,7 +22,7 @@ public class LoanApplicationService  implements LoanApplicationUseCase {
         loanApplicationRepository.createLoanApplication(loanApplication);
     }
     @Override
-    public ResponseGlobalPagination<List<LoanRequestDTO>> findAllLoanApplication(ParamsLoan params) {
+    public ResponseGlobalPagination<List<LoanRequestDTO>> findAllLoanApplication(ParamsLoanRequest params) {
         return loanApplicationRepository.findAllLoanApplication(params);
     }
 

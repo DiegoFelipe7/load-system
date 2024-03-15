@@ -3,9 +3,8 @@ package com.ddinnovations.loadsystem.infrastructure.adapters.jpa.loan;
 import com.ddinnovations.loadsystem.domain.entity.enums.LoanState;
 import com.ddinnovations.loadsystem.domain.entity.enums.PaymentOfPayroll;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.clients.ClientsEntity;
-import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.paymentschedule.PaymentScheduleEntity;
+import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.payment.schedule.PaymentScheduleEntity;
 import jakarta.persistence.*;
-import jakarta.persistence.spi.LoadState;
 import lombok.*;
 
 import java.math.BigDecimal;

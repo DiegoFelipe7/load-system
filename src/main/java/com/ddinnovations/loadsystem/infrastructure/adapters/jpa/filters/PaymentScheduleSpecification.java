@@ -2,7 +2,7 @@ package com.ddinnovations.loadsystem.infrastructure.adapters.jpa.filters;
 
 import com.ddinnovations.loadsystem.domain.entity.enums.PaymentOfPayroll;
 import com.ddinnovations.loadsystem.domain.entity.enums.PaymentStatus;
-import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.paymentschedule.PaymentScheduleEntity;
+import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.payment.schedule.PaymentScheduleEntity;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
@@ -28,24 +28,29 @@ public class PaymentScheduleSpecification implements Specification<PaymentSchedu
 
     @Override
     public Predicate toPredicate(Root<PaymentScheduleEntity> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
-        query.orderBy(criteriaBuilder.asc(root.get("createdAt")));
+
         List<Predicate> predicates = new ArrayList<>();
+
+        query.orderBy(criteriaBuilder.asc(root.get("createdAt")));
+
         Predicate paymentStatus = criteriaBuilder.in(root.get("paymentStatus")).value(PaymentStatus.Pendiente).value(PaymentStatus.Mora);
         predicates.add(paymentStatus);
+
         if (StringUtils.hasText(getStartDate())) {
-            Predicate filter = criteriaBuilder.equal(root.get("paymentDate"), getStartDate());
-            predicates.add(filter);
+            Predicate filterByPaymentDate = criteriaBuilder.equal(root.get("paymentDate"), getStartDate());
+            predicates.add(filterByPaymentDate);
         }
 
         if (StringUtils.hasText(getFilterCriteriaText())) {
-            Predicate filter = criteriaBuilder.like(root.get("searchKey"), "%".concat(getFilterCriteriaText().toLowerCase()).concat("%"));
-            predicates.add(filter);
+            Predicate filterByText = criteriaBuilder.like(root.get("searchKey"), "%".concat(getFilterCriteriaText().toLowerCase()).concat("%"));
+            predicates.add(filterByText);
         }
 
         if (getPaymentCycle() != null) {
-            Predicate paymentCycle = criteriaBuilder.equal(root.get("paymentCycle"), getPaymentCycle());
-            predicates.add(paymentCycle);
+            Predicate filterByPaymentCycle = criteriaBuilder.equal(root.get("paymentCycle"), getPaymentCycle());
+            predicates.add(filterByPaymentCycle);
         }
+
         return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
     }
 }

@@ -3,6 +3,7 @@ package com.ddinnovations.loadsystem.infrastructure.points.controller;
 import com.ddinnovations.loadsystem.application.service.ClientsService;
 import com.ddinnovations.loadsystem.domain.entity.Clients;
 import com.ddinnovations.loadsystem.domain.entity.User;
+import com.ddinnovations.loadsystem.domain.entity.dto.CustomerIndicatorDto;
 import com.ddinnovations.loadsystem.domain.entity.enums.OrderBy;
 import com.ddinnovations.loadsystem.domain.entity.params.ParamsClients;
 import com.ddinnovations.loadsystem.domain.entity.response.ResponseGlobal;
@@ -22,6 +23,11 @@ public class ClientsController {
     @PostMapping()
     public ResponseGlobal<Clients> createClient(@RequestBody Clients clients) {
         return clientsService.createClient(clients);
+    }
+
+    @GetMapping(path = "/indicators")
+    public ResponseGlobal<CustomerIndicatorDto> customerIndicators() {
+        return clientsService.customerIndicators();
     }
 
     @GetMapping()

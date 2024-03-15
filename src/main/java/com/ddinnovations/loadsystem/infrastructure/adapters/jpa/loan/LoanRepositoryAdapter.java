@@ -4,7 +4,6 @@ import com.ddinnovations.loadsystem.domain.entity.Loan;
 import com.ddinnovations.loadsystem.domain.entity.PaymentSchedule;
 import com.ddinnovations.loadsystem.domain.entity.common.BusinessException;
 import com.ddinnovations.loadsystem.domain.entity.dto.LoanIndicatorDTO;
-import com.ddinnovations.loadsystem.domain.entity.dto.LoanRequestDTO;
 import com.ddinnovations.loadsystem.domain.entity.enums.LoanState;
 import com.ddinnovations.loadsystem.domain.entity.enums.PaymentStatus;
 import com.ddinnovations.loadsystem.domain.entity.params.ParamsLoan;
@@ -17,8 +16,8 @@ import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.helpers.AdapterO
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.helpers.GenerateCalendar;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.helpers.GenerateDates;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.loan.mapper.LoanMapper;
-import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.paymentschedule.PaymentScheduleEntity;
-import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.paymentschedule.mapper.PaymentScheduleMapper;
+import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.payment.schedule.PaymentScheduleEntity;
+import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.payment.schedule.mapper.PaymentScheduleMapper;
 import org.reactivecommons.utils.ObjectMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
@@ -27,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -108,7 +106,7 @@ public class LoanRepositoryAdapter extends AdapterOperations<Loan, LoanEntity, S
 
     @Override
     public ResponseGlobal<LoanIndicatorDTO> loanIndicators() {
-        Object object = repository.getLoanStatistics(GenerateDates.starDateFilter(), GenerateDates.endDateFilter());
+        Object object = repository.getIndicators(GenerateDates.starDateFilter(), GenerateDates.endDateFilter());
         if (object instanceof Object[] array) {
             BigDecimal totalInvestedCapital = (BigDecimal) array[0];
             BigDecimal investedCapital = (BigDecimal) array[1];
@@ -121,6 +119,17 @@ public class LoanRepositoryAdapter extends AdapterOperations<Loan, LoanEntity, S
         return new ResponseGlobal<>(new LoanIndicatorDTO(BigDecimal.ZERO, BigDecimal.ZERO, 0L, 0L, 0L, 0L));
     }
 
+    /**
+     *  SELECT
+     *  	SUM(CASE WHEN l.loan_state IN (1, 3) THEN l.amount ELSE 0 END) AS totalCapitalInvertido,
+     *  	SUM(CASE WHEN l.loan_state IN (1) THEN 1 ELSE 0 END) AS totalPrestamosActivos,
+     *  	SUM(CASE WHEN l.loan_state IN (1, 3) THEN l.earnings ELSE 0 END) AS totalGanancias,
+     *  	SUM(CASE WHEN l.loan_state IN (3) THEN 1 ELSE 0 END) AS totalPrestamosPagados
+     *  	FROM   loan l
+     *
+     * @param id
+     * @return
+     */
 
     private LoanEntity getByIdLoan(String id) {
         return repository.findById(id)

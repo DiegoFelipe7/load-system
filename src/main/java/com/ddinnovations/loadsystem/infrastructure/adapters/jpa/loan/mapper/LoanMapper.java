@@ -3,7 +3,7 @@ package com.ddinnovations.loadsystem.infrastructure.adapters.jpa.loan.mapper;
 import com.ddinnovations.loadsystem.domain.entity.Loan;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.clients.mapper.ClientMapper;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.loan.LoanEntity;
-import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.paymentschedule.mapper.PaymentScheduleMapper;
+import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.payment.schedule.mapper.PaymentScheduleMapper;
 
 public class LoanMapper {
 

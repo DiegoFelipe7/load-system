@@ -22,5 +22,5 @@ public interface LoanDtoRepository extends JpaRepository<LoanEntity, String>, Qu
                     "    loan l " +
                     "WHERE " +
                     "    (l.loan_state IN (1, 3) OR l.created_at BETWEEN :startDate AND :endDate)")
-    Object getLoanStatistics(LocalDateTime startDate, LocalDateTime endDate);
+    Object getIndicators(LocalDateTime startDate, LocalDateTime endDate);
 }
