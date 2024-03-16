@@ -1,6 +1,7 @@
 package com.ddinnovations.loadsystem.infrastructure.adapters.mongo.loan.application;
 
 import com.ddinnovations.loadsystem.domain.entity.*;
+import com.ddinnovations.loadsystem.domain.entity.enums.PaymentOfPayroll;
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -20,11 +21,12 @@ public class LoanApplicationEntity {
     private BankAccount bankAccount;
     private PersonalReference personalReference;
     private String searchKey;
+    private PaymentOfPayroll paymentCycle;
     private LocalDateTime createAt;
 
-    public void insert(){
-        this.searchKey = (this.client.getFullName() + "|" + this.client.getIdentification() + "|" + this.loan.getAmount() +  '|' + this.loan.getPaymentCycle().name() + '|' + this.client.getEmail()).toLowerCase();
-
+    public void insert() {
+        this.searchKey = (this.client.getFullName() + "|" + this.client.getIdentification() + "|" + this.loan.getAmount() + '|' + this.loan.getPaymentCycle().name() + '|' + this.client.getEmail()).toLowerCase();
+        this.paymentCycle = loan.getPaymentCycle();
     }
 
 

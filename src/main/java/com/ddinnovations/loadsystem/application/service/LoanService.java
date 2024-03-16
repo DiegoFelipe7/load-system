@@ -53,4 +53,9 @@ public class LoanService implements LoanUseCase {
     public ResponseGlobal<LoanIndicatorDTO> loanIndicators() {
         return loanRepository.loanIndicators();
     }
+
+    @Override
+    public byte[] loanReport(String id) {
+        return loanRepository.loanReport(id);
+    }
 }

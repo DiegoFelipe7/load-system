@@ -11,6 +11,7 @@ import com.ddinnovations.loadsystem.domain.entity.response.ResponseGlobal;
 import com.ddinnovations.loadsystem.domain.entity.response.ResponseGlobalPagination;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -48,6 +49,11 @@ public class LoanController {
     @GetMapping(path = "/indicators")
     public ResponseGlobal<LoanIndicatorDTO> loanIndicators() {
         return loanService.loanIndicators();
+    }
+
+    @GetMapping(path = "/report/{id}")
+    public ResponseEntity<byte[]> loanReport(@PathVariable("id") String id) {
+        return ResponseEntity.ok(loanService.loanReport(id));
     }
 
     @GetMapping(path = "/{id}")

@@ -24,4 +24,5 @@ public interface LoanUseCase {
     ResponseGlobal<Loan> cancelLoan(String id);
 
     ResponseGlobal<LoanIndicatorDTO> loanIndicators();
+    byte[] loanReport(String id);
 }

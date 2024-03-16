@@ -11,4 +11,6 @@ import java.util.List;
 public interface LoanApplicationDtoRepository extends MongoRepository<LoanApplicationEntity, String>, QueryByExampleExecutor<LoanApplicationEntity> {
 
     List<LoanApplicationEntity> findAllBy(Pageable pageable);
+
+    List<LoanApplicationEntity> findAllBySearchKeyLike(Pageable pageable , String filterText);
 }

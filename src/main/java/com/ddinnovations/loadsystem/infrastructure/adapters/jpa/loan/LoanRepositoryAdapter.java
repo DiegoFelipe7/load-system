@@ -4,6 +4,7 @@ import com.ddinnovations.loadsystem.domain.entity.Loan;
 import com.ddinnovations.loadsystem.domain.entity.PaymentSchedule;
 import com.ddinnovations.loadsystem.domain.entity.common.BusinessException;
 import com.ddinnovations.loadsystem.domain.entity.dto.LoanIndicatorDTO;
+import com.ddinnovations.loadsystem.domain.entity.dto.LoanReportDTO;
 import com.ddinnovations.loadsystem.domain.entity.enums.LoanState;
 import com.ddinnovations.loadsystem.domain.entity.enums.PaymentStatus;
 import com.ddinnovations.loadsystem.domain.entity.params.ParamsLoan;
@@ -119,13 +120,20 @@ public class LoanRepositoryAdapter extends AdapterOperations<Loan, LoanEntity, S
         return new ResponseGlobal<>(new LoanIndicatorDTO(BigDecimal.ZERO, BigDecimal.ZERO, 0L, 0L, 0L, 0L));
     }
 
+    @Override
+    public byte[] loanReport(String id) {
+        LoanEntity loanEntity = this.getByIdLoan(id);
+        LoanReportDTO loanReportDTO = LoanMapper.loanReportDTO(loanEntity);
+        return new byte[0];
+    }
+
     /**
-     *  SELECT
-     *  	SUM(CASE WHEN l.loan_state IN (1, 3) THEN l.amount ELSE 0 END) AS totalCapitalInvertido,
-     *  	SUM(CASE WHEN l.loan_state IN (1) THEN 1 ELSE 0 END) AS totalPrestamosActivos,
-     *  	SUM(CASE WHEN l.loan_state IN (1, 3) THEN l.earnings ELSE 0 END) AS totalGanancias,
-     *  	SUM(CASE WHEN l.loan_state IN (3) THEN 1 ELSE 0 END) AS totalPrestamosPagados
-     *  	FROM   loan l
+     * SELECT
+     * SUM(CASE WHEN l.loan_state IN (1, 3) THEN l.amount ELSE 0 END) AS totalCapitalInvertido,
+     * SUM(CASE WHEN l.loan_state IN (1) THEN 1 ELSE 0 END) AS totalPrestamosActivos,
+     * SUM(CASE WHEN l.loan_state IN (1, 3) THEN l.earnings ELSE 0 END) AS totalGanancias,
+     * SUM(CASE WHEN l.loan_state IN (3) THEN 1 ELSE 0 END) AS totalPrestamosPagados
+     * FROM   loan l
      *
      * @param id
      * @return

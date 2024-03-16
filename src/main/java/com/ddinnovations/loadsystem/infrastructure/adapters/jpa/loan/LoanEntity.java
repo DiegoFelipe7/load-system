@@ -1,7 +1,9 @@
 package com.ddinnovations.loadsystem.infrastructure.adapters.jpa.loan;
 
+import com.ddinnovations.loadsystem.domain.entity.PaymentSchedule;
 import com.ddinnovations.loadsystem.domain.entity.enums.LoanState;
 import com.ddinnovations.loadsystem.domain.entity.enums.PaymentOfPayroll;
+import com.ddinnovations.loadsystem.domain.entity.enums.PaymentStatus;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.clients.ClientsEntity;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.payment.schedule.PaymentScheduleEntity;
 import jakarta.persistence.*;
@@ -62,6 +64,25 @@ public class LoanEntity {
         return this.amount.multiply(BigDecimal.valueOf(interestRate))
                 .multiply(BigDecimal.valueOf(this.deadline));
     }
+
+
+    public BigDecimal valuePaid() {
+        return this.paymentSchedule.stream()
+                .filter(ele -> ele.getPaymentStatus().equals(PaymentStatus.Pagado))
+                .map(PaymentScheduleEntity::getAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+
+    public BigDecimal loanValue() {
+        return this.amount.add(this.earnings);
+    }
+    /*
+    public PaymentScheduleEntity paymentSchedule() {
+        var data = this.getPaymentSchedule().stream()
+                .filter(ele -> ele.getPaymentStatus().equals(PaymentStatus.Pendiente))
+                .findFirst()stat;
+    }*/
 
 
 }

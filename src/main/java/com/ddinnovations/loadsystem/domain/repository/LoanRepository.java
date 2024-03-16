@@ -24,5 +24,7 @@ public interface LoanRepository {
 
     ResponseGlobal<LoanIndicatorDTO> loanIndicators();
 
+    byte[] loanReport(String id);
+
 
 }
