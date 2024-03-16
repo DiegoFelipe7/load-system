@@ -1,12 +1,9 @@
 package com.ddinnovations.loadsystem.infrastructure.adapters.jpa.loan.mapper;
 
 import com.ddinnovations.loadsystem.domain.entity.Loan;
-import com.ddinnovations.loadsystem.domain.entity.dto.LoanReportDTO;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.clients.mapper.ClientMapper;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.loan.LoanEntity;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.payment.schedule.mapper.PaymentScheduleMapper;
-
-import java.math.BigDecimal;
 
 public class LoanMapper {
 
@@ -65,16 +62,7 @@ public class LoanMapper {
                 .build();
     }
 
-    public static LoanReportDTO loanReportDTO(LoanEntity loan) {
-        return LoanReportDTO.builder()
-                .clients(ClientMapper.clientsDto(loan.getClient()))
-                .balance(BigDecimal.ZERO)
-                .totalCredit(loan.loanValue())
-                .valuePaid(BigDecimal.ZERO)
-                //.paymentSchedule()
-                .paymentSchedules(loan.getPaymentSchedule().stream().map(PaymentScheduleMapper::paymentScheduleDtoAPaymentSchedule).toList())
-                .build();
-    }
+
 
 
 }

@@ -11,13 +11,15 @@ import com.ddinnovations.loadsystem.domain.entity.response.ResponseGlobal;
 import com.ddinnovations.loadsystem.domain.entity.response.ResponseGlobalPagination;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "api/loan")
+@RequestMapping(path = "api/loan" , produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class LoanController {
     private final LoanService loanService;
@@ -53,7 +55,11 @@ public class LoanController {
 
     @GetMapping(path = "/report/{id}")
     public ResponseEntity<byte[]> loanReport(@PathVariable("id") String id) {
-        return ResponseEntity.ok(loanService.loanReport(id));
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData("petsReport", "petsReport.pdf");
+        return ResponseEntity.ok().headers(headers).body(loanService.loanReport(id));
+
     }
 
     @GetMapping(path = "/{id}")

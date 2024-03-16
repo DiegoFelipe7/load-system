@@ -9,10 +9,11 @@ import com.ddinnovations.loadsystem.domain.entity.dto.LoginDTO;
 import com.ddinnovations.loadsystem.domain.entity.dto.TokenDTO;
 import com.ddinnovations.loadsystem.domain.entity.response.ResponseGlobal;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(path = "api/auth")
+@RequestMapping(path = "api/auth" , produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthService authService;

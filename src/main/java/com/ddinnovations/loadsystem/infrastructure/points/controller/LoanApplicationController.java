@@ -13,12 +13,13 @@ import com.ddinnovations.loadsystem.domain.entity.response.ResponseGlobal;
 import com.ddinnovations.loadsystem.domain.entity.response.ResponseGlobalPagination;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "api/loan-application")
+@RequestMapping(path = "api/loan-application" ,produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class LoanApplicationController {
     private final LoanApplicationService loanApplicationService;

@@ -4,7 +4,6 @@ import com.ddinnovations.loadsystem.domain.entity.Loan;
 import com.ddinnovations.loadsystem.domain.entity.PaymentSchedule;
 import com.ddinnovations.loadsystem.domain.entity.common.BusinessException;
 import com.ddinnovations.loadsystem.domain.entity.dto.LoanIndicatorDTO;
-import com.ddinnovations.loadsystem.domain.entity.dto.LoanReportDTO;
 import com.ddinnovations.loadsystem.domain.entity.enums.LoanState;
 import com.ddinnovations.loadsystem.domain.entity.enums.PaymentStatus;
 import com.ddinnovations.loadsystem.domain.entity.params.ParamsLoan;
@@ -19,18 +18,19 @@ import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.helpers.Generate
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.loan.mapper.LoanMapper;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.payment.schedule.PaymentScheduleEntity;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.payment.schedule.mapper.PaymentScheduleMapper;
+//import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.reactivecommons.utils.ObjectMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ResourceUtils;
 
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Repository
 public class LoanRepositoryAdapter extends AdapterOperations<Loan, LoanEntity, String, LoanDtoRepository> implements LoanRepository {
@@ -122,22 +122,31 @@ public class LoanRepositoryAdapter extends AdapterOperations<Loan, LoanEntity, S
 
     @Override
     public byte[] loanReport(String id) {
-        LoanEntity loanEntity = this.getByIdLoan(id);
-        LoanReportDTO loanReportDTO = LoanMapper.loanReportDTO(loanEntity);
-        return new byte[0];
+        try {
+            LoanEntity loanEntity = this.getByIdLoan(id);
+            PaymentScheduleEntity paymentSchedule = loanEntity.paymentSchedule();
+            Map<String, Object> params = new HashMap<>();
+            params.put("voucherNumber", String.valueOf(paymentSchedule.getQuotaNumber()));
+            params.put("name", loanEntity.getClient().getFullName());
+            params.put("phone", loanEntity.getClient().getPhone());
+            params.put("address", loanEntity.getClient().getAddress());
+            params.put("balance", loanEntity.valuePaid());
+            params.put("totalLoan", loanEntity.loanValue());
+            params.put("valuePaid", paymentSchedule.getAmount());
+            params.put("imageDir", "classpath:/static/images/");
+            params.put("paymentSchedule", new JRBeanCollectionDataSource(loanEntity.getPaymentSchedule()));
+            JasperPrint report = JasperFillManager.fillReport(JasperCompileManager.compileReport(
+                    ResourceUtils.getFile("classpath:ReportLoanApplication.jrxml")
+                            .getAbsolutePath()), params, new JREmptyDataSource());
+            return JasperExportManager.exportReportToPdf(report);
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println(e.getCause());
+            throw new BusinessException(BusinessException.Type.ERROR_BD);
+        }
     }
 
-    /**
-     * SELECT
-     * SUM(CASE WHEN l.loan_state IN (1, 3) THEN l.amount ELSE 0 END) AS totalCapitalInvertido,
-     * SUM(CASE WHEN l.loan_state IN (1) THEN 1 ELSE 0 END) AS totalPrestamosActivos,
-     * SUM(CASE WHEN l.loan_state IN (1, 3) THEN l.earnings ELSE 0 END) AS totalGanancias,
-     * SUM(CASE WHEN l.loan_state IN (3) THEN 1 ELSE 0 END) AS totalPrestamosPagados
-     * FROM   loan l
-     *
-     * @param id
-     * @return
-     */
 
     private LoanEntity getByIdLoan(String id) {
         return repository.findById(id)

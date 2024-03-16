@@ -4,6 +4,7 @@ import com.ddinnovations.loadsystem.domain.entity.PaymentSchedule;
 import com.ddinnovations.loadsystem.domain.entity.enums.LoanState;
 import com.ddinnovations.loadsystem.domain.entity.enums.PaymentOfPayroll;
 import com.ddinnovations.loadsystem.domain.entity.enums.PaymentStatus;
+import com.ddinnovations.loadsystem.domain.entity.params.ParamsPaymentSchedule;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.clients.ClientsEntity;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.payment.schedule.PaymentScheduleEntity;
 import jakarta.persistence.*;
@@ -77,12 +78,16 @@ public class LoanEntity {
     public BigDecimal loanValue() {
         return this.amount.add(this.earnings);
     }
-    /*
+
     public PaymentScheduleEntity paymentSchedule() {
-        var data = this.getPaymentSchedule().stream()
+        return this.getPaymentSchedule().stream()
                 .filter(ele -> ele.getPaymentStatus().equals(PaymentStatus.Pendiente))
-                .findFirst()stat;
-    }*/
+                .findFirst()
+                .orElseGet(() -> PaymentScheduleEntity.builder()
+                        .amount(BigDecimal.ZERO)
+                        .quotaNumber(0)
+                        .build());
+    }
 
 
 }
