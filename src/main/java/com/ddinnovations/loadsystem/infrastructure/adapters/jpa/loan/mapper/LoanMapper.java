@@ -1,9 +1,15 @@
 package com.ddinnovations.loadsystem.infrastructure.adapters.jpa.loan.mapper;
 
 import com.ddinnovations.loadsystem.domain.entity.Loan;
+import com.ddinnovations.loadsystem.domain.entity.dto.LoanIndicatorDTO;
+import com.ddinnovations.loadsystem.domain.entity.dto.LoanReportDto;
+import com.ddinnovations.loadsystem.domain.entity.dto.LoanRequestDTO;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.clients.mapper.ClientMapper;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.loan.LoanEntity;
+import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.payment.schedule.PaymentScheduleEntity;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.payment.schedule.mapper.PaymentScheduleMapper;
+
+import java.util.List;
 
 public class LoanMapper {
 
@@ -62,7 +68,13 @@ public class LoanMapper {
                 .build();
     }
 
-
+    public static List<LoanReportDto> loanReport(List<PaymentScheduleEntity> paymentScheduleEntities) {
+        return paymentScheduleEntities.stream().map(ele -> LoanReportDto.builder()
+                .amount(ele.getAmount())
+                .paymentStatus(ele.getPaymentStatus().name())
+                .quotaNumber(String.valueOf(ele.getQuotaNumber()))
+                .build()).toList();
+    }
 
 
 }

@@ -4,6 +4,7 @@ import com.ddinnovations.loadsystem.domain.entity.Loan;
 import com.ddinnovations.loadsystem.domain.entity.PaymentSchedule;
 import com.ddinnovations.loadsystem.domain.entity.common.BusinessException;
 import com.ddinnovations.loadsystem.domain.entity.dto.LoanIndicatorDTO;
+import com.ddinnovations.loadsystem.domain.entity.dto.LoanReportDto;
 import com.ddinnovations.loadsystem.domain.entity.enums.LoanState;
 import com.ddinnovations.loadsystem.domain.entity.enums.PaymentStatus;
 import com.ddinnovations.loadsystem.domain.entity.params.ParamsLoan;
@@ -125,6 +126,7 @@ public class LoanRepositoryAdapter extends AdapterOperations<Loan, LoanEntity, S
         try {
             LoanEntity loanEntity = this.getByIdLoan(id);
             PaymentScheduleEntity paymentSchedule = loanEntity.paymentSchedule();
+            List<LoanReportDto> loanReportDto = LoanMapper.loanReport(loanEntity.getPaymentSchedule());
             Map<String, Object> params = new HashMap<>();
             params.put("voucherNumber", String.valueOf(paymentSchedule.getQuotaNumber()));
             params.put("name", loanEntity.getClient().getFullName());
@@ -134,7 +136,8 @@ public class LoanRepositoryAdapter extends AdapterOperations<Loan, LoanEntity, S
             params.put("totalLoan", loanEntity.loanValue());
             params.put("valuePaid", paymentSchedule.getAmount());
             params.put("imageDir", "classpath:/static/images/");
-            params.put("paymentSchedule", new JRBeanCollectionDataSource(loanEntity.getPaymentSchedule()));
+
+            params.put("dsPaymentSchedule", new JRBeanCollectionDataSource(loanReportDto));
             JasperPrint report = JasperFillManager.fillReport(JasperCompileManager.compileReport(
                     ResourceUtils.getFile("classpath:ReportLoanApplication.jrxml")
                             .getAbsolutePath()), params, new JREmptyDataSource());

@@ -1,16 +1,16 @@
 package com.ddinnovations.loadsystem.domain.entity.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
+import java.math.BigDecimal;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder(toBuilder = true)
 public class LoanReportDto {
-    private String amount;
+    private BigDecimal amount;
     private String quotaNumber;
     private String paymentStatus;
 }
