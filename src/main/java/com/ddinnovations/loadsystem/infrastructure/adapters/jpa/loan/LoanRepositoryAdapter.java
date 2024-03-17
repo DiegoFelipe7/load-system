@@ -123,8 +123,9 @@ public class LoanRepositoryAdapter extends AdapterOperations<Loan, LoanEntity, S
 
     @Override
     public byte[] loanReport(String id) {
+        LoanEntity loanEntity = this.getByIdLoan(id);
+
         try {
-            LoanEntity loanEntity = this.getByIdLoan(id);
             PaymentScheduleEntity paymentSchedule = loanEntity.paymentSchedule();
             List<LoanReportDto> loanReportDto = LoanMapper.loanReport(loanEntity.getPaymentSchedule());
             Map<String, Object> params = new HashMap<>();
@@ -136,8 +137,8 @@ public class LoanRepositoryAdapter extends AdapterOperations<Loan, LoanEntity, S
             params.put("totalLoan", loanEntity.loanValue());
             params.put("valuePaid", paymentSchedule.getAmount());
             params.put("imageDir", "classpath:/static/images/");
-
             params.put("dsPaymentSchedule", new JRBeanCollectionDataSource(loanReportDto));
+
             JasperPrint report = JasperFillManager.fillReport(JasperCompileManager.compileReport(
                     ResourceUtils.getFile("classpath:ReportLoanApplication.jrxml")
                             .getAbsolutePath()), params, new JREmptyDataSource());

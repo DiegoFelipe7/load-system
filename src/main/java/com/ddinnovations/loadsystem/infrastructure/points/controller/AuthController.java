@@ -13,7 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(path = "api/auth" , produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "api/auth" )
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthService authService;

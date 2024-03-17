@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "api/payment-schedule" , produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "api/payment-schedule" )
 @RequiredArgsConstructor
 public class PaymentScheduleController {
     private final PaymentScheduleService paymentScheduleService;

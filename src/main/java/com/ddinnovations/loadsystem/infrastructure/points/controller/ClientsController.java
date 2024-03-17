@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "api/clients" ,produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "api/clients" )
 @RequiredArgsConstructor
 public class ClientsController {
     private final ClientsService clientsService;

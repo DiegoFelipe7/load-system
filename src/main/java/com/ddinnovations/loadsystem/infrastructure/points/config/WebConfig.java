@@ -1,6 +1,7 @@
 package com.ddinnovations.loadsystem.infrastructure.points.config;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @Configuration
 @EnableWebMvc
+//TODO: BUSCAR COMO MEJORAR LO DEL XML EN EL PROYECTO Y EVITAR CONFIGURAR EL MEDIA TYPE JSON
 public class WebConfig implements WebMvcConfigurer {
 
     @Override
@@ -23,5 +25,6 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         converters.add(new MappingJackson2HttpMessageConverter());
+        converters.add(new ByteArrayHttpMessageConverter());
     }
 }

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "api/loan" , produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "api/loan")
 @RequiredArgsConstructor
 public class LoanController {
     private final LoanService loanService;
@@ -53,13 +53,12 @@ public class LoanController {
         return loanService.loanIndicators();
     }
 
-    @GetMapping(path = "/report/{id}")
+    @GetMapping(path = "/report/{id}" , produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<byte[]> loanReport(@PathVariable("id") String id) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDispositionFormData("petsReport", "petsReport.pdf");
+        headers.setContentDispositionFormData("report", "item-report.pdf");
         return ResponseEntity.ok().headers(headers).body(loanService.loanReport(id));
-
     }
 
     @GetMapping(path = "/{id}")

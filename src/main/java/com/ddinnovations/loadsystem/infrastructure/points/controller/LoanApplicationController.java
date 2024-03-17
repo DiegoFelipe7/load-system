@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "api/loan-application" ,produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "api/loan-application" )
 @RequiredArgsConstructor
 public class LoanApplicationController {
     private final LoanApplicationService loanApplicationService;
