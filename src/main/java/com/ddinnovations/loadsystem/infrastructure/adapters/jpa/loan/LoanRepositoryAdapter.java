@@ -133,9 +133,9 @@ public class LoanRepositoryAdapter extends AdapterOperations<Loan, LoanEntity, S
             params.put("name", loanEntity.getClient().getFullName());
             params.put("phone", loanEntity.getClient().getPhone());
             params.put("address", loanEntity.getClient().getAddress());
-            params.put("balance", loanEntity.valuePaid());
+            params.put("balance", paymentSchedule.getAmount());
             params.put("totalLoan", loanEntity.loanValue());
-            params.put("valuePaid", paymentSchedule.getAmount());
+            params.put("valuePaid", loanEntity.valuePaid());
             params.put("imageDir", "classpath:/static/images/");
             params.put("dsPaymentSchedule", new JRBeanCollectionDataSource(loanReportDto));
 
@@ -145,8 +145,6 @@ public class LoanRepositoryAdapter extends AdapterOperations<Loan, LoanEntity, S
             return JasperExportManager.exportReportToPdf(report);
 
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            System.out.println(e.getCause());
             throw new BusinessException(BusinessException.Type.ERROR_BD);
         }
     }
