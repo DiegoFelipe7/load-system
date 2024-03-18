@@ -38,7 +38,7 @@ public class PaymentScheduleRepositoryAdapter extends AdapterOperations<PaymentS
                 .map(PaymentScheduleMapper::paymentScheduleDTO)
                 .toList();
         return new ResponseGlobalPagination<>(loanApplications, new Pagination(paymentSchedule.getPage(), paymentSchedule.getLimit(), ((int) repository.count())));
-        //return  null;
+
     }
 
     @Override

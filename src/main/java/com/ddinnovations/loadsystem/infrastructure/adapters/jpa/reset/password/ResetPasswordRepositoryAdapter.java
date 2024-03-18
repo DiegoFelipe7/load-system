@@ -3,11 +3,13 @@ package com.ddinnovations.loadsystem.infrastructure.adapters.jpa.reset.password;
 import com.ddinnovations.loadsystem.domain.entity.ResetPassword;
 import com.ddinnovations.loadsystem.domain.entity.common.BusinessException;
 import com.ddinnovations.loadsystem.domain.entity.dto.ConfirmPasswordDTO;
+import com.ddinnovations.loadsystem.domain.entity.enums.EmailTemplate;
 import com.ddinnovations.loadsystem.domain.repository.ResetPasswordRepository;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.auth.AuthDtoRepository;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.reset.password.mapper.ResetPasswordMapper;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.user.UserEntity;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.helpers.AdapterOperations;
+import com.ddinnovations.loadsystem.infrastructure.adapters.mail.service.EmailService;
 import org.reactivecommons.utils.ObjectMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
@@ -19,11 +21,13 @@ import java.time.LocalDateTime;
 public class ResetPasswordRepositoryAdapter extends AdapterOperations<ResetPassword, ResetPasswordEntity, String, ResetPasswordDtoRepository> implements ResetPasswordRepository {
     private final AuthDtoRepository authDtoRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
-    protected ResetPasswordRepositoryAdapter(ResetPasswordDtoRepository repository, ObjectMapper mapper, AuthDtoRepository authDtoRepository, PasswordEncoder passwordEncoder) {
+    protected ResetPasswordRepositoryAdapter(ResetPasswordDtoRepository repository, ObjectMapper mapper, AuthDtoRepository authDtoRepository, PasswordEncoder passwordEncoder, EmailService emailService) {
         super(repository, mapper, d -> mapper.map(d, ResetPassword.ResetPasswordBuilder.class).build());
         this.authDtoRepository = authDtoRepository;
         this.passwordEncoder = passwordEncoder;
+        this.emailService = emailService;
     }
 
     @Override
@@ -34,7 +38,8 @@ public class ResetPasswordRepositoryAdapter extends AdapterOperations<ResetPassw
         userEntity.setState(false);
         authDtoRepository.save(userEntity);
 
-        repository.save(ResetPasswordMapper.buildResetPassword(email));
+        ResetPasswordEntity resetPassword = repository.save(ResetPasswordMapper.buildResetPassword(email));
+        emailService.sendEmailWelcome(userEntity.getFistName(), resetPassword.getToken(), resetPassword.getEmail(), EmailTemplate.WELCOME);
     }
 
     @Override
