@@ -35,6 +35,7 @@ public class ClientSpecification implements Specification<ClientsEntity> {
             Predicate filterByText = criteriaBuilder.like(root.get("searchKey"), "%".concat(getFilterCriteriaText().toLowerCase()).concat("%"));
             predicates.add(filterByText);
         }
+        //TODO: AQUI FALTA
         // Se aplica la ordenación si se proporciona
         if (getOrderBy() != null) {
             /*Predicate orderByPredicate = orderBy.equals(OrderBy.DESC) ?

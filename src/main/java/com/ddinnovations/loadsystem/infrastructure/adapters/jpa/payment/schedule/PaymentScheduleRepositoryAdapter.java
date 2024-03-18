@@ -35,10 +35,10 @@ public class PaymentScheduleRepositoryAdapter extends AdapterOperations<PaymentS
         PageRequest pages = PageRequest.of(paymentSchedule.getPage(), paymentSchedule.getLimit(), paymentSchedule.getSort());
         List<PaymentSchedule> loanApplications = repository.findAll(specification, pages)
                 .stream()
-                .map(PaymentScheduleMapper::paymentScheduleDtoAPaymentSchedule)
+                .map(PaymentScheduleMapper::paymentScheduleDTO)
                 .toList();
         return new ResponseGlobalPagination<>(loanApplications, new Pagination(paymentSchedule.getPage(), paymentSchedule.getLimit(), ((int) repository.count())));
-
+        //return  null;
     }
 
     @Override

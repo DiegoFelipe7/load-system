@@ -19,15 +19,14 @@ import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.helpers.Generate
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.loan.mapper.LoanMapper;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.payment.schedule.PaymentScheduleEntity;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.payment.schedule.mapper.PaymentScheduleMapper;
-//import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.reactivecommons.utils.ObjectMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ResourceUtils;
 
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -41,6 +40,7 @@ public class LoanRepositoryAdapter extends AdapterOperations<Loan, LoanEntity, S
     }
 
     @Override
+    @Transactional
     public ResponseGlobal<Loan> createLoan(Loan loan) {
         LoanEntity loanEntity = LoanMapper.loanALoanDto(loan);
         return new ResponseGlobal<>(LoanMapper.loanDtoALoan(repository.save(loanEntity)));
@@ -56,6 +56,7 @@ public class LoanRepositoryAdapter extends AdapterOperations<Loan, LoanEntity, S
         loanEntity.setPaymentCycle(loan.getPaymentCycle());
         loanEntity.setFirstPaymentDate(loan.getFirstPaymentDate());
         loanEntity.setLoanState(LoanState.Aprobado);
+
         generatePaymentSchedule(loan).getBody().forEach(ele -> {
             PaymentScheduleEntity paymentSchedule = PaymentScheduleMapper.paymentScheduleAPaymentScheduleDto(ele, loanEntity);
             loanEntity.getPaymentSchedule().add(paymentSchedule);
@@ -77,20 +78,26 @@ public class LoanRepositoryAdapter extends AdapterOperations<Loan, LoanEntity, S
 
     }
 
-    @Override
     public ResponseGlobal<List<PaymentSchedule>> generatePaymentSchedule(Loan loan) {
         List<PaymentSchedule> paymentSchedules = new ArrayList<>();
         Calendar calendar = GenerateCalendar.generateCalendar(loan.getFirstPaymentDate());
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         BigDecimal amount = GenerateCalendar.calculateFee(loan.getAmount(), loan.getInterest(), loan.getDeadline());
         for (int i = 0; i < loan.getDeadline(); i++) {
-            calendar.add(Calendar.DAY_OF_WEEK, GenerateCalendar.calculateDaysBetweenPayments(loan.getPaymentCycle()));
             Date expirationDate = calendar.getTime();
-            paymentSchedules.add(new PaymentSchedule(dateFormat.format(expirationDate), amount, i + 1, loan.getPaymentCycle(), PaymentStatus.Pendiente));
+
+            paymentSchedules.add(PaymentSchedule.builder()
+                    .paymentDate(dateFormat.format(expirationDate))
+                    .amount(amount)
+                    .quotaNumber(i + 1)
+                    .paymentCycle(loan.getPaymentCycle())
+                    .paymentStatus(PaymentStatus.Pendiente)
+                    .build());
+
+            calendar.add(Calendar.DAY_OF_WEEK, GenerateCalendar.calculateDaysBetweenPayments(loan.getPaymentCycle()));
         }
         return new ResponseGlobal<>(paymentSchedules);
     }
-
 
     @Override
     public ResponseGlobal<Loan> findByIdLoan(String id) {
@@ -99,6 +106,7 @@ public class LoanRepositoryAdapter extends AdapterOperations<Loan, LoanEntity, S
     }
 
     @Override
+    @Transactional
     public ResponseGlobal<Loan> cancelLoan(String id) {
         LoanEntity loanEntity = this.getByIdLoan(id);
         loanEntity.setLoanState(LoanState.Cancelado);
@@ -138,10 +146,8 @@ public class LoanRepositoryAdapter extends AdapterOperations<Loan, LoanEntity, S
             params.put("valuePaid", loanEntity.valuePaid());
             params.put("imageDir", "classpath:/static/images/");
             params.put("dsPaymentSchedule", new JRBeanCollectionDataSource(loanReportDto));
-
-            JasperPrint report = JasperFillManager.fillReport(JasperCompileManager.compileReport(
-                    ResourceUtils.getFile("classpath:ReportLoanApplication.jrxml")
-                            .getAbsolutePath()), params, new JREmptyDataSource());
+            InputStream reportStream = getClass().getResourceAsStream("/ReportLoanApplication.jrxml");
+            JasperPrint report = JasperFillManager.fillReport(JasperCompileManager.compileReport(reportStream), params, new JREmptyDataSource());
             return JasperExportManager.exportReportToPdf(report);
 
         } catch (Exception e) {

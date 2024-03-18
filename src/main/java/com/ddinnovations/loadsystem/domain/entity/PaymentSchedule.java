@@ -28,11 +28,4 @@ public class PaymentSchedule {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private LocalDateTime updatedAt;
 
-    public PaymentSchedule(String paymentDate, BigDecimal amount, int quotaNumber, PaymentOfPayroll paymentCycle, PaymentStatus paymentStatus) {
-        this.paymentDate = paymentDate;
-        this.amount = amount;
-        this.quotaNumber = quotaNumber;
-        this.paymentCycle = paymentCycle;
-        this.paymentStatus = paymentStatus;
-    }
 }

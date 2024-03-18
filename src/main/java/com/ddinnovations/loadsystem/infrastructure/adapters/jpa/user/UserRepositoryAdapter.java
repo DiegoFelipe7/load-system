@@ -2,6 +2,7 @@ package com.ddinnovations.loadsystem.infrastructure.adapters.jpa.user;
 
 import com.ddinnovations.loadsystem.domain.entity.User;
 import com.ddinnovations.loadsystem.domain.entity.common.BusinessException;
+import com.ddinnovations.loadsystem.domain.entity.dto.UpdatePassword;
 import com.ddinnovations.loadsystem.domain.entity.params.ParamsUser;
 import com.ddinnovations.loadsystem.domain.entity.response.Pagination;
 import com.ddinnovations.loadsystem.domain.entity.response.ResponseGlobal;
@@ -66,6 +67,17 @@ public class UserRepositoryAdapter extends AdapterOperations<User, UserEntity, S
             }
             userEntity.setEmail(user.getEmail());
         }
+
+        return new ResponseGlobal<>(UserMapper.userDtoAUser(repository.save(userEntity)));
+    }
+
+    @Override
+    public ResponseGlobal<User> changePassword(String id, UpdatePassword updatePassword) {
+        UserEntity userEntity = getByIdUser(id);
+        if (!passwordEncoder.matches(updatePassword.password(), userEntity.getPassword())) {
+            throw new BusinessException(BusinessException.Type.PASSWORD_INVALID);
+        }
+        userEntity.setPassword(passwordEncoder.encode(updatePassword.password()));
 
         return new ResponseGlobal<>(UserMapper.userDtoAUser(repository.save(userEntity)));
     }

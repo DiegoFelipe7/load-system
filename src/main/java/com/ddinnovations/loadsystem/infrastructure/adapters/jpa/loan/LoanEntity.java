@@ -21,6 +21,7 @@ import java.util.List;
 @Builder(toBuilder = true)
 @Table(name = "loan")
 @Entity
+@ToString
 public class LoanEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

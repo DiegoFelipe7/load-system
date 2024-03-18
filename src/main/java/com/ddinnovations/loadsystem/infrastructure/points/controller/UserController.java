@@ -3,10 +3,12 @@ package com.ddinnovations.loadsystem.infrastructure.points.controller;
 import com.ddinnovations.loadsystem.application.service.UserService;
 import com.ddinnovations.loadsystem.domain.entity.Clients;
 import com.ddinnovations.loadsystem.domain.entity.User;
+import com.ddinnovations.loadsystem.domain.entity.dto.UpdatePassword;
 import com.ddinnovations.loadsystem.domain.entity.params.ParamsClients;
 import com.ddinnovations.loadsystem.domain.entity.params.ParamsUser;
 import com.ddinnovations.loadsystem.domain.entity.response.ResponseGlobal;
 import com.ddinnovations.loadsystem.domain.entity.response.ResponseGlobalPagination;
+import com.ddinnovations.loadsystem.infrastructure.adapters.security.config.CurrenUsers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
@@ -15,10 +17,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "api/user" )
+@RequestMapping(path = "api/user")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final CurrenUsers currenUsers;
 
     @PostMapping()
     public ResponseGlobal<User> createUser(@RequestBody User user) {
@@ -41,6 +44,10 @@ public class UserController {
     }
 
 
+    @PatchMapping(path = "/change-password")
+    public ResponseGlobal<User> changePassword(@RequestBody UpdatePassword updatePassword) {
+        return userService.changePassword(currenUsers.getCurrentUser().getId(), updatePassword);
+    }
 
     @PutMapping(path = "/{id}")
     public ResponseGlobal<User> update(@PathVariable("id") String id, @RequestBody User user) {

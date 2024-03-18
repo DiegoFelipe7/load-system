@@ -2,6 +2,7 @@ package com.ddinnovations.loadsystem.application.service;
 
 import com.ddinnovations.loadsystem.application.usecase.UserUseCase;
 import com.ddinnovations.loadsystem.domain.entity.User;
+import com.ddinnovations.loadsystem.domain.entity.dto.UpdatePassword;
 import com.ddinnovations.loadsystem.domain.entity.params.ParamsUser;
 import com.ddinnovations.loadsystem.domain.entity.response.ResponseGlobal;
 import com.ddinnovations.loadsystem.domain.entity.response.ResponseGlobalPagination;
@@ -34,6 +35,11 @@ public class UserService implements UserUseCase {
     @Override
     public ResponseGlobal<User> update(String id, User user) {
         return userRepository.update(id, user);
+    }
+
+    @Override
+    public ResponseGlobal<User> changePassword(String id, UpdatePassword updatePassword) {
+        return userRepository.changePassword(id,updatePassword);
     }
 
     @Override

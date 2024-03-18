@@ -38,14 +38,14 @@ public class PaymentScheduleEntity {
 
     @PrePersist()
     public void insert() {
-        this.createdAt=LocalDateTime.now();
-        this.updatedAt=LocalDateTime.now();
-        this.searchKey = (this.paymentDate + "|" + this.amount + "|" + this.quotaNumber + '|' + this.paymentStatus.name() + '|' + this.paymentCycle.name()).toLowerCase();
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+        this.searchKey = (this.loan.getClient().getIdentification() + "|" + this.paymentDate + "|" + this.amount + "|" + this.quotaNumber + '|' + this.paymentStatus.name() + '|' + this.paymentCycle.name()).toLowerCase();
     }
 
     @PreUpdate()
     public void update() {
-        this.updatedAt=LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
         this.searchKey = (this.paymentDate + "|" + this.amount + "|" + this.quotaNumber + '|' + this.paymentStatus.name() + '|' + this.paymentCycle.name()).toLowerCase();
     }
 
