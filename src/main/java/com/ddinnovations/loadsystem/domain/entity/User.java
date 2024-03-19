@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Builder(toBuilder = true)
 public class User {
     private String id;
-    private String fistName;
+    private String firstName;
     private String lastName;
     private String email;
     private String password;

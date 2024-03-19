@@ -72,7 +72,7 @@ public class LoanController {
     }
 
 
-    @DeleteMapping(path = "/cancel/{id}")
+    @PatchMapping(path = "/cancel/{id}")
     public ResponseGlobal<Loan> cancelLoan(@PathVariable("id") String id) {
         return loanService.cancelLoan(id);
     }

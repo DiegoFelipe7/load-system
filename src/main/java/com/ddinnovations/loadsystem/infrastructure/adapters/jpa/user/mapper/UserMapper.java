@@ -11,7 +11,7 @@ public class UserMapper {
     public static User userDtoAUser(UserEntity userEntity) {
         return User.builder()
                 .id(userEntity.getId())
-                .fistName(userEntity.getFistName())
+                .firstName(userEntity.getFirstName())
                 .lastName(userEntity.getLastName())
                 .email(userEntity.getEmail())
                 //.password(userEntity.getPassword())
@@ -25,7 +25,7 @@ public class UserMapper {
     public static UserEntity userAUserDto(User user) {
         return UserEntity.builder()
                 .id(user.getId())
-                .fistName(user.getFistName())
+                .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .email(user.getEmail())
                 .password(user.getPassword())

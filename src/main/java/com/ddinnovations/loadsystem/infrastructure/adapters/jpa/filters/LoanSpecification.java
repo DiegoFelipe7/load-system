@@ -29,9 +29,6 @@ public class LoanSpecification implements Specification<LoanEntity> {
     public Predicate toPredicate(Root<LoanEntity> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
         query.orderBy(criteriaBuilder.desc(root.get("createdAt")));
         List<Predicate> predicates = new ArrayList<>();
-        Predicate notCancelled = criteriaBuilder.notEqual(root.get("loanState"), LoanState.Cancelado);
-        predicates.add(notCancelled);
-
         if (StringUtils.hasText(getFilterCriteriaText())) {
             Predicate filterByText = criteriaBuilder.like(root.get("searchKey"), "%".concat(getFilterCriteriaText().toLowerCase()).concat("%"));
             predicates.add(filterByText);

@@ -50,14 +50,14 @@ public class LoanEntity {
         this.numberOfPayments = 0;
         this.earnings = BigDecimal.ZERO;
         this.loanState = LoanState.Pendiente;
-        this.searchKey = (this.client.getEmail() + "|" + this.client.getIdentification() + "|" + this.amount.toString() + '|' + this.paymentCycle.name() + '|' + this.createdAt + '|' + this.deadline).toLowerCase();
+        this.searchKey = (this.client.getFullName() + "|" + this.client.getIdentification() + "|" + this.amount.toString() + '|' + this.paymentCycle.name() + '|' + this.createdAt + '|' + this.deadline).toLowerCase();
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
 
     @PreUpdate()
     public void update() {
-        this.searchKey = (this.client.getEmail() + "|" + this.client.getIdentification() + "|" + this.amount.toString() + '|' + this.paymentCycle.name() + '|' + this.description + '|' + this.createdAt + '|' + this.deadline).toLowerCase();
+        this.searchKey = (this.client.getFullName() + "|" + this.client.getIdentification() + "|" + this.amount.toString() + '|' + this.paymentCycle.name() + '|' + this.description + '|' + this.createdAt + '|' + this.deadline).toLowerCase();
         this.updatedAt = LocalDateTime.now();
     }
 

@@ -59,8 +59,8 @@ public class UserRepositoryAdapter extends AdapterOperations<User, UserEntity, S
     @Override
     public ResponseGlobal<User> update(String id, User user) {
         UserEntity userEntity = getByIdUser(id);
-        userEntity.setFistName(user.getFistName());
-        user.setLastName(user.getLastName());
+        userEntity.setFirstName(user.getFirstName());
+        userEntity.setLastName(user.getLastName());
         if (!userEntity.getEmail().equalsIgnoreCase(user.getEmail())) {
             if (repository.existsByEmailIgnoreCase(user.getEmail())) {
                 throw new BusinessException(BusinessException.Type.USER_EXIST);
