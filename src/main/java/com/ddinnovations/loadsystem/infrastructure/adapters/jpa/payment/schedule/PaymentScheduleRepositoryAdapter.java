@@ -2,6 +2,8 @@ package com.ddinnovations.loadsystem.infrastructure.adapters.jpa.payment.schedul
 
 import com.ddinnovations.loadsystem.domain.entity.PaymentSchedule;
 import com.ddinnovations.loadsystem.domain.entity.common.BusinessException;
+import com.ddinnovations.loadsystem.domain.entity.dto.LoanIndicatorDTO;
+import com.ddinnovations.loadsystem.domain.entity.dto.PaymentIndicatorsDto;
 import com.ddinnovations.loadsystem.domain.entity.enums.PaymentStatus;
 import com.ddinnovations.loadsystem.domain.entity.params.ParamsPaymentSchedule;
 import com.ddinnovations.loadsystem.domain.entity.response.Pagination;
@@ -10,6 +12,7 @@ import com.ddinnovations.loadsystem.domain.entity.response.ResponseGlobalPaginat
 import com.ddinnovations.loadsystem.domain.repository.PaymentScheduleRepository;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.filters.PaymentScheduleSpecification;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.helpers.AdapterOperations;
+import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.helpers.GenerateDates;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.loan.LoanRepositoryAdapter;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.payment.schedule.mapper.PaymentScheduleMapper;
 import org.reactivecommons.utils.ObjectMapper;
@@ -17,6 +20,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Repository
@@ -31,7 +35,7 @@ public class PaymentScheduleRepositoryAdapter extends AdapterOperations<PaymentS
 
     @Override
     public ResponseGlobalPagination<List<PaymentSchedule>> findAllPaymentSchedule(ParamsPaymentSchedule paymentSchedule) {
-        PaymentScheduleSpecification specification = new PaymentScheduleSpecification(paymentSchedule.getStartDate(), paymentSchedule.getFilterCriteriaText(), paymentSchedule.getPaymentCycle());
+        PaymentScheduleSpecification specification = new PaymentScheduleSpecification(paymentSchedule.getStartDate(), paymentSchedule.getFilterCriteriaText(), paymentSchedule.getPaymentCycle(), paymentSchedule.getPaymentStatus());
         PageRequest pages = PageRequest.of(paymentSchedule.getPage(), paymentSchedule.getLimit(), paymentSchedule.getSort());
         List<PaymentSchedule> loanApplications = repository.findAll(specification, pages)
                 .stream()
@@ -44,7 +48,7 @@ public class PaymentScheduleRepositoryAdapter extends AdapterOperations<PaymentS
     @Override
     public ResponseGlobal<PaymentSchedule> findByIdPaymentSchedule(String id) {
         PaymentScheduleEntity paymentSchedule = this.getByIdPaymentSchedule(id);
-        return new ResponseGlobal<>(PaymentScheduleMapper.paymentScheduleDtoAPaymentSchedule(paymentSchedule));
+        return new ResponseGlobal<>(PaymentScheduleMapper.paymentScheduleDTO(paymentSchedule));
     }
 
     @Override
@@ -59,9 +63,23 @@ public class PaymentScheduleRepositoryAdapter extends AdapterOperations<PaymentS
         return new ResponseGlobal<>(PaymentScheduleMapper.paymentScheduleDtoAPaymentSchedule(repository.save(paymentSchedule)));
     }
 
-    //TODO: CAMBIAR MENSAJE
+    @Override
+    public ResponseGlobal<PaymentIndicatorsDto> paymentIndicators() {
+        Object object = repository.getIndicators(GenerateDates.starDateFilter(), GenerateDates.endDateFilter());
+
+        if (object instanceof Object[] array) {
+            BigDecimal totalBalance = (BigDecimal) array[0];
+            BigDecimal raisedMoney = (BigDecimal) array[1];
+            Long paymentsMade = ((Number) array[2]).longValue();
+            Long overduePayments = ((Number) array[3]).longValue();
+            return new ResponseGlobal<>(new PaymentIndicatorsDto(totalBalance, raisedMoney, paymentsMade, overduePayments));
+        }
+        return new ResponseGlobal<>(new PaymentIndicatorsDto(BigDecimal.ZERO, BigDecimal.ZERO, 0L, 0L));
+
+    }
+
     private PaymentScheduleEntity getByIdPaymentSchedule(String id) {
         return repository.findById(id)
-                .orElseThrow(() -> new BusinessException(BusinessException.Type.ERROR_BD));
+                .orElseThrow(() -> new BusinessException(BusinessException.Type.INVALID_PAYMENT_REFERENCE));
     }
 }

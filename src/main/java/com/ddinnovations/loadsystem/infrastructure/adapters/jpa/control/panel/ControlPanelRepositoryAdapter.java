@@ -27,7 +27,7 @@ public class ControlPanelRepositoryAdapter implements ControlPanelRepository {
         Long totalClients = clientsDtoRepository.count();
         Long totalRequest = loanApplicationDtoRepository.count();
         Long totalLoansInArrears = paymentScheduleDtoRepository.findAll().stream().filter(ele -> ele.getPaymentStatus().equals(PaymentStatus.Mora)).count();
-        Object object = loanDtoRepository.getControlPanelIndicators();
+        Object object = loanDtoRepository.getLoanStatistics();
         if (object instanceof Object[] array) {
             BigDecimal totalInvestedCapital = (BigDecimal) array[0];
             Long totalActiveLoans = ((Number) array[1]).longValue();

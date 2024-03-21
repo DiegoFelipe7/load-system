@@ -35,14 +35,13 @@ public class ClientSpecification implements Specification<ClientsEntity> {
             Predicate filterByText = criteriaBuilder.like(root.get("searchKey"), "%".concat(getFilterCriteriaText().toLowerCase()).concat("%"));
             predicates.add(filterByText);
         }
-        //TODO: AQUI FALTA
-        // Se aplica la ordenación si se proporciona
+        //TODO : NO FUNCIONA
         if (getOrderBy() != null) {
-            /*Predicate orderByPredicate = orderBy.equals(OrderBy.DESC) ?
-                    criteriaBuilder.desc(root.<LocalDateTime>get(createdAt)) :
-                    criteriaBuilder.asc(root.<LocalDateTime>get(createdAt));
-            query.orderBy(orderByPredicate);*/
+            query.orderBy(orderBy.equals(OrderBy.DESC) ?
+                    criteriaBuilder.desc(root.<LocalDateTime>get("id")) :
+                    criteriaBuilder.asc(root.<LocalDateTime>get("id")));
         }
+
         if (StringUtils.hasText(getStartDate()) && StringUtils.hasText(getEndDate())) {
             Predicate dateRangePredicate = criteriaBuilder.between(root.get(createdAt), GenerateDates.starDate(getStartDate()), GenerateDates.endDate(getEndDate()));
             predicates.add(dateRangePredicate);

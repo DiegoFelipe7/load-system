@@ -188,7 +188,7 @@
                 <textFieldExpression><![CDATA[$P{valuePaid}]]></textFieldExpression>
             </textField>
             <staticText>
-                <reportElement x="322" y="206" width="110" height="20" forecolor="#2D664E" uuid="2973a78a-e19c-4fac-b3de-13f771eac47d"/>
+                <reportElement x="322" y="206" width="115" height="20" forecolor="#2D664E" uuid="2973a78a-e19c-4fac-b3de-13f771eac47d"/>
                 <textElement verticalAlignment="Middle">
                     <font size="14" isBold="true"/>
                 </textElement>

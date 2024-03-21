@@ -16,13 +16,14 @@ import java.time.LocalDateTime;
 @Setter
 @Builder(toBuilder = true)
 @Entity
-@Table(name = "payment-schedule")
+@Table(name = "payment_schedule")
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PaymentScheduleEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+   // private String paymentReference;
     private String paymentDate;
     private BigDecimal amount;
     private int quotaNumber;
@@ -39,6 +40,7 @@ public class PaymentScheduleEntity {
     @PrePersist()
     public void insert() {
         this.createdAt = LocalDateTime.now();
+      //  this.paymentReference = this.loan.getId().split()
         this.updatedAt = LocalDateTime.now();
         this.searchKey = (this.loan.getClient().getIdentification() + "|" + this.paymentDate + "|" + this.amount + "|" + this.quotaNumber + '|' + this.paymentStatus.name() + '|' + this.paymentCycle.name()).toLowerCase();
     }

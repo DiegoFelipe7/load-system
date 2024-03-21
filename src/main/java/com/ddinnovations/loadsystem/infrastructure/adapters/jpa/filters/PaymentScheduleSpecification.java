@@ -25,6 +25,7 @@ public class PaymentScheduleSpecification implements Specification<PaymentSchedu
     private String startDate;
     private String filterCriteriaText;
     private PaymentOfPayroll paymentCycle;
+    private PaymentStatus paymentStatus;
 
     @Override
     public Predicate toPredicate(Root<PaymentScheduleEntity> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
@@ -33,8 +34,6 @@ public class PaymentScheduleSpecification implements Specification<PaymentSchedu
 
         query.orderBy(criteriaBuilder.asc(root.get("createdAt")));
 
-        Predicate paymentStatus = criteriaBuilder.in(root.get("paymentStatus")).value(PaymentStatus.Pendiente).value(PaymentStatus.Mora);
-        predicates.add(paymentStatus);
 
         if (StringUtils.hasText(getStartDate())) {
             Predicate filterByPaymentDate = criteriaBuilder.equal(root.get("paymentDate"), getStartDate());
@@ -50,6 +49,12 @@ public class PaymentScheduleSpecification implements Specification<PaymentSchedu
             Predicate filterByPaymentCycle = criteriaBuilder.equal(root.get("paymentCycle"), getPaymentCycle());
             predicates.add(filterByPaymentCycle);
         }
+
+        if (getPaymentCycle() != null) {
+            Predicate status = criteriaBuilder.equal(root.get("paymentStatus"), getPaymentStatus());
+            predicates.add(status);
+        }
+
 
         return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
     }

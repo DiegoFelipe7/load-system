@@ -55,6 +55,7 @@ public class LoanMapper {
                 .id(loan.getId())
                 .amount(loan.getAmount())
                 .paymentCycle(loan.getPaymentCycle())
+                .interest(loan.getInterest())
                 .firstPaymentDate(loan.getFirstPaymentDate())
                 .deadline(loan.getDeadline())
                 .description(loan.getDescription())
