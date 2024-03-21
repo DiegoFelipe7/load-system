@@ -46,7 +46,7 @@ public class LoanController {
             @RequestParam(value = "paymentCycle", required = false) PaymentOfPayroll paymentCycle,
             @RequestParam(value = "loanState", required = false) LoanState loanState) {
 
-        return loanService.findAllLoan(new ParamsLoan(page, limit, Sort.by(sort), filterCriteriaText, paymentCycle, loanState, startDate));
+        return loanService.findAllLoan(new ParamsLoan(page, limit, Sort.by(Sort.Order.desc(sort)), filterCriteriaText, paymentCycle, loanState, startDate));
     }
 
     @GetMapping(path = "/indicators")

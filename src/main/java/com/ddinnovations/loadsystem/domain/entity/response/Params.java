@@ -21,4 +21,10 @@ public class Params {
         this.limit = limit;
         this.sort = sort;
     }
+
+    public Params(int page, int limit , String filterCriteriaText) {
+        this.page = page;
+        this.limit = limit;
+        this.filterCriteriaText=filterCriteriaText;
+    }
 }

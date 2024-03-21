@@ -32,7 +32,7 @@ public class UserController {
     public ResponseGlobalPagination<List<User>> findAllUsers(
             @RequestParam(value = "page", defaultValue = "0", required = false) int page,
             @RequestParam(value = "limit", defaultValue = "10", required = false) int limit,
-            @RequestParam(value = "sort", defaultValue = "id", required = false) String sort,
+            @RequestParam(value = "sort", defaultValue = "createdAt", required = false) String sort,
             @RequestParam(value = "filterCriteriaText", defaultValue = "", required = false) String filterCriteriaText,
             @RequestParam(value = "email", defaultValue = "", required = false) String email) {
         return userService.findAllUser(new ParamsUser(page, limit, Sort.by(sort), filterCriteriaText, email));

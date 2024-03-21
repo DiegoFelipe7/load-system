@@ -16,8 +16,8 @@ public class ParamsClients extends Params {
     private String startDate;
     private String endDate;
 
-    public ParamsClients(int page, int limit, Sort sort, String filterCriteriaText, OrderBy orderBy, String startDate, String endDate) {
-        super(page, limit, sort, filterCriteriaText);
+    public ParamsClients(int page, int limit, String filterCriteriaText, OrderBy orderBy, String startDate, String endDate) {
+        super(page, limit, filterCriteriaText);
         this.orderBy = orderBy;
         this.startDate = startDate;
         this.endDate = endDate;

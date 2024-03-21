@@ -27,7 +27,6 @@ public class LoanSpecification implements Specification<LoanEntity> {
 
     @Override
     public Predicate toPredicate(Root<LoanEntity> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
-        //query.orderBy(criteriaBuilder.asc(root.get("createdAt")));
         List<Predicate> predicates = new ArrayList<>();
         if (StringUtils.hasText(getFilterCriteriaText())) {
             Predicate filterByText = criteriaBuilder.like(root.get("searchKey"), "%".concat(getFilterCriteriaText().toLowerCase()).concat("%"));

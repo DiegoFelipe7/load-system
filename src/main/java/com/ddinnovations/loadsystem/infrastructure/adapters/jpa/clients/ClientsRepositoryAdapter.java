@@ -17,6 +17,7 @@ import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.helpers.Generate
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.workin.information.mapper.WorkingInformationMapper;
 import org.reactivecommons.utils.ObjectMapper;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,8 +34,8 @@ public class ClientsRepositoryAdapter extends AdapterOperations<Clients, Clients
     @Override
     public ResponseGlobalPagination<List<Clients>> findAllClients(ParamsClients params) {
         ClientSpecification specification = new ClientSpecification(params.getFilterCriteriaText(), params.getOrderBy(), params.getStartDate(), params.getEndDate());
-        PageRequest pages = PageRequest.of(params.getPage(), params.getLimit(), params.getSort());
-        List<Clients> clientList = repository.findAll(specification, pages)
+        PageRequest pages = PageRequest.of(params.getPage(), params.getLimit());
+        List<Clients> clientList = repository.findAll(specification,pages)
                 .stream()
                 .map(ClientMapper::clientsDto)
                 .toList();
