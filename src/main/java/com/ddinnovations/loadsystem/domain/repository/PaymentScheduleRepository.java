@@ -13,4 +13,6 @@ public interface PaymentScheduleRepository {
     ResponseGlobal<PaymentSchedule> findByIdPaymentSchedule(String id);
     ResponseGlobal<PaymentSchedule> makePayment(String id);
     ResponseGlobal<PaymentIndicatorsDto> paymentIndicators();
+
+    void updatePayments();
 }

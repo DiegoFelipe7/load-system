@@ -41,4 +41,12 @@ public class GenerateDates {
 
     }
 
+
+    public static String paymentDate() {
+        LocalDate localDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return localDate.format(formatter);
+
+    }
+
 }

@@ -2,6 +2,7 @@ package com.ddinnovations.loadsystem.application.usecase;
 
 import com.ddinnovations.loadsystem.domain.entity.Loan;
 import com.ddinnovations.loadsystem.domain.entity.PaymentSchedule;
+import com.ddinnovations.loadsystem.domain.entity.dto.Id;
 import com.ddinnovations.loadsystem.domain.entity.dto.LoanIndicatorDTO;
 import com.ddinnovations.loadsystem.domain.entity.params.ParamsLoan;
 import com.ddinnovations.loadsystem.domain.entity.response.ResponseGlobal;
@@ -25,4 +26,6 @@ public interface LoanUseCase {
 
     ResponseGlobal<LoanIndicatorDTO> loanIndicators();
     byte[] loanReport(String id);
+
+    ResponseGlobal<Id> removeLoan(String id);
 }

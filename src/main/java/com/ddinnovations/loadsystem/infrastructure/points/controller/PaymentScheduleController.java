@@ -40,7 +40,7 @@ public class PaymentScheduleController {
             @RequestParam(value = "filterCriteriaText", defaultValue = "", required = false) String filterCriteriaText,
             @RequestParam(value = "sort", defaultValue = "createdAt", required = false) String sort,
             @RequestParam(value = "paymentCycle", required = false) PaymentOfPayroll paymentCycle,
-            @RequestParam(value = "startDate") String startDate,
+            @RequestParam(value = "startDate" , required = false) String startDate,
             @RequestParam(value = "paymentStatus", required = false) PaymentStatus paymentStatus) {
         return paymentScheduleService.findAllPaymentSchedule(new ParamsPaymentSchedule(page, limit, Sort.by(sort), filterCriteriaText, paymentCycle, paymentStatus, startDate));
     }

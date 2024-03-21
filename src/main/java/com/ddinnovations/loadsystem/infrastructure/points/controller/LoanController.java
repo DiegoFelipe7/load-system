@@ -3,6 +3,7 @@ package com.ddinnovations.loadsystem.infrastructure.points.controller;
 import com.ddinnovations.loadsystem.application.service.LoanService;
 import com.ddinnovations.loadsystem.domain.entity.Loan;
 import com.ddinnovations.loadsystem.domain.entity.PaymentSchedule;
+import com.ddinnovations.loadsystem.domain.entity.dto.Id;
 import com.ddinnovations.loadsystem.domain.entity.dto.LoanIndicatorDTO;
 import com.ddinnovations.loadsystem.domain.entity.enums.LoanState;
 import com.ddinnovations.loadsystem.domain.entity.enums.PaymentOfPayroll;
@@ -53,7 +54,7 @@ public class LoanController {
         return loanService.loanIndicators();
     }
 
-    @GetMapping(path = "/report/{id}" , produces = MediaType.APPLICATION_PDF_VALUE)
+    @GetMapping(path = "/report/{id}", produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<byte[]> loanReport(@PathVariable("id") String id) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
@@ -76,4 +77,10 @@ public class LoanController {
     public ResponseGlobal<Loan> cancelLoan(@PathVariable("id") String id) {
         return loanService.cancelLoan(id);
     }
+
+    @DeleteMapping(path = "/{id}")
+    public ResponseGlobal<Id> removeLoan(@PathVariable("id") String id) {
+        return loanService.removeLoan(id);
+    }
+
 }

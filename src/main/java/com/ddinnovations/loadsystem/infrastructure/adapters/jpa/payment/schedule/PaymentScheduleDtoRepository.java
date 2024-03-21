@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.QueryByExampleExecutor;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Repository
 public interface PaymentScheduleDtoRepository extends JpaRepository<PaymentScheduleEntity, String>, QueryByExampleExecutor<PaymentScheduleEntity>, JpaSpecificationExecutor<PaymentScheduleEntity> {
@@ -19,4 +20,6 @@ public interface PaymentScheduleDtoRepository extends JpaRepository<PaymentSched
                     "FROM " +
                     "    payment_schedule ps")
     Object getIndicators(LocalDateTime startDate, LocalDateTime endDate);
+
+    List<PaymentScheduleEntity> findAllByPaymentDate(String paymentDate);
 }

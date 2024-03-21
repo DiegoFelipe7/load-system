@@ -23,8 +23,8 @@ public class PaymentScheduleEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
-   // private String paymentReference;
     private String paymentDate;
+    private String paymentReference;
     private BigDecimal amount;
     private int quotaNumber;
     @ManyToOne(targetEntity = LoanEntity.class, fetch = FetchType.LAZY)
@@ -40,9 +40,9 @@ public class PaymentScheduleEntity {
     @PrePersist()
     public void insert() {
         this.createdAt = LocalDateTime.now();
-      //  this.paymentReference = this.loan.getId().split()
+        this.paymentReference = this.loan.getId().split("-")[0].concat("-N" + this.quotaNumber);
         this.updatedAt = LocalDateTime.now();
-        this.searchKey = (this.loan.getClient().getIdentification() + "|" + this.paymentDate + "|" + this.amount + "|" + this.quotaNumber + '|' + this.paymentStatus.name() + '|' + this.paymentCycle.name()).toLowerCase();
+        this.searchKey = (this.paymentReference + "|" + this.loan.getClient().getIdentification() + "|" + this.paymentDate + "|" + this.amount + "|" + this.quotaNumber + '|' + this.paymentStatus.name() + '|' + this.paymentCycle.name()).toLowerCase();
     }
 
     @PreUpdate()

@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 public class PaymentSchedule {
     private String id;
     private String paymentDate;
+    private String paymentReference;
     private BigDecimal amount;
     private int quotaNumber;
     private Loan loan;

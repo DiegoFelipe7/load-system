@@ -78,6 +78,16 @@ public class PaymentScheduleRepositoryAdapter extends AdapterOperations<PaymentS
 
     }
 
+    @Override
+   // @Scheduled(cron = "0 0/1 * * * *", zone = "America/Bogota") //every 1 minutes
+    public void updatePayments() {
+        repository.findAllByPaymentDate(GenerateDates.paymentDate())
+                .forEach(ele -> {
+                    ele.setPaymentStatus(PaymentStatus.Mora);
+                    repository.save(ele);
+                });
+    }
+
     private PaymentScheduleEntity getByIdPaymentSchedule(String id) {
         return repository.findById(id)
                 .orElseThrow(() -> new BusinessException(BusinessException.Type.INVALID_PAYMENT_REFERENCE));

@@ -42,6 +42,7 @@ public class PaymentScheduleMapper {
         return PaymentSchedule.builder()
                 .id(paymentSchedule.getId())
                 .paymentDate(paymentSchedule.getPaymentDate())
+                .paymentReference(paymentSchedule.getPaymentReference())
                 .amount(paymentSchedule.getAmount())
                 .loan(LoanMapper.loanDtoALoan(paymentSchedule.getLoan()))
                 .quotaNumber(paymentSchedule.getQuotaNumber())

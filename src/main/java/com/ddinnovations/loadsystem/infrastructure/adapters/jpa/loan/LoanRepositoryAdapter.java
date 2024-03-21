@@ -3,6 +3,7 @@ package com.ddinnovations.loadsystem.infrastructure.adapters.jpa.loan;
 import com.ddinnovations.loadsystem.domain.entity.Loan;
 import com.ddinnovations.loadsystem.domain.entity.PaymentSchedule;
 import com.ddinnovations.loadsystem.domain.entity.common.BusinessException;
+import com.ddinnovations.loadsystem.domain.entity.dto.Id;
 import com.ddinnovations.loadsystem.domain.entity.dto.LoanIndicatorDTO;
 import com.ddinnovations.loadsystem.domain.entity.dto.LoanReportDto;
 import com.ddinnovations.loadsystem.domain.entity.enums.LoanState;
@@ -153,6 +154,13 @@ public class LoanRepositoryAdapter extends AdapterOperations<Loan, LoanEntity, S
         } catch (Exception e) {
             throw new BusinessException(BusinessException.Type.ERROR_BD);
         }
+    }
+
+    @Override
+    public ResponseGlobal<Id> removeLoan(String id) {
+        LoanEntity loanEntity = this.getByIdLoan(id);
+        repository.deleteById(loanEntity.getId());
+        return new ResponseGlobal<>(new Id(loanEntity.getId()));
     }
 
 
