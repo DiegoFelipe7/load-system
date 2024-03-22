@@ -77,8 +77,7 @@ public class UserRepositoryAdapter extends AdapterOperations<User, UserEntity, S
         if (!passwordEncoder.matches(updatePassword.password(), userEntity.getPassword())) {
             throw new BusinessException(BusinessException.Type.PASSWORD_INVALID);
         }
-        userEntity.setPassword(passwordEncoder.encode(updatePassword.password()));
-
+        userEntity.setPassword(passwordEncoder.encode(updatePassword.newPassword()));
         return new ResponseGlobal<>(UserMapper.userDtoAUser(repository.save(userEntity)));
     }
 

@@ -18,10 +18,9 @@ public interface LoanDtoRepository extends JpaRepository<LoanEntity, String>, Qu
                     " SUM(CASE WHEN l.loan_state IN (1) THEN 1 ELSE 0 END) AS activeLoans, " +
                     " SUM(CASE WHEN l.loan_state IN (3) THEN 1 ELSE 0 END) AS totalLoansPaid, " +
                     " SUM(CASE WHEN l.loan_state IN (3) THEN 1 ELSE 0 END) AS loansPaid " +
-                    "FROM loan l "+
+                    "FROM loan l " +
                     "WHERE " +
                     "    (l.loan_state IN (1, 3) OR l.created_at BETWEEN :startDate AND :endDate)")
-
     Object getIndicators(LocalDateTime startDate, LocalDateTime endDate);
 
 
@@ -31,8 +30,7 @@ public interface LoanDtoRepository extends JpaRepository<LoanEntity, String>, Qu
                     "    SUM(CASE WHEN l.loan_state = 1 THEN 1 ELSE 0 END) AS totalActiveLoans, " +
                     "    SUM(CASE WHEN l.loan_state IN (1, 3) THEN l.earnings ELSE 0 END) AS totalProfits, " +
                     "    SUM(CASE WHEN l.loan_state = 3 THEN 1 ELSE 0 END) AS loansPaid " +
-                    "FROM " +
-                    "    loan l ")
+                    "FROM loan l ")
     Object getLoanStatistics();
 
 }

@@ -60,7 +60,7 @@ public class PaymentScheduleRepositoryAdapter extends AdapterOperations<PaymentS
         }
         paymentSchedule.setPaymentStatus(PaymentStatus.Pagado);
         loanRepositoryAdapter.updatePaymentNumber(paymentSchedule.getLoan().getId());
-        return new ResponseGlobal<>(PaymentScheduleMapper.paymentScheduleDtoAPaymentSchedule(repository.save(paymentSchedule)));
+        return new ResponseGlobal<>(PaymentScheduleMapper.paymentScheduleDTO(repository.save(paymentSchedule)));
     }
 
     @Override
