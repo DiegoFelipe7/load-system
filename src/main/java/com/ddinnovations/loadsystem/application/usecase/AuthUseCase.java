@@ -9,5 +9,5 @@ public interface AuthUseCase {
     TokenDTO singIn(LoginDTO loginDTO);
     ResponseGlobal<User> singUp(User user);
     ResponseGlobal<User> inactive(String id);
-    TokenDTO refreshToken(User user);
+    TokenDTO refreshToken(String token);
 }

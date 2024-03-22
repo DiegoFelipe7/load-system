@@ -13,15 +13,13 @@ import java.util.List;
 @Setter
 @Builder(toBuilder = true)
 @Entity
-@Table(name = "personal-reference")
+@Table(name = "personal_reference")
 public class PersonalReferenceEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
-    /*@ElementCollection
-    @CollectionTable(name = "reference", joinColumns = @JoinColumn(name = "personal_reference_id"))
-    private List<ReferenceDTO> reference;
-    */
+    @OneToMany(targetEntity = ReferenceEntity.class, fetch = FetchType.LAZY, mappedBy = "personalReference" , cascade = CascadeType.ALL)
+    private List<ReferenceEntity> referenceEntity;
     private String interaction;
     @Embedded
     private ReferenceDTO referred;

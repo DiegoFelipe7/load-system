@@ -40,7 +40,7 @@ public class LoanEntity {
     private LocalDateTime updatedAt;
     @ManyToOne(targetEntity = ClientsEntity.class, fetch = FetchType.LAZY)
     private ClientsEntity client;
-    @OneToMany(targetEntity = PaymentScheduleEntity.class, fetch = FetchType.EAGER, mappedBy = "loan", cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = PaymentScheduleEntity.class, fetch = FetchType.LAZY, mappedBy = "loan", cascade = CascadeType.ALL)
     private List<PaymentScheduleEntity> paymentSchedule;
 
 

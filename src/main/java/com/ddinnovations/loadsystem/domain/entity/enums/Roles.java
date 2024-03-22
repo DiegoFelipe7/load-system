@@ -6,8 +6,7 @@ import java.util.List;
 
 public enum Roles {
     ADMINISTRADOR(Arrays.asList(Permission.FULL)),
-    VENDEDOR(Arrays.asList(Permission.GET,Permission.SAVE,Permission.UPDATE)),
-    BODEGA(Arrays.asList(Permission.SAVE,Permission.UPDATE,Permission.GET));
+    VENDEDOR(Arrays.asList(Permission.GET,Permission.SAVE,Permission.UPDATE,Permission.PATCH));
 
     private List<Permission> permissions;
     Roles(List<Permission> permissions){

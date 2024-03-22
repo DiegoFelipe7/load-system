@@ -4,21 +4,21 @@ spring:
   application:
     name: "load-system"
   datasource:
-    url: "jdbc:postgresql://database-1.clucwwsgi8w3.us-east-1.rds.amazonaws.com:5432/postgres"
-    username: "postgres"
-    password: "Lider123**"
-    #url: "jdbc:postgresql://localhost:5431/massivetransactionmgmt"
+    #url: "jdbc:postgresql://database-1.clucwwsgi8w3.us-east-1.rds.amazonaws.com:5432/postgres"
     #username: "postgres"
-    #password: "some_password"
+    #password: "Lider123**"
+    url: "jdbc:postgresql://localhost:5431/massivetransactionmgmt"
+    username: "postgres"
+    password: "some_password"
     driverClassName: "org.postgresql.Driver"
   jpa:
-    database-platform: "org.hibernate.dialect.PostgreSQLDialect"
     hibernate:
       ddl-auto: update
     properties:
       hibernate:
-        format_sql: true
-        show_sql: true
+        #format_sql: true
+        #show_sql: true
+        dialect: "org.hibernate.dialect.PostgreSQLDialect"
   data:
     mongodb:
       uri: "mongodb+srv://dbuser:DMekHRirbSkdNyfj@cluster0.s4e6i.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"

@@ -38,4 +38,9 @@ public class AuthController {
     public void forgotPassword(@PathVariable("id") String id, @RequestBody ConfirmPasswordDTO confirmPassword) {
         resetPasswordService.changePassword(id,confirmPassword);
     }
+
+    @PostMapping(path = "/refresh")
+    public TokenDTO refreshToken(@RequestBody TokenDTO tokenDTO) {
+        return authService.refreshToken(tokenDTO.refreshToken());
+    }
 }

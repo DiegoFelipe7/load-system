@@ -70,7 +70,7 @@ public class LoanApplicationRepositoryAdapter extends AdapterOperations<LoanAppl
 
     @Override
     @Transactional
-    public ResponseGlobal<LoanApplication> approveLoanApplication(String id) {
+    public ResponseGlobal<Id> approveLoanApplication(String id) {
         LoanApplicationEntity loanApplicationEntity = this.getByIdLoanApplication(id);
 
         loanApplicationEntity.getClient().setWorkingInformation(loanApplicationEntity.getWorkingInformation());
@@ -81,7 +81,7 @@ public class LoanApplicationRepositoryAdapter extends AdapterOperations<LoanAppl
         loanApplicationEntity.getLoan().setClient(ClientMapper.clientDtoAClient(clientsEntity));
         loanRepositoryAdapter.createLoan(loanApplicationEntity.getLoan());
         repository.deleteById(loanApplicationEntity.getId());
-        return new ResponseGlobal<>(LoanApplicationMapper.loanApplicationLoanApplicationDto(loanApplicationEntity));
+        return new ResponseGlobal<>(new Id(loanApplicationEntity.getId()));
     }
 
     @Override

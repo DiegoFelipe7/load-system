@@ -14,7 +14,7 @@ import java.util.List;
 @Builder(toBuilder = true)
 public class PersonalReference {
     private String id;
-    private List<ReferenceDTO> reference;
+    private List<Reference> reference;
     private String interaction;
     private ReferenceDTO referred;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")

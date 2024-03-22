@@ -49,7 +49,7 @@ public class LoanApplicationController {
     }
 
     @PatchMapping(path = "/approve/{id}")
-    public ResponseGlobal<LoanApplication> approveLoanApplication(@PathVariable("id") String id) {
+    public ResponseGlobal<Id> approveLoanApplication(@PathVariable("id") String id) {
         return loanApplicationService.approveLoanApplication(id);
     }
 

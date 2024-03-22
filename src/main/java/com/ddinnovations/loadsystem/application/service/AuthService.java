@@ -29,7 +29,7 @@ public class AuthService implements AuthUseCase {
     }
 
     @Override
-    public TokenDTO refreshToken(User user) {
-        return authRepository.refreshToken(user);
+    public TokenDTO refreshToken(String token) {
+        return authRepository.refreshToken(token);
     }
 }

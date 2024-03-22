@@ -1,10 +1,12 @@
 package com.ddinnovations.loadsystem.infrastructure.adapters.jpa.clients.mapper;
 
 import com.ddinnovations.loadsystem.domain.entity.Clients;
+import com.ddinnovations.loadsystem.domain.entity.PersonalReference;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.back.account.BackAccountEntity;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.back.account.mapper.BackAccountMapper;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.clients.ClientsEntity;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.personal.reference.PersonalReferenceEntity;
+import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.personal.reference.mapper.ReferenceMapper;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.workin.information.WorkingInformationEntity;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.workin.information.mapper.WorkingInformationMapper;
 
@@ -77,6 +79,14 @@ public class ClientMapper {
     }
 
     public static ClientsEntity approveClient(Clients client) {
+        PersonalReferenceEntity personalReference = PersonalReferenceEntity
+                .builder()
+                .id(client.getPersonalReference().getId())
+                .interaction(client.getPersonalReference().getInteraction())
+                .referred(client.getPersonalReference().getReferred())
+                .build();
+        personalReference.setReferenceEntity(client.getPersonalReference().getReference().stream().map(ele->ReferenceMapper.referenceAReferenceDto(ele,personalReference)).toList());
+
         return ClientsEntity.builder()
                 .id(client.getId())
                 .email(client.getEmail())
@@ -116,53 +126,10 @@ public class ClientMapper {
                         .transfers(client.getBankAccount().isTransfers())
                         .accountNumber(client.getBankAccount().getAccountNumber())
                         .build())
-                .personalReference(PersonalReferenceEntity.builder()
-                        .id(client.getPersonalReference().getId())
-                        .interaction(client.getPersonalReference().getInteraction())
-                        .referred(client.getPersonalReference().getReferred())
-                        .build())
+                .personalReference(personalReference)
                 .build();
     }
 
 
-    public static ClientsEntity updateClient(ClientsEntity client) {
-        return ClientsEntity.builder()
-                .id(client.getId())
-                .email(client.getEmail())
-                .fullName(client.getFullName())
-                .typeOfIdentification(client.getTypeOfIdentification())
-                .identification(client.getIdentification())
-                .phone(client.getPhone())
-                .civilStatus(client.getCivilStatus())
-                .profession(client.getProfession())
-                .address(client.getAddress())
-                .houseNumber(client.getHouseNumber())
-                .sector(client.getSector())
-                .typeOfResidence(client.getTypeOfResidence())
-                .updatedAt(client.getUpdatedAt())
-                .workingInformation(WorkingInformationEntity.builder()
-                        //.id(client.getWorkingInformation().getId())
-                        .companyName(client.getWorkingInformation().getCompanyName())
-                        .phone(client.getWorkingInformation().getPhone())
-                        .address(client.getWorkingInformation().getAddress())
-                        .timeWorking(client.getWorkingInformation().getTimeWorking())
-                        .position(client.getWorkingInformation().getPosition())
-                        .bossName(client.getWorkingInformation().getBossName())
-                        .bossPhone(client.getWorkingInformation().getBossPhone())
-                        .salary(client.getWorkingInformation().getSalary())
-                        .paymentOfPayroll(client.getWorkingInformation().getPaymentOfPayroll())
-                        .otherIncome(client.getWorkingInformation().getOtherIncome())
-                        .description(client.getWorkingInformation().getDescription())
-                        .build())
-                .backAccount(BackAccountEntity.builder()
-                       // .id(client.getBackAccount().getId())
-                        .accountType(client.getBackAccount().getAccountType())
-                        .bank(client.getBackAccount().getBank())
-                        .name(client.getBackAccount().getName())
-                        .bankingApplication(client.getBackAccount().isBankingApplication())
-                        .transfers(client.getBackAccount().isTransfers())
-                        .accountNumber(client.getBackAccount().getAccountNumber())
-                        .build())
-                .build();
-    }
+
 }

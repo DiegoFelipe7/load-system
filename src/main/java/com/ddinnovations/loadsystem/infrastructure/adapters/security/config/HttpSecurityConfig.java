@@ -24,11 +24,11 @@ public class HttpSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //Manejador de sessiones
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(authConfig -> {
-                    authConfig.requestMatchers(HttpMethod.POST, "/api/auth/**", "/api/loan-application").permitAll();
+                    authConfig.requestMatchers(HttpMethod.POST, "/api/auth/singIn", "/api/loan-application").permitAll();
                     authConfig.requestMatchers(HttpMethod.GET, "/api/auth/activate-account").permitAll();
                     authConfig.requestMatchers(HttpMethod.GET, "/api/clients/search-by-id").permitAll();
                     authConfig.anyRequest().authenticated();

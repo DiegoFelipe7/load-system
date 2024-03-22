@@ -11,5 +11,5 @@ public interface AuthRepository {
 
     ResponseGlobal<User> inactive(String id);
 
-    TokenDTO refreshToken(User user);
+    TokenDTO refreshToken(String token);
 }

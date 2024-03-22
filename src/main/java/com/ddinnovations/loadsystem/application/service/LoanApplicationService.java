@@ -34,7 +34,7 @@ public class LoanApplicationService  implements LoanApplicationUseCase {
     }
 
     @Override
-    public ResponseGlobal<LoanApplication> approveLoanApplication(String id) {
+    public ResponseGlobal<Id> approveLoanApplication(String id) {
         return loanApplicationRepository.approveLoanApplication(id);
     }
 

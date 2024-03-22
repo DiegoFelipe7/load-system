@@ -70,8 +70,14 @@ public class AuthRepositoryAdapter extends AdapterOperations<User, UserEntity, S
     }
 
     @Override
-    public TokenDTO refreshToken(User user) {
-        return null;
+    public TokenDTO refreshToken(String token) {
+        String id = jwtService.extractUserName(token);
+
+        UserEntity userEntity = repository.findById(id)
+                .orElseThrow(() -> new BusinessException(BusinessException.Type.USER_NOT_EXIST));
+
+        return new TokenDTO(jwtService.generateToken(userEntity, expiration),
+                jwtService.generateToken(userEntity, expiration));
     }
 
 

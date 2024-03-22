@@ -5,5 +5,6 @@ public enum Permission {
     GET,
     SAVE,
     UPDATE,
+    PATCH,
     REMOVE,
 }

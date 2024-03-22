@@ -15,7 +15,7 @@ public interface LoanApplicationUseCase {
 
     ResponseGlobal<LoanApplication> findByIdLoanApplication(String id);
 
-    ResponseGlobal<LoanApplication> approveLoanApplication(String id);
+    ResponseGlobal<Id> approveLoanApplication(String id);
 
     ResponseGlobal<Id> rejectLoanApplication(String id);
 }
