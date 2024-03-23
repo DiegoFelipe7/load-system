@@ -27,7 +27,7 @@ public class PaymentScheduleEntity {
     private String paymentReference;
     private BigDecimal amount;
     private int quotaNumber;
-    @ManyToOne(targetEntity = LoanEntity.class, fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = LoanEntity.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "loan_id")
     private LoanEntity loan;
     private PaymentOfPayroll paymentCycle;

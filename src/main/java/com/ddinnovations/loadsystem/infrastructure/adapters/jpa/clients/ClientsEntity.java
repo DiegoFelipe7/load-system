@@ -45,7 +45,7 @@ public class ClientsEntity {
     private WorkingInformationEntity workingInformation;
     @OneToOne(cascade = CascadeType.ALL)
     private BackAccountEntity backAccount;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL , fetch = FetchType.LAZY)
     private PersonalReferenceEntity personalReference;
     @OneToMany(targetEntity = LoanEntity.class, fetch = FetchType.LAZY, mappedBy = "client")
     private List<LoanEntity> loanEntities;

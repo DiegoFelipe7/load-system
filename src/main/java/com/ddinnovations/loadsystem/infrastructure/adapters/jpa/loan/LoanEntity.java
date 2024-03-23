@@ -30,6 +30,7 @@ public class LoanEntity {
     private PaymentOfPayroll paymentCycle;
     private double interest;
     private int deadline;
+    private int numberOfQuotas;
     private int numberOfPayments;
     private String description;
     private String searchKey;
@@ -38,15 +39,16 @@ public class LoanEntity {
     private String firstPaymentDate;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    @ManyToOne(targetEntity = ClientsEntity.class, fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = ClientsEntity.class, fetch = FetchType.EAGER)
     private ClientsEntity client;
-    @OneToMany(targetEntity = PaymentScheduleEntity.class, fetch = FetchType.LAZY, mappedBy = "loan", cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = PaymentScheduleEntity.class, fetch = FetchType.EAGER, mappedBy = "loan", cascade = CascadeType.ALL)
     private List<PaymentScheduleEntity> paymentSchedule;
 
 
     @PrePersist()
     public void insert() {
         this.interest = 0;
+        this.numberOfQuotas=3;
         this.numberOfPayments = 0;
         this.earnings = BigDecimal.ZERO;
         this.loanState = LoanState.Pendiente;

@@ -14,9 +14,7 @@ import java.util.Date;
 public class JwtService {
     @Value("${jwt.secret}")
     private String secret;
-
-
-    public String generateToken(UserDetails userDetails, int expiration) {
+    public String generateToken(UserDetails userDetails, long duration) {
         var user = (UserEntity) userDetails;
         return Jwts.builder()
                 .subject(user.getId())
@@ -24,7 +22,7 @@ public class JwtService {
                 .claim("roles", user.getRoles())
                 .claim("permissions", user.getAuthorities())
                 .issuedAt(new Date())
-                .expiration(new Date(new Date().getTime() + expiration * 10000L))
+                .expiration(new Date(new Date().getTime() + duration * 60 * 60 * 1000))
                 .signWith(getKey(secret))
                 .compact();
     }
@@ -34,7 +32,8 @@ public class JwtService {
     }
 
     public Claims extractAllClaims(String token) {
-        return Jwts.parser().setSigningKey(getKey(secret))
+        return Jwts.parser()
+                .setSigningKey(getKey(secret))
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();

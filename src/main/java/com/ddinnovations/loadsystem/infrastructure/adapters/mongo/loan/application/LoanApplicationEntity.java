@@ -22,7 +22,7 @@ public class LoanApplicationEntity {
     private PersonalReference personalReference;
     private String searchKey;
     private PaymentOfPayroll paymentCycle;
-    private LocalDateTime createAt;
+    private LocalDateTime createdAt;
 
     public void insert() {
         this.searchKey = (this.client.getFullName() + "|" + this.client.getIdentification() + "|" + this.loan.getAmount() + '|' + this.loan.getPaymentCycle().name() + '|' + this.client.getEmail()).toLowerCase();

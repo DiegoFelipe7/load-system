@@ -2,6 +2,7 @@ package com.ddinnovations.loadsystem.infrastructure.adapters.mongo.loan.applicat
 
 import com.ddinnovations.loadsystem.domain.entity.LoanApplication;
 import com.ddinnovations.loadsystem.domain.entity.dto.LoanRequestDTO;
+import com.ddinnovations.loadsystem.domain.entity.enums.LoanState;
 import com.ddinnovations.loadsystem.infrastructure.adapters.mongo.loan.application.LoanApplicationEntity;
 
 import java.time.LocalDateTime;
@@ -20,7 +21,7 @@ public class LoanApplicationMapper {
                 .loan(loanApplication.getLoan())
                 .bankAccount(loanApplication.getBankAccount())
                 .personalReference(loanApplication.getPersonalReference())
-                .createdAt(loanApplication.getCreateAt())
+                .createdAt(loanApplication.getCreatedAt())
                 .build();
     }
 
@@ -34,7 +35,7 @@ public class LoanApplicationMapper {
                 .loan(loanApplication.getLoan())
                 .bankAccount(loanApplication.getBankAccount())
                 .personalReference(loanApplication.getPersonalReference())
-                .createAt(LocalDateTime.now())
+                .createdAt(LocalDateTime.now())
                 .build();
     }
 
@@ -44,9 +45,9 @@ public class LoanApplicationMapper {
                 .id(loanApplication.getId())
                 .fullName(loanApplication.getClient().getFullName())
                 .amount(loanApplication.getLoan().getAmount())
-                .state("Pendiente")
-                .paymentCycle(loanApplication.getLoan().getPaymentCycle())
-                .createdAt(loanApplication.getCreateAt().toString())
+                .state(LoanState.Pendiente.name())
+                .paymentCycle(loanApplication.getPaymentCycle())
+                .createdAt(loanApplication.getCreatedAt().toString())
                 .build();
     }
 }

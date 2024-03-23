@@ -17,6 +17,7 @@ import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.loan.LoanReposit
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.payment.schedule.mapper.PaymentScheduleMapper;
 import org.reactivecommons.utils.ObjectMapper;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -79,7 +80,7 @@ public class PaymentScheduleRepositoryAdapter extends AdapterOperations<PaymentS
     }
 
     @Override
-   // @Scheduled(cron = "0 0/1 * * * *", zone = "America/Bogota") //every 1 minutes
+    @Scheduled(cron = "0 0 0 * * *", zone = "America/Bogota")
     public void updatePayments() {
         repository.findAllByPaymentDate(GenerateDates.paymentDate())
                 .forEach(ele -> {

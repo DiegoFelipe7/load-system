@@ -39,13 +39,13 @@ public class LoanApplicationController {
     public ResponseGlobalPagination<List<LoanRequestDTO>> findAllLoanApplications(
             @RequestParam(value = "page", defaultValue = "0", required = false) int page,
             @RequestParam(value = "limit", defaultValue = "10", required = false) int limit,
-            @RequestParam(value = "sort", defaultValue = "createAt", required = false) String sort,
+            @RequestParam(value = "sort", defaultValue = "createdAt", required = false) String sort,
             @RequestParam(value = "filterCriteriaText", defaultValue = "", required = false) String filterCriteriaText,
             @RequestParam(value = "paymentCycle", required = false) PaymentOfPayroll paymentCycle,
             @RequestParam(value = "starDate", defaultValue = "", required = false) String starDate
     ) {
 
-        return loanApplicationService.findAllLoanApplication(new ParamsLoanRequest(page, limit, Sort.by(sort), filterCriteriaText, starDate, paymentCycle));
+        return loanApplicationService.findAllLoanApplication(new ParamsLoanRequest(page, limit, Sort.by(Sort.Order.desc(sort)), filterCriteriaText, starDate, paymentCycle));
     }
 
     @PatchMapping(path = "/approve/{id}")

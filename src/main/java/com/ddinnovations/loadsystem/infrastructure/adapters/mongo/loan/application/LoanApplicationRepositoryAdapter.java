@@ -4,7 +4,6 @@ import com.ddinnovations.loadsystem.domain.entity.LoanApplication;
 import com.ddinnovations.loadsystem.domain.entity.common.BusinessException;
 import com.ddinnovations.loadsystem.domain.entity.dto.Id;
 import com.ddinnovations.loadsystem.domain.entity.dto.LoanRequestDTO;
-import com.ddinnovations.loadsystem.domain.entity.params.ParamsLoan;
 import com.ddinnovations.loadsystem.domain.entity.params.ParamsLoanRequest;
 import com.ddinnovations.loadsystem.domain.entity.response.Pagination;
 import com.ddinnovations.loadsystem.domain.entity.response.ResponseGlobal;
@@ -14,28 +13,37 @@ import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.clients.ClientsD
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.clients.ClientsEntity;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.clients.ClientsRepositoryAdapter;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.clients.mapper.ClientMapper;
+import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.helpers.GenerateDates;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.loan.LoanRepositoryAdapter;
 import com.ddinnovations.loadsystem.infrastructure.adapters.mongo.helpers.AdapterOperations;
 import com.ddinnovations.loadsystem.infrastructure.adapters.mongo.loan.application.mapper.LoanApplicationMapper;
 import org.reactivecommons.utils.ObjectMapper;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.springframework.data.mongodb.core.query.Query;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class LoanApplicationRepositoryAdapter extends AdapterOperations<LoanApplication, LoanApplicationEntity, String, LoanApplicationDtoRepository> implements LoanApplicationRepository {
     private final ClientsDtoRepository clientsDtoRepository;
     private final LoanRepositoryAdapter loanRepositoryAdapter;
+    private final MongoOperations mongoOperations;
 
-    protected LoanApplicationRepositoryAdapter(LoanApplicationDtoRepository repository, ObjectMapper mapper, ClientsDtoRepository clientsDtoRepository, ClientsRepositoryAdapter clientsRepositoryAdapter, LoanRepositoryAdapter loanRepositoryAdapter, MongoTemplate mongoTemplate) {
+    protected LoanApplicationRepositoryAdapter(LoanApplicationDtoRepository repository, ObjectMapper mapper, ClientsDtoRepository clientsDtoRepository, ClientsRepositoryAdapter clientsRepositoryAdapter, LoanRepositoryAdapter loanRepositoryAdapter, MongoTemplate mongoTemplate, MongoOperations mongoOperations) {
         super(repository, mapper, d -> mapper.map(d, LoanApplication.LoanApplicationBuilder.class).build());
         this.clientsDtoRepository = clientsDtoRepository;
         this.loanRepositoryAdapter = loanRepositoryAdapter;
+        this.mongoOperations = mongoOperations;
     }
 
     @Override
@@ -53,11 +61,20 @@ public class LoanApplicationRepositoryAdapter extends AdapterOperations<LoanAppl
     @Override
     public ResponseGlobalPagination<List<LoanRequestDTO>> findAllLoanApplication(ParamsLoanRequest params) {
         PageRequest pages = PageRequest.of(params.getPage(), params.getLimit(), params.getSort());
-        List<LoanRequestDTO> loanApplications = repository.findAllBy(pages)
-                .stream()
+        List<LoanApplicationEntity> loanApplications;
+        if (StringUtils.hasText(params.getFilterCriteriaText()) || params.getPaymentCycle() != null) {
+            loanApplications = repository.findBySearchKeyAndPaymentCycle(
+                    params.getFilterCriteriaText(),
+                    params.getPaymentCycle(),
+                    pages
+            );
+        } else {
+            loanApplications = repository.findAllBy(pages);
+        }
+
+        return new ResponseGlobalPagination<>(loanApplications.stream()
                 .map(LoanApplicationMapper::loanRequest)
-                .toList();
-        return new ResponseGlobalPagination<>(loanApplications, new Pagination(params.getPage(), params.getLimit(), ((int) repository.count())));
+                .toList(), new Pagination(params.getPage(), params.getLimit(), ((int) repository.count())));
 
     }
 
@@ -85,6 +102,7 @@ public class LoanApplicationRepositoryAdapter extends AdapterOperations<LoanAppl
     }
 
     @Override
+    @Transactional
     public ResponseGlobal<Id> rejectLoanApplication(String id) {
         LoanApplicationEntity loanApplication = this.getByIdLoanApplication(id);
         repository.deleteById(loanApplication.getId());

@@ -19,8 +19,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class AuthRepositoryAdapter extends AdapterOperations<User, UserEntity, String, AuthDtoRepository> implements AuthRepository {
-    @Value("${jwt.expiration}")
-    private int expiration;
+
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
@@ -45,8 +44,8 @@ public class AuthRepositoryAdapter extends AdapterOperations<User, UserEntity, S
                 loginDTO.password()
         );
         authenticationManager.authenticate(authenticationToken);
-        return new TokenDTO(jwtService.generateToken(userEntity, expiration),
-                jwtService.generateToken(userEntity, expiration));
+        return new TokenDTO(jwtService.generateToken(userEntity, 4L),
+                jwtService.generateToken(userEntity, 5L));
 
     }
 
@@ -76,8 +75,8 @@ public class AuthRepositoryAdapter extends AdapterOperations<User, UserEntity, S
         UserEntity userEntity = repository.findById(id)
                 .orElseThrow(() -> new BusinessException(BusinessException.Type.USER_NOT_EXIST));
 
-        return new TokenDTO(jwtService.generateToken(userEntity, expiration),
-                jwtService.generateToken(userEntity, expiration));
+        return new TokenDTO(jwtService.generateToken(userEntity, 4L),
+                jwtService.generateToken(userEntity, 5L));
     }
 
 
