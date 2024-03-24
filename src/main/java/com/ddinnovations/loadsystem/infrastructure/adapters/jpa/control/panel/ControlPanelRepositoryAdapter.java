@@ -1,7 +1,6 @@
 package com.ddinnovations.loadsystem.infrastructure.adapters.jpa.control.panel;
 
 import com.ddinnovations.loadsystem.domain.entity.ControlPanel;
-import com.ddinnovations.loadsystem.domain.entity.dto.LoanIndicatorDTO;
 import com.ddinnovations.loadsystem.domain.entity.enums.PaymentStatus;
 import com.ddinnovations.loadsystem.domain.entity.response.ResponseGlobal;
 import com.ddinnovations.loadsystem.domain.repository.ControlPanelRepository;

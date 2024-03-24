@@ -1,9 +1,7 @@
 package com.ddinnovations.loadsystem.infrastructure.adapters.jpa.loan.mapper;
 
 import com.ddinnovations.loadsystem.domain.entity.Loan;
-import com.ddinnovations.loadsystem.domain.entity.dto.LoanIndicatorDTO;
 import com.ddinnovations.loadsystem.domain.entity.dto.LoanReportDto;
-import com.ddinnovations.loadsystem.domain.entity.dto.LoanRequestDTO;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.clients.mapper.ClientMapper;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.loan.LoanEntity;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.payment.schedule.PaymentScheduleEntity;

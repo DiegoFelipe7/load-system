@@ -1,8 +1,6 @@
 package com.ddinnovations.loadsystem.infrastructure.adapters.jpa.back.account;
 
-import com.ddinnovations.loadsystem.domain.entity.Clients;
 import com.ddinnovations.loadsystem.domain.entity.enums.AccountType;
-import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.clients.ClientsEntity;
 import jakarta.persistence.*;
 import lombok.*;
 

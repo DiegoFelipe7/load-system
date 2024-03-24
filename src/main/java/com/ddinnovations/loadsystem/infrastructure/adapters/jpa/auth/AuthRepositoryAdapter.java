@@ -11,7 +11,6 @@ import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.helpers.AdapterO
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.user.UserEntity;
 import com.ddinnovations.loadsystem.infrastructure.adapters.security.jwt.JwtService;
 import org.reactivecommons.utils.ObjectMapper;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;

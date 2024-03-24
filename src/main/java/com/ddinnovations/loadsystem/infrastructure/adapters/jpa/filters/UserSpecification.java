@@ -1,6 +1,5 @@
 package com.ddinnovations.loadsystem.infrastructure.adapters.jpa.filters;
 
-import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.clients.ClientsEntity;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.user.UserEntity;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;

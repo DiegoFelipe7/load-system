@@ -1,7 +1,6 @@
 package com.ddinnovations.loadsystem.infrastructure.adapters.jpa.clients.mapper;
 
 import com.ddinnovations.loadsystem.domain.entity.Clients;
-import com.ddinnovations.loadsystem.domain.entity.PersonalReference;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.back.account.BackAccountEntity;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.back.account.mapper.BackAccountMapper;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.clients.ClientsEntity;

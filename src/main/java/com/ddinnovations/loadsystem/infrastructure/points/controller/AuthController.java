@@ -9,7 +9,6 @@ import com.ddinnovations.loadsystem.domain.entity.dto.LoginDTO;
 import com.ddinnovations.loadsystem.domain.entity.dto.TokenDTO;
 import com.ddinnovations.loadsystem.domain.entity.response.ResponseGlobal;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

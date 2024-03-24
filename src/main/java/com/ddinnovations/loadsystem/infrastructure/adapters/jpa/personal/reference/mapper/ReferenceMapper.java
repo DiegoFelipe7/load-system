@@ -1,6 +1,5 @@
 package com.ddinnovations.loadsystem.infrastructure.adapters.jpa.personal.reference.mapper;
 
-import com.ddinnovations.loadsystem.domain.entity.PersonalReference;
 import com.ddinnovations.loadsystem.domain.entity.Reference;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.personal.reference.PersonalReferenceEntity;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.personal.reference.ReferenceEntity;

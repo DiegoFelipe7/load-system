@@ -5,8 +5,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.query.QueryByExampleExecutor;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
-
 @Repository
 public interface UserDtoRepository  extends JpaRepository<UserEntity,String>, QueryByExampleExecutor<UserEntity>  , JpaSpecificationExecutor<UserEntity> {
     boolean existsByEmailIgnoreCase(String email);
