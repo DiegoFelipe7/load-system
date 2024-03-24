@@ -16,11 +16,10 @@ public class GenerateCalendar {
         throw new IllegalStateException("Utility class");
     }
 
-    public static BigDecimal calculateFee(BigDecimal amount, double interest, int numberOfInstallments) {
+    public static BigDecimal calculateFee(BigDecimal amount, double interest, int months, int numberOfQuotas) {
         double interestRate = interest / 100.0;
-        BigDecimal totalInterest = amount.multiply(BigDecimal.valueOf(interestRate)).multiply(BigDecimal.valueOf(numberOfInstallments));
-        BigDecimal totalAmount = amount.add(totalInterest);
-        return totalAmount.divide(BigDecimal.valueOf(numberOfInstallments), 0, RoundingMode.HALF_UP);
+        BigDecimal totalAmount = amount.multiply(BigDecimal.valueOf(interestRate)).multiply(BigDecimal.valueOf(months)).add(amount);
+        return totalAmount.divide(BigDecimal.valueOf(numberOfQuotas), 0, RoundingMode.HALF_UP);
     }
 
     public static int calculateDaysBetweenPayments(PaymentOfPayroll paymentPeriod) {

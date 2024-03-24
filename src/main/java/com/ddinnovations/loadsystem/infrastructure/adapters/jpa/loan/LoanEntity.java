@@ -48,7 +48,6 @@ public class LoanEntity {
     @PrePersist()
     public void insert() {
         this.interest = 0;
-        this.numberOfQuotas=3;
         this.numberOfPayments = 0;
         this.earnings = BigDecimal.ZERO;
         this.loanState = LoanState.Pendiente;

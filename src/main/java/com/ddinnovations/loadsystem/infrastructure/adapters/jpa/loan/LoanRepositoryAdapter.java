@@ -20,8 +20,8 @@ import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.helpers.Generate
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.loan.mapper.LoanMapper;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.payment.schedule.PaymentScheduleEntity;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.payment.schedule.mapper.PaymentScheduleMapper;
-//import net.sf.jasperreports.engine.*;
-//import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.reactivecommons.utils.ObjectMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
@@ -54,6 +54,7 @@ public class LoanRepositoryAdapter extends AdapterOperations<Loan, LoanEntity, S
         loanEntity.setAmount(loan.getAmount());
         loanEntity.setInterest(loan.getInterest());
         loanEntity.setDeadline(loan.getDeadline());
+        loanEntity.setNumberOfPayments(loanEntity.getNumberOfQuotas());
         loanEntity.setPaymentCycle(loan.getPaymentCycle());
         loanEntity.setFirstPaymentDate(loan.getFirstPaymentDate());
         loanEntity.setLoanState(LoanState.Aprobado);
@@ -83,7 +84,7 @@ public class LoanRepositoryAdapter extends AdapterOperations<Loan, LoanEntity, S
         List<PaymentSchedule> paymentSchedules = new ArrayList<>();
         Calendar calendar = GenerateCalendar.generateCalendar(loan.getFirstPaymentDate());
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        BigDecimal amount = GenerateCalendar.calculateFee(loan.getAmount(), loan.getInterest(), loan.getDeadline());
+        BigDecimal amount = GenerateCalendar.calculateFee(loan.getAmount(), loan.getInterest(), loan.getDeadline(),loan.getNumberOfQuotas());
         for (int i = 0; i < loan.getNumberOfQuotas(); i++) {
             Date expirationDate = calendar.getTime();
 
@@ -146,11 +147,10 @@ public class LoanRepositoryAdapter extends AdapterOperations<Loan, LoanEntity, S
             params.put("totalLoan", loanEntity.loanValue());
             params.put("valuePaid", loanEntity.valuePaid());
             params.put("imageDir", "classpath:/static/images/");
-         /*   params.put("dsPaymentSchedule", new JRBeanCollectionDataSource(loanReportDto));
+            params.put("dsPaymentSchedule", new JRBeanCollectionDataSource(loanReportDto));
             InputStream reportStream = getClass().getResourceAsStream("/ReportLoanApplication.jrxml");
             JasperPrint report = JasperFillManager.fillReport(JasperCompileManager.compileReport(reportStream), params, new JREmptyDataSource());
-            return JasperExportManager.exportReportToPdf(report);*/
-            return null;
+            return JasperExportManager.exportReportToPdf(report);
 
         } catch (Exception e) {
             throw new BusinessException(BusinessException.Type.ERROR_BD);

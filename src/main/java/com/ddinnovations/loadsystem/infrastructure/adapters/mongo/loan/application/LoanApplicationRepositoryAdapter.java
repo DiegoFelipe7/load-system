@@ -63,10 +63,11 @@ public class LoanApplicationRepositoryAdapter extends AdapterOperations<LoanAppl
         PageRequest pages = PageRequest.of(params.getPage(), params.getLimit(), params.getSort());
         List<LoanApplicationEntity> loanApplications;
         if (StringUtils.hasText(params.getFilterCriteriaText()) || params.getPaymentCycle() != null) {
-            loanApplications = repository.findBySearchKeyAndPaymentCycle(
+            loanApplications = repository.findAllBySearchKeyLikeAndPaymentCycle(
                     params.getFilterCriteriaText(),
                     params.getPaymentCycle(),
                     pages
+
             );
         } else {
             loanApplications = repository.findAllBy(pages);

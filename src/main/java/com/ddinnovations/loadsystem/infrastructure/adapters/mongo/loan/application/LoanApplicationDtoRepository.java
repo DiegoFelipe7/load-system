@@ -15,12 +15,6 @@ public interface LoanApplicationDtoRepository extends MongoRepository<LoanApplic
 
     List<LoanApplicationEntity> findAllBy(Pageable pageable);
 
-    List<LoanApplicationEntity> findAllBySearchKeyLike(Pageable pageable , String filterText);
-
-    List<LoanApplicationEntity> findAllByPaymentCycle(Pageable pageable , PaymentOfPayroll paymentCycle);
-
-    List<LoanApplicationEntity> findAllBySearchKeyLikeAndPaymentCycle(Pageable pageable , String filterText,PaymentOfPayroll paymentCycle);
-    @Query("{ 'searchKey': { $regex: ?0, $options: 'i' }, 'paymentCycle': ?1}")
-    List<LoanApplicationEntity> findBySearchKeyAndPaymentCycle(String searchKeyRegex, PaymentOfPayroll paymentCycle, Pageable pageable);
+    List<LoanApplicationEntity> findAllBySearchKeyLikeAndPaymentCycle(String searchKey, PaymentOfPayroll paymentCycle, Pageable pageable);
 
 }
