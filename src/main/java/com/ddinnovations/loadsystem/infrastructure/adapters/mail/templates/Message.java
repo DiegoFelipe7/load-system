@@ -83,7 +83,7 @@ public class Message {
                     "            Has solicitado la recuperación de contraseña para acceder al sistema\n" +
                     "            de prestamos puedes hacer el cambio dando clic en el botón de abajo.\n" +
                     "          </p>\n" +
-                    "          <a class=\"link\" href=\"http://localhost:5173/changePassword/"+token+"\">\n" +
+                    "          <a class=\"link\" href=\"https://www.cashmoneyrd.com/changePassword/"+token+"\">\n" +
                     "            <span>Restablecer Contraseña</span>\n" +
                     "          </a>\n" +
                     "        </td>\n" +
