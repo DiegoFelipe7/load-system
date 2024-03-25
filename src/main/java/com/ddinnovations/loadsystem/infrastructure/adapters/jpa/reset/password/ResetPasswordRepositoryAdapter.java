@@ -39,7 +39,7 @@ public class ResetPasswordRepositoryAdapter extends AdapterOperations<ResetPassw
         authDtoRepository.save(userEntity);
 
         ResetPasswordEntity resetPassword = repository.save(ResetPasswordMapper.buildResetPassword(email));
-        emailService.sendEmailWelcome(userEntity.getFirstName(), resetPassword.getToken(), resetPassword.getEmail(), EmailTemplate.WELCOME);
+        emailService.sendEmailRecovery(userEntity.getFirstName(), resetPassword.getToken(), resetPassword.getEmail(), EmailTemplate.WELCOME);
     }
 
     @Override

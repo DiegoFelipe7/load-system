@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthService authService;
-    private final ResetPasswordService resetPasswordService;
 
     @PostMapping(path = "/singIn")
     public TokenDTO singIn(@RequestBody LoginDTO loginDTO) {
@@ -28,15 +27,6 @@ public class AuthController {
         return authService.singUp(user);
     }
 
-    @PostMapping(path = "/forgot-password")
-    public void forgotPassword(@RequestBody Email email) {
-        resetPasswordService.forgotPassword(email.email());
-    }
-
-    @PostMapping(path = "/change-password/{id}")
-    public void forgotPassword(@PathVariable("id") String id, @RequestBody ConfirmPasswordDTO confirmPassword) {
-        resetPasswordService.changePassword(id,confirmPassword);
-    }
 
     @PostMapping(path = "/refresh")
     public TokenDTO refreshToken(@RequestBody TokenDTO tokenDTO) {

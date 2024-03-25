@@ -20,7 +20,7 @@ public class EmailService {
     private final JavaMailSender mailSender;
 
     @Async
-    public void sendEmailWelcome(String firstName, String token, String email, EmailTemplate emailTemplate) {
+    public void sendEmailRecovery(String firstName, String token, String email, EmailTemplate emailTemplate) {
         MimeMessage message = mailSender.createMimeMessage();
 
         String template = Message.welcome(firstName, token, emailTemplate);
