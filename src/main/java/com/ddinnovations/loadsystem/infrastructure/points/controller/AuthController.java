@@ -1,10 +1,7 @@
 package com.ddinnovations.loadsystem.infrastructure.points.controller;
 
 import com.ddinnovations.loadsystem.application.service.AuthService;
-import com.ddinnovations.loadsystem.application.service.ResetPasswordService;
 import com.ddinnovations.loadsystem.domain.entity.User;
-import com.ddinnovations.loadsystem.domain.entity.dto.ConfirmPasswordDTO;
-import com.ddinnovations.loadsystem.domain.entity.dto.Email;
 import com.ddinnovations.loadsystem.domain.entity.dto.LoginDTO;
 import com.ddinnovations.loadsystem.domain.entity.dto.TokenDTO;
 import com.ddinnovations.loadsystem.domain.entity.response.ResponseGlobal;
