@@ -9,8 +9,6 @@ spring:
     password: "S7k~kOo|I,02:,z9]841"
     driverClassName: "org.postgresql.Driver"
   jpa:
-    #hibernate:
-      #ddl-auto: update
     properties:
       hibernate:
         format_sql: true
@@ -18,10 +16,15 @@ spring:
     open-in-view: false
   data:
     mongodb:
-      uri: "mongodb+srv://dbuser:DMekHRirbSkdNyfj@cluster0.s4e6i.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+      uri: "mongodb+srv://cashrdmoney:vrD4bENZuVzIEI7T@cluster0.emcecbh.mongodb.net/cashrdmoney?retryWrites=true&w=majority"
 jwt:
   secret: secretsecretsecretsecretsecretsecretsecretsecretsecret
 load-system:
   email:
     sender: corporate@betbillions.com.co
     password: Fara4020**
+
+
+
+
+
