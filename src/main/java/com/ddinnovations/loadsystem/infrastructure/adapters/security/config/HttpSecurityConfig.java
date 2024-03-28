@@ -28,8 +28,8 @@ public class HttpSecurityConfig {
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(authConfig -> {
-                    authConfig.requestMatchers(HttpMethod.POST, "/api/auth/singIn", "/api/password/**","/api/loan-application").permitAll();
-                    authConfig.requestMatchers(HttpMethod.GET, "/api/clients/search-by-id").permitAll();
+                    authConfig.requestMatchers(HttpMethod.POST, "/api/auth/singIn", "/api/password/**", "/api/loan-application").permitAll();
+                    authConfig.requestMatchers(HttpMethod.GET, "/", "/api/clients/search-by-id").permitAll();
                     authConfig.anyRequest().authenticated();
 
                 })
