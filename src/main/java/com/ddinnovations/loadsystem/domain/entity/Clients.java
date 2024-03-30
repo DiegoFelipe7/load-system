@@ -25,6 +25,7 @@ public class Clients {
     private String address;
     private String houseNumber;
     private String sector;
+    private String city;
     private TypeOfResidence typeOfResidence;
     private String searchKey;
     private boolean state;

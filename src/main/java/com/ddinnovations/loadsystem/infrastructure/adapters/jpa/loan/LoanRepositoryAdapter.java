@@ -84,7 +84,7 @@ public class LoanRepositoryAdapter extends AdapterOperations<Loan, LoanEntity, S
         List<PaymentSchedule> paymentSchedules = new ArrayList<>();
         Calendar calendar = GenerateCalendar.generateCalendar(loan.getFirstPaymentDate());
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        BigDecimal amount = GenerateCalendar.calculateFee(loan.getAmount(), loan.getInterest(), loan.getDeadline(),loan.getNumberOfQuotas());
+        BigDecimal amount = GenerateCalendar.calculateFee(loan.getAmount(), loan.getInterest(), loan.getDeadline(), loan.getNumberOfQuotas());
         for (int i = 0; i < loan.getNumberOfQuotas(); i++) {
             Date expirationDate = calendar.getTime();
 
@@ -139,7 +139,7 @@ public class LoanRepositoryAdapter extends AdapterOperations<Loan, LoanEntity, S
             PaymentScheduleEntity paymentSchedule = loanEntity.paymentSchedule();
             List<LoanReportDto> loanReportDto = LoanMapper.loanReport(loanEntity.getPaymentSchedule());
             Map<String, Object> params = new HashMap<>();
-            params.put("voucherNumber", String.valueOf(paymentSchedule.getQuotaNumber()));
+            params.put("voucherNumber", paymentSchedule.getPaymentReference());
             params.put("name", loanEntity.getClient().getFullName());
             params.put("phone", loanEntity.getClient().getPhone());
             params.put("address", loanEntity.getClient().getAddress());

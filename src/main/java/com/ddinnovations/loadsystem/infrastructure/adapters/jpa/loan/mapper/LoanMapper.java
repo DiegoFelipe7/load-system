@@ -73,7 +73,7 @@ public class LoanMapper {
         return paymentScheduleEntities.stream().map(ele -> LoanReportDto.builder()
                 .amount(ele.getAmount())
                 .paymentStatus(ele.getPaymentStatus().name())
-                .quotaNumber(String.valueOf(ele.getQuotaNumber()))
+                .quotaNumber(ele.getPaymentReference())
                 .build()).toList();
     }
 

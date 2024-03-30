@@ -70,6 +70,7 @@ public class ClientsRepositoryAdapter extends AdapterOperations<Clients, Clients
         clientEntity.setCivilStatus(client.getCivilStatus());
         clientEntity.setProfession(client.getProfession());
         clientEntity.setAddress(client.getAddress());
+        clientEntity.setCity(client.getCity());
         clientEntity.setWorkingInformation(WorkingInformationMapper.workingInformationAWorkingInformationDto(client.getWorkingInformation()));
         clientEntity.setBackAccount(BackAccountMapper.bankAccountABacKAccountDto(client.getBankAccount()));
         return new ResponseGlobal<>(ClientMapper.clientDtoAClient(repository.save(clientEntity)));

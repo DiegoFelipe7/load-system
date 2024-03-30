@@ -16,8 +16,6 @@ public class BankAccount {
     private AccountType accountType;
     private String bank;
     private String name;
-    private boolean bankingApplication;
-    private boolean transfers;
     private String accountNumber;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private LocalDateTime createdAt;

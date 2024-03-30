@@ -20,8 +20,6 @@ public class BackAccountEntity {
     private AccountType accountType;
     private String bank;
     private String name;
-    private boolean bankingApplication;
-    private boolean transfers;
     private String accountNumber;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
