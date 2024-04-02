@@ -49,7 +49,7 @@ public class LoanEntity {
         this.numberOfPayments = 0;
         this.earnings = BigDecimal.ZERO;
         this.loanState = LoanState.Pendiente;
-        this.searchKey = (this.client.getFullName() + "|" + this.client.getIdentification() + "|" + this.amount.toString() + '|' + this.paymentCycle.name() +'|' + this.deadline).toLowerCase();
+        this.searchKey = (this.client.getFullName() + "|" + this.client.getIdentification() + "|" + this.amount.toString() + '|' + this.paymentCycle.name() + '|' + this.deadline).toLowerCase();
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
@@ -75,15 +75,12 @@ public class LoanEntity {
     }
 
 
-    public BigDecimal loanValue() {
-        return this.amount.add(this.earnings);
-    }
-
     public PaymentScheduleEntity paymentSchedule() {
         return this.getPaymentSchedule().stream()
                 .filter(ele -> ele.getPaymentStatus().equals(PaymentStatus.Pendiente))
                 .findFirst()
                 .orElseGet(() -> PaymentScheduleEntity.builder()
+                        .paymentReference("0")
                         .amount(BigDecimal.ZERO)
                         .quotaNumber(0)
                         .build());

@@ -134,24 +134,22 @@ public class LoanRepositoryAdapter extends AdapterOperations<Loan, LoanEntity, S
     @Override
     public byte[] loanReport(String id) {
         LoanEntity loanEntity = this.getByIdLoan(id);
-
         try {
             PaymentScheduleEntity paymentSchedule = loanEntity.paymentSchedule();
-            List<LoanReportDto> loanReportDto = LoanMapper.loanReport(loanEntity.getPaymentSchedule());
             Map<String, Object> params = new HashMap<>();
-            params.put("voucherNumber", paymentSchedule.getPaymentReference());
-            params.put("name", loanEntity.getClient().getFullName());
-            params.put("phone", loanEntity.getClient().getPhone());
-            params.put("address", loanEntity.getClient().getAddress());
-            params.put("balance", paymentSchedule.getAmount());
-            params.put("totalLoan", loanEntity.loanValue());
-            params.put("valuePaid", loanEntity.valuePaid());
-            params.put("imageDir", "classpath:/static/images/");
-            params.put("dsPaymentSchedule", new JRBeanCollectionDataSource(loanReportDto));
-            InputStream reportStream = getClass().getResourceAsStream("/ReportLoanApplication.jrxml");
+            params.put("PaymentReference", paymentSchedule.getPaymentReference());
+            params.put("FullName", loanEntity.getClient().getFullName());
+            params.put("Phone", loanEntity.getClient().getPhone());
+            params.put("Address", loanEntity.getClient().getAddress());
+            params.put("Balance", paymentSchedule.getAmount());
+            params.put("TotalLoan", loanEntity.getAmount());
+            params.put("ValuePaid", loanEntity.valuePaid());
+            params.put("ImageDir", "classpath:/static/images/");
+            params.put("PaymentNumber", loanEntity.getNumberOfPayments() + "/" + loanEntity.getNumberOfQuotas());
+            params.put("QuotaValue", paymentSchedule.getAmount());
+            InputStream reportStream = getClass().getResourceAsStream("/LoanApplicationReport.jrxml");
             JasperPrint report = JasperFillManager.fillReport(JasperCompileManager.compileReport(reportStream), params, new JREmptyDataSource());
             return JasperExportManager.exportReportToPdf(report);
-
         } catch (Exception e) {
             throw new BusinessException(BusinessException.Type.ERROR_BD);
         }
