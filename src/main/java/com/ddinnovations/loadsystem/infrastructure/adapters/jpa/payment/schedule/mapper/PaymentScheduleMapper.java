@@ -5,6 +5,8 @@ import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.loan.LoanEntity;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.loan.mapper.LoanMapper;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.payment.schedule.PaymentScheduleEntity;
 
+import java.math.BigDecimal;
+
 public class PaymentScheduleMapper {
     private PaymentScheduleMapper() {
         throw new IllegalStateException("Utility class");
@@ -25,9 +27,10 @@ public class PaymentScheduleMapper {
                 .build();
     }
 
-    public static PaymentScheduleEntity paymentScheduleAPaymentScheduleDto(PaymentSchedule paymentSchedule, LoanEntity loan ) {
+    public static PaymentScheduleEntity paymentScheduleAPaymentScheduleDto(BigDecimal earnings, PaymentSchedule paymentSchedule, LoanEntity loan) {
         return PaymentScheduleEntity.builder()
                 .id(paymentSchedule.getId())
+                .earnings(earnings)
                 .paymentDate(paymentSchedule.getPaymentDate())
                 .paymentReference(paymentSchedule.getPaymentReference())
                 .amount(paymentSchedule.getAmount())
@@ -40,7 +43,7 @@ public class PaymentScheduleMapper {
     }
 
 
-    public static PaymentSchedule paymentScheduleDTO(PaymentScheduleEntity paymentSchedule){
+    public static PaymentSchedule paymentScheduleDTO(PaymentScheduleEntity paymentSchedule) {
         return PaymentSchedule.builder()
                 .id(paymentSchedule.getId())
                 .paymentDate(paymentSchedule.getPaymentDate())

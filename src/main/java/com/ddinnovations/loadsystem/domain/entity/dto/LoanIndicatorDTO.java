@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 public class LoanIndicatorDTO {
     private BigDecimal totalInvestedCapital;
     private BigDecimal investedCapital;
+    private BigDecimal earnings;
     private Long totalActiveLoans;
     private Long activeLoans;
     private Long totalLoansPaid;

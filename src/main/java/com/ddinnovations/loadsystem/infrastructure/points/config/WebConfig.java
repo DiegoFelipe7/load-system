@@ -12,7 +12,6 @@ import java.util.List;
 
 @Configuration
 @EnableWebMvc
-//TODO: BUSCAR COMO MEJORAR LO DEL XML EN EL PROYECTO Y EVITAR CONFIGURAR EL MEDIA TYPE JSON
 public class WebConfig implements WebMvcConfigurer {
 
     @Override

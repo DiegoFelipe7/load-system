@@ -29,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -54,16 +55,17 @@ public class LoanRepositoryAdapter extends AdapterOperations<Loan, LoanEntity, S
         loanEntity.setAmount(loan.getAmount());
         loanEntity.setInterest(loan.getInterest());
         loanEntity.setDeadline(loan.getDeadline());
-        loanEntity.setNumberOfPayments(loanEntity.getNumberOfQuotas());
+        loanEntity.setNumberOfQuotas(loan.getNumberOfQuotas());
         loanEntity.setPaymentCycle(loan.getPaymentCycle());
         loanEntity.setFirstPaymentDate(loan.getFirstPaymentDate());
         loanEntity.setLoanState(LoanState.Aprobado);
-
+        loanEntity.setEarnings(loanEntity.earnings());
+        BigDecimal earnings = loanEntity.getEarnings().divide(BigDecimal.valueOf(loanEntity.getNumberOfQuotas()), RoundingMode.HALF_UP);
         generatePaymentSchedule(loan).getBody().forEach(ele -> {
-            PaymentScheduleEntity paymentSchedule = PaymentScheduleMapper.paymentScheduleAPaymentScheduleDto(ele, loanEntity);
+            PaymentScheduleEntity paymentSchedule = PaymentScheduleMapper.paymentScheduleAPaymentScheduleDto(earnings, ele, loanEntity);
             loanEntity.getPaymentSchedule().add(paymentSchedule);
         });
-        loanEntity.setEarnings(loanEntity.earnings());
+
 
         return new ResponseGlobal<>(LoanMapper.loanDtoALoansAPaymentSchedule(repository.save(loanEntity)));
     }
@@ -122,13 +124,14 @@ public class LoanRepositoryAdapter extends AdapterOperations<Loan, LoanEntity, S
         if (object instanceof Object[] array) {
             BigDecimal totalInvestedCapital = (BigDecimal) array[0];
             BigDecimal investedCapital = (BigDecimal) array[1];
-            Long totalActiveLoans = ((Number) array[2]).longValue();
-            Long activeLoans = ((Number) array[3]).longValue();
-            Long totalLoansPaid = ((Number) array[4]).longValue();
-            Long loansPaid = ((Number) array[5]).longValue();
-            return new ResponseGlobal<>(new LoanIndicatorDTO(totalInvestedCapital, investedCapital, totalActiveLoans, activeLoans, totalLoansPaid, loansPaid));
+            BigDecimal earnings = (BigDecimal) array[2];
+            Long totalActiveLoans = ((Number) array[3]).longValue();
+            Long activeLoans = ((Number) array[4]).longValue();
+            Long totalLoansPaid = ((Number) array[5]).longValue();
+            Long loansPaid = ((Number) array[6]).longValue();
+            return new ResponseGlobal<>(new LoanIndicatorDTO(totalInvestedCapital, investedCapital, earnings, totalActiveLoans, activeLoans, totalLoansPaid, loansPaid));
         }
-        return new ResponseGlobal<>(new LoanIndicatorDTO(BigDecimal.ZERO, BigDecimal.ZERO, 0L, 0L, 0L, 0L));
+        return new ResponseGlobal<>(new LoanIndicatorDTO(BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, 0L, 0L, 0L, 0L));
     }
 
     @Override
@@ -171,7 +174,7 @@ public class LoanRepositoryAdapter extends AdapterOperations<Loan, LoanEntity, S
     public void updatePaymentNumber(String id) {
         LoanEntity loanEntity = this.getByIdLoan(id);
         loanEntity.setNumberOfPayments(loanEntity.getNumberOfPayments() + 1);
-        if (loanEntity.getNumberOfPayments() == loanEntity.getDeadline()) {
+        if (loanEntity.getNumberOfPayments() == loanEntity.getNumberOfQuotas()) {
             loanEntity.setLoanState(LoanState.Pagado);
             repository.save(loanEntity);
         }

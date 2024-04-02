@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
@@ -26,6 +27,7 @@ public class PaymentScheduleEntity {
     private String paymentDate;
     private String paymentReference;
     private BigDecimal amount;
+    private BigDecimal earnings;
     private int quotaNumber;
     @ManyToOne(targetEntity = LoanEntity.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "loan_id")
