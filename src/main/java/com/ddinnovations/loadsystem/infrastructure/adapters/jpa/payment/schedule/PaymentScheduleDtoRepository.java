@@ -13,14 +13,14 @@ import java.util.List;
 @Repository
 public interface PaymentScheduleDtoRepository extends JpaRepository<PaymentScheduleEntity, String>, QueryByExampleExecutor<PaymentScheduleEntity>, JpaSpecificationExecutor<PaymentScheduleEntity> {
 
-    @Query( "SELECT " +
+    @Query("SELECT " +
             "    COALESCE(main.totalBalance, 0) AS totalBalance, " +
             "    COALESCE(sub.raisedMoney, 0) AS raisedMoney, " +
             "    COALESCE(sub.paymentsMade, 0) AS paymentsMade," +
             "    COALESCE(main.overduePayments, 0) AS overduePayments " +
             "FROM ( " +
             "    SELECT " +
-            "        SUM(CASE WHEN ps.paymentStatus = 1 THEN ps.amount ELSE 0 END) AS totalBalance, " +
+            "        SUM(ps.amount) - SUM(CASE WHEN ps.paymentStatus = 1 THEN ps.amount ELSE 0 END) AS totalBalance, " +
             "        SUM(CASE WHEN ps.paymentStatus = 2 THEN 1 ELSE 0 END) AS overduePayments " +
             "    FROM PaymentScheduleEntity ps " +
             ") AS main, " +

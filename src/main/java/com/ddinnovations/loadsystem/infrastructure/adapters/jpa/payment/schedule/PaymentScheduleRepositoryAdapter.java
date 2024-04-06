@@ -4,24 +4,18 @@ import com.ddinnovations.loadsystem.domain.entity.PaymentSchedule;
 import com.ddinnovations.loadsystem.domain.entity.common.BusinessException;
 import com.ddinnovations.loadsystem.domain.entity.dto.PaymentIndicatorsDto;
 import com.ddinnovations.loadsystem.domain.entity.enums.PaymentStatus;
-import com.ddinnovations.loadsystem.domain.entity.params.ParamsPaymentSchedule;
-import com.ddinnovations.loadsystem.domain.entity.response.Pagination;
 import com.ddinnovations.loadsystem.domain.entity.response.ResponseGlobal;
-import com.ddinnovations.loadsystem.domain.entity.response.ResponseGlobalPagination;
 import com.ddinnovations.loadsystem.domain.repository.PaymentScheduleRepository;
-import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.filters.PaymentScheduleSpecification;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.helpers.AdapterOperations;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.helpers.GenerateDates;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.loan.LoanRepositoryAdapter;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.payment.schedule.mapper.PaymentScheduleMapper;
 import org.reactivecommons.utils.ObjectMapper;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @Repository
 public class PaymentScheduleRepositoryAdapter extends AdapterOperations<PaymentSchedule, PaymentScheduleEntity, String, PaymentScheduleDtoRepository> implements PaymentScheduleRepository {
@@ -32,24 +26,6 @@ public class PaymentScheduleRepositoryAdapter extends AdapterOperations<PaymentS
         this.loanRepositoryAdapter = loanRepositoryAdapter;
     }
 
-
-    @Override
-    public ResponseGlobalPagination<List<PaymentSchedule>> findAllPaymentSchedule(ParamsPaymentSchedule paymentSchedule) {
-        PaymentScheduleSpecification specification = new PaymentScheduleSpecification(paymentSchedule.getStartDate(), paymentSchedule.getFilterCriteriaText(), paymentSchedule.getPaymentCycle(), paymentSchedule.getPaymentStatus());
-        PageRequest pages = PageRequest.of(paymentSchedule.getPage(), paymentSchedule.getLimit(), paymentSchedule.getSort());
-        List<PaymentSchedule> loanApplications = repository.findAll(specification, pages)
-                .stream()
-                .map(PaymentScheduleMapper::paymentScheduleDTO)
-                .toList();
-        return new ResponseGlobalPagination<>(loanApplications, new Pagination(paymentSchedule.getPage(), paymentSchedule.getLimit(), ((int) repository.count())));
-
-    }
-
-    @Override
-    public ResponseGlobal<PaymentSchedule> findByIdPaymentSchedule(String id) {
-        PaymentScheduleEntity paymentSchedule = this.getByIdPaymentSchedule(id);
-        return new ResponseGlobal<>(PaymentScheduleMapper.paymentScheduleDTO(paymentSchedule));
-    }
 
     @Override
     @Transactional
@@ -79,8 +55,8 @@ public class PaymentScheduleRepositoryAdapter extends AdapterOperations<PaymentS
     }
 
     @Override
-    @Scheduled(cron = "0 0 0 * * *", zone = "America/Bogota")
-    public void updatePayments() {
+    @Scheduled(cron = "0 10 0 * * *", zone = "America/Santo_Domingo")
+    public void updateStatusToLate() {
         repository.findAllByPaymentDate(GenerateDates.paymentDate())
                 .forEach(ele -> {
                     ele.setPaymentStatus(PaymentStatus.Mora);
