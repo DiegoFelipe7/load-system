@@ -100,7 +100,7 @@ public class ErrorHandler {
                 exception.getMessage(),
                 request.getMethod(),
                 request.getRequestURL().toString());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(dto);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(dto);
     }
 
     private ResponseEntity<ErrorResponse> handleHttpClientErrorException(Exception exception,

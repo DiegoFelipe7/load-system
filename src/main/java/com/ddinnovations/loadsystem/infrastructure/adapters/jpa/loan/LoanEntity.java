@@ -75,15 +75,20 @@ public class LoanEntity {
     }
 
 
-    public PaymentScheduleEntity paymentSchedule() {
+    public PaymentScheduleEntity paymentSchedule(String id) {
         return this.getPaymentSchedule().stream()
-                .filter(ele -> ele.getPaymentStatus().equals(PaymentStatus.Pendiente))
+                .filter(ele -> ele.getId().equals(id))
                 .findFirst()
                 .orElseGet(() -> PaymentScheduleEntity.builder()
                         .paymentReference("0")
                         .amount(BigDecimal.ZERO)
+                        .outstandingBalance(BigDecimal.ZERO)
                         .quotaNumber(0)
                         .build());
+    }
+
+    public BigDecimal balance() {
+        return amount.subtract(valuePaid()).max(BigDecimal.ZERO);
     }
 
 

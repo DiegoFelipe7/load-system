@@ -135,21 +135,23 @@ public class LoanRepositoryAdapter extends AdapterOperations<Loan, LoanEntity, S
     }
 
     @Override
-    public byte[] loanReport(String id) {
+    public byte[] loanReport(String id, String paymentId) {
         LoanEntity loanEntity = this.getByIdLoan(id);
+        PaymentScheduleEntity paymentSchedule = loanEntity.paymentSchedule(paymentId);
         try {
-            PaymentScheduleEntity paymentSchedule = loanEntity.paymentSchedule();
             Map<String, Object> params = new HashMap<>();
             params.put("PaymentReference", paymentSchedule.getPaymentReference());
             params.put("FullName", loanEntity.getClient().getFullName());
             params.put("Phone", loanEntity.getClient().getPhone());
             params.put("Address", loanEntity.getClient().getAddress());
-            params.put("Balance", paymentSchedule.getAmount());
+            params.put("Balance", loanEntity.balance());
             params.put("TotalLoan", loanEntity.getAmount());
             params.put("ValuePaid", loanEntity.valuePaid());
             params.put("ImageDir", "classpath:/static/images/");
             params.put("PaymentNumber", loanEntity.getNumberOfPayments() + "/" + loanEntity.getNumberOfQuotas());
             params.put("QuotaValue", paymentSchedule.getAmount());
+            params.put("Total", paymentSchedule.totalPayment());
+            params.put("OutstandingBalance", paymentSchedule.getOutstandingBalance());
             InputStream reportStream = getClass().getResourceAsStream("/LoanApplicationReport.jrxml");
             JasperPrint report = JasperFillManager.fillReport(JasperCompileManager.compileReport(reportStream), params, new JREmptyDataSource());
             return JasperExportManager.exportReportToPdf(report);

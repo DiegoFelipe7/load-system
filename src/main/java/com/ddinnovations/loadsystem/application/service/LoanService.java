@@ -47,7 +47,7 @@ public class LoanService implements LoanUseCase {
     @Override
     public ResponseGlobal<Loan> cancelLoan(String id) {
         return loanRepository.cancelLoan(id);
-        
+
     }
 
     @Override
@@ -56,8 +56,8 @@ public class LoanService implements LoanUseCase {
     }
 
     @Override
-    public byte[] loanReport(String id) {
-        return loanRepository.loanReport(id);
+    public byte[] loanReport(String id, String paymentId) {
+        return loanRepository.loanReport(id, paymentId);
     }
 
     @Override

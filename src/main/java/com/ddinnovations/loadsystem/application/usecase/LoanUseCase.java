@@ -25,7 +25,7 @@ public interface LoanUseCase {
     ResponseGlobal<Loan> cancelLoan(String id);
 
     ResponseGlobal<LoanIndicatorDTO> loanIndicators();
-    byte[] loanReport(String id);
+    byte[] loanReport(String id, String paymentId);
 
     ResponseGlobal<Id> removeLoan(String id);
 }

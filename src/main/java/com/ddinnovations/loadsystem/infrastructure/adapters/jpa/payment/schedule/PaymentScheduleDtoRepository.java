@@ -9,9 +9,11 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface PaymentScheduleDtoRepository extends JpaRepository<PaymentScheduleEntity, String>, QueryByExampleExecutor<PaymentScheduleEntity>, JpaSpecificationExecutor<PaymentScheduleEntity> {
+    Optional<PaymentScheduleEntity> findByPaymentReference(String id);
 
     @Query("SELECT " +
             "    COALESCE(main.totalBalance, 0) AS totalBalance, " +

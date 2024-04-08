@@ -11,6 +11,8 @@
 	<parameter name="PaymentNumber" class="java.lang.String"/>
 	<parameter name="QuotaValue" class="java.math.BigDecimal"/>
 	<parameter name="ImageDir" class="java.lang.String"/>
+	<parameter name="OutstandingBalance" class="java.math.BigDecimal"/>
+	<parameter name="Total" class="java.math.BigDecimal"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -118,7 +120,7 @@
 				<textFieldExpression><![CDATA[$P{Phone}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="260" y="212" width="180" height="31" uuid="2bd9fc9f-cf6e-443e-b5db-480a61c947cb"/>
+				<reportElement x="268" y="212" width="180" height="31" uuid="2bd9fc9f-cf6e-443e-b5db-480a61c947cb"/>
 				<textElement verticalAlignment="Middle">
 					<font size="14"/>
 				</textElement>
@@ -226,14 +228,14 @@
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="14"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Text Field"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{Total}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="360" y="502" width="171" height="31" uuid="9b3f99ab-b416-40d8-be57-3193d0e4355f"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="14"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Text Field"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{OutstandingBalance}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

@@ -54,12 +54,12 @@ public class LoanController {
         return loanService.loanIndicators();
     }
 
-    @GetMapping(path = "/report/{id}", produces = MediaType.APPLICATION_PDF_VALUE)
-    public ResponseEntity<byte[]> loanReport(@PathVariable("id") String id) {
+    @GetMapping(path = "/report/{id}/payment/{paymentId}", produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseEntity<byte[]> loanReport(@PathVariable("id") String id, @PathVariable("paymentId") String paymentId) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
         headers.setContentDispositionFormData("report", "item-report.pdf");
-        return ResponseEntity.ok().headers(headers).body(loanService.loanReport(id));
+        return ResponseEntity.ok().headers(headers).body(loanService.loanReport(id, paymentId));
     }
 
     @GetMapping(path = "/{id}")

@@ -27,6 +27,7 @@ public class PaymentScheduleEntity {
     private String paymentDate;
     private String paymentReference;
     private BigDecimal amount;
+    private BigDecimal outstandingBalance;
     private BigDecimal earnings;
     private int quotaNumber;
     @ManyToOne(targetEntity = LoanEntity.class, fetch = FetchType.EAGER)
@@ -42,6 +43,7 @@ public class PaymentScheduleEntity {
     @PrePersist()
     public void insert() {
         this.createdAt = LocalDateTime.now();
+        this.outstandingBalance = BigDecimal.ZERO;
         this.paymentReference = this.loan.getId().split("-")[0].concat("-N" + this.quotaNumber);
         this.updatedAt = LocalDateTime.now();
         this.searchKey = (this.paymentReference + "|" + this.loan.getClient().getIdentification() + "|" + this.paymentDate + "|" + this.amount + "|" + this.quotaNumber + '|' + this.paymentStatus.name() + '|' + this.paymentCycle.name()).toLowerCase();
@@ -53,4 +55,8 @@ public class PaymentScheduleEntity {
         this.searchKey = (this.paymentDate + "|" + this.amount + "|" + this.quotaNumber + '|' + this.paymentStatus.name() + '|' + this.paymentCycle.name()).toLowerCase();
     }
 
+
+    public BigDecimal totalPayment() {
+        return this.amount.subtract(this.outstandingBalance);
+    }
 }

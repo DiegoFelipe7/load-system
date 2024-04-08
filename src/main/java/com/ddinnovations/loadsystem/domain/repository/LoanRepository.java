@@ -17,7 +17,7 @@ public interface LoanRepository {
 
     ResponseGlobalPagination<List<Loan>> findAllLoan(ParamsLoan params);
 
-    ResponseGlobal<List<PaymentSchedule>> generatePaymentSchedule( Loan loan);
+    ResponseGlobal<List<PaymentSchedule>> generatePaymentSchedule(Loan loan);
 
     ResponseGlobal<Loan> findByIdLoan(String id);
 
@@ -25,7 +25,7 @@ public interface LoanRepository {
 
     ResponseGlobal<LoanIndicatorDTO> loanIndicators();
 
-    byte[] loanReport(String id);
+    byte[] loanReport(String id, String paymentId);
 
     ResponseGlobal<Id> removeLoan(String id);
 

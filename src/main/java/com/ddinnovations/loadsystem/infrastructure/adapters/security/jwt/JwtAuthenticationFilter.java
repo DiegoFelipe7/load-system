@@ -1,5 +1,6 @@
 package com.ddinnovations.loadsystem.infrastructure.adapters.security.jwt;
 
+import com.ddinnovations.loadsystem.domain.entity.common.BusinessException;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.auth.AuthDtoRepository;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.user.UserEntity;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.auth.mapper.AuthMapper;
@@ -22,7 +23,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException, BusinessException {
         String authHeader = request.getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
@@ -31,7 +32,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String jwt = authHeader.split(" ")[1];
         String id = jwtService.extractUserName(jwt);
-        UserEntity singIn = authDtoRepository.findById(id).get();
+        UserEntity singIn = authDtoRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(BusinessException.Type.ERROR_BD));
+
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 AuthMapper.authDtoAuth(singIn),
                 null,
