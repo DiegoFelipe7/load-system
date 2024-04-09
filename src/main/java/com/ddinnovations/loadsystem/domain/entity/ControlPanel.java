@@ -15,6 +15,7 @@ public class ControlPanel {
     private BigDecimal totalCapitalInvested;
     private Long totalActiveLoans;
     private BigDecimal totalProfits;
-    private Long totalLoansRepaid;
+    private BigDecimal profitsCollected;
+    private Long totalLoansPaid;
     private Long totalLoansInArrears;
 }

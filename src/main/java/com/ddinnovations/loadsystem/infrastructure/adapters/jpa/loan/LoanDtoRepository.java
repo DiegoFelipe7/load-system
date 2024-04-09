@@ -12,7 +12,8 @@ import java.time.LocalDateTime;
 
 @Repository
 public interface LoanDtoRepository extends JpaRepository<LoanEntity, String>, QueryByExampleExecutor<LoanEntity>, JpaSpecificationExecutor<LoanEntity> {
-   @Query("SELECT " +
+
+    @Query("SELECT " +
            " COALESCE(main.totalInvestedCapital, 0) AS totalInvestedCapital, " +
            " COALESCE(sub.investedCapital, 0) AS investedCapital, " +
            " COALESCE(extra.earnings, 0) AS earnings, " +
@@ -41,18 +42,21 @@ public interface LoanDtoRepository extends JpaRepository<LoanEntity, String>, Qu
 
 
     @Query("SELECT COALESCE(main.totalInvestedCapital, 0) AS totalInvestedCapital, " +
-                "COALESCE(main.totalActiveLoans, 0) AS totalActiveLoans," +
-                "COALESCE(sub.totalProfits, 0) AS totalProfits, " +
-                "COALESCE(main.loansPaid, 0) AS loansPaid " +
+            "COALESCE(main.totalActiveLoans, 0) AS totalActiveLoans," +
+            "COALESCE(main.totalProfitsLoan, 0) - COALESCE(sub.totalProfits, 0) AS totalProfits, " +
+            "COALESCE(sub.totalProfits, 0) AS profitsCollected, " +
+            "COALESCE(main.loansPaid, 0) AS loansPaid " +
             "FROM (" +
                 "SELECT " +
+                    "COALESCE(SUM(CASE WHEN l.loanState = 1 THEN l.earnings ELSE 0 END), 0) AS totalProfitsLoan, " +
                     "COALESCE(SUM(CASE WHEN l.loanState IN (1,3) THEN l.amount ELSE 0 END), 0) AS totalInvestedCapital, " +
                     "COALESCE(SUM(CASE WHEN l.loanState = 1 THEN 1 ELSE 0 END), 0) AS totalActiveLoans, " +
                     "COALESCE(SUM(CASE WHEN l.loanState = 3 THEN 1 ELSE 0 END), 0) AS loansPaid " +
-                "FROM LoanEntity l) AS main, (" +
-                "SELECT " +
+                "FROM LoanEntity l) AS main, " +
+                    "(SELECT " +
                     "COALESCE(SUM(CASE WHEN ps.paymentStatus = 1 THEN ps.earnings ELSE 0 END), 0) AS totalProfits " +
                 "FROM PaymentScheduleEntity ps) AS sub")
     Object getLoanStatistics();
+
 
 }

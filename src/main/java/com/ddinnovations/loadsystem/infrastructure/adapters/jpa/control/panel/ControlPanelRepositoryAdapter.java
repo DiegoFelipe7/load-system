@@ -21,6 +21,7 @@ public class ControlPanelRepositoryAdapter implements ControlPanelRepository {
     private final LoanDtoRepository loanDtoRepository;
     private final PaymentScheduleDtoRepository paymentScheduleDtoRepository;
 
+    //TODO: MEJORAR EL CODIGO
     @Override
     public ResponseGlobal<ControlPanel> generateControlPanelReport() {
         Long totalClients = clientsDtoRepository.count();
@@ -31,10 +32,11 @@ public class ControlPanelRepositoryAdapter implements ControlPanelRepository {
             BigDecimal totalInvestedCapital = (BigDecimal) array[0];
             Long totalActiveLoans = ((Number) array[1]).longValue();
             BigDecimal totalProfits = (BigDecimal) array[2];
-            Long loansPaid = ((Number) array[3]).longValue();
-            return new ResponseGlobal<>(new ControlPanel(totalClients, totalRequest, totalInvestedCapital, totalActiveLoans, totalProfits, loansPaid, totalLoansInArrears));
+            BigDecimal profitsCollected = (BigDecimal) array[3];
+            Long loansPaid = ((Number) array[4]).longValue();
+            return new ResponseGlobal<>(new ControlPanel(totalClients, totalRequest, totalInvestedCapital, totalActiveLoans, totalProfits, profitsCollected, loansPaid, totalLoansInArrears));
         }
-        return new ResponseGlobal<>(new ControlPanel(totalClients, totalRequest, BigDecimal.ZERO, 0L, BigDecimal.ZERO, 0L, totalLoansInArrears));
+        return new ResponseGlobal<>(new ControlPanel(totalClients, totalRequest, BigDecimal.ZERO, 0L, BigDecimal.ZERO, BigDecimal.ZERO, 0L, totalLoansInArrears));
 
     }
 }
