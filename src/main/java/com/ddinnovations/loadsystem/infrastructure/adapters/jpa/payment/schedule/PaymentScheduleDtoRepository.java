@@ -22,7 +22,7 @@ public interface PaymentScheduleDtoRepository extends JpaRepository<PaymentSched
             "    COALESCE(main.overduePayments, 0) AS overduePayments " +
             "FROM ( " +
             "    SELECT " +
-            "        SUM(ps.amount) - SUM(CASE WHEN ps.paymentStatus = 1 THEN ps.amount ELSE 0 END) AS totalBalance, " +
+            "        SUM(CASE WHEN ps.paymentStatus = 1 THEN ps.amount ELSE 0 END) AS totalBalance, " +
             "        SUM(CASE WHEN ps.paymentStatus = 2 THEN 1 ELSE 0 END) AS overduePayments " +
             "    FROM PaymentScheduleEntity ps " +
             ") AS main, " +

@@ -30,7 +30,7 @@ public interface LoanDtoRepository extends JpaRepository<LoanEntity, String>, Qu
            ") AS main," +
            "( " +
            "SELECT " +
-                "SUM(CASE WHEN l.loanState IN (1, 3) THEN l.amount ELSE 0 END) AS investedCapital, " +
+                "SUM(CASE WHEN l.loanState = 1 THEN l.amount ELSE 0 END) AS investedCapital, " +
                 "SUM(CASE WHEN l.loanState = 1 THEN 1 ELSE 0 END) AS activeLoans, " +
                 "SUM(CASE WHEN l.loanState = 3 THEN 1 ELSE 0 END) AS totalLoansPaid " +
            "FROM LoanEntity l" +
