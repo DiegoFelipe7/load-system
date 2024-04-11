@@ -56,14 +56,14 @@ public class LoanEntity {
 
     @PreUpdate()
     public void update() {
-        this.searchKey = (this.client.getFullName() + "|" + this.client.getIdentification() + "|" + this.amount.toString() + '|' + this.paymentCycle.name() + '|' + this.description + '|' + this.deadline).toLowerCase();
+        this.searchKey = (this.client.getFullName() + "|" + this.client.getIdentification() + "|" + this.amount.toString() + '|' + this.paymentCycle.name() + '|' + this.deadline).toLowerCase();
         this.updatedAt = LocalDateTime.now();
     }
 
     public BigDecimal earnings() {
         double interestRate = interest / 100.0;
         return this.amount.multiply(BigDecimal.valueOf(interestRate))
-                .multiply(BigDecimal.valueOf(this.deadline));
+                .multiply(BigDecimal.valueOf(this.numberOfQuotas));
     }
 
 
