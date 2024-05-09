@@ -1,10 +1,13 @@
 server:
   port: 5000
 spring:
+  thymeleaf:
+    check-template-location: false
   application:
     name: "load-system"
   datasource:
-    url: "jdbc:postgresql://database-1.cn8see6oisrh.us-east-1.rds.amazonaws.com:5432/postgres"
+    #url: "jdbc:postgresql://database-1.cn8see6oisrh.us-east-1.rds.amazonaws.com:5432/postgres"
+    url: "jdbc:postgresql://database-1.cn8see6oisrh.us-east-1.rds.amazonaws.com:5432/pruebas"
     username: "postgres"
     password: "S7k~kOo|I,02:,z9]841"
     driverClassName: "org.postgresql.Driver"
@@ -13,17 +16,23 @@ spring:
       hibernate:
         format_sql: true
         dialect: "org.hibernate.dialect.PostgreSQLDialect"
+        hbm2ddl:
+          auto: update
     open-in-view: false
   data:
     mongodb:
       uri: "mongodb+srv://cashrdmoney:vrD4bENZuVzIEI7T@cluster0.emcecbh.mongodb.net/cashrdmoney?retryWrites=true&w=majority"
+      #uri: "mongodb+srv://dbuser:6QlIDZsMqrPkP8NZ@cluster0.s4e6i.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
 jwt:
   secret: secretsecretsecretsecretsecretsecretsecretsecretsecret
 load-system:
   email:
     sender: Cashrdmoney@gmail.com
     password: aesweghbwgkkkxmk
-
+aws:
+  bucketName: ""
+  accessKey: "AKIAU6GDUR2DTWSOSVGM"
+  secretKey: "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"
 
 
 

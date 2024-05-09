@@ -13,15 +13,10 @@ import java.util.Optional;
 public interface ClientsDtoRepository extends JpaRepository<ClientsEntity, String>, QueryByExampleExecutor<ClientsEntity>, JpaSpecificationExecutor<ClientsEntity> {
     boolean existsByIdentification(String id);
 
-    Optional<ClientsEntity> findByIdentification(String id);
-
-    @Query(nativeQuery = true, value = "SELECT " +
-            "(SELECT COUNT(*) FROM clients c1) AS totalClients, " +
-            "(SELECT COUNT(*) FROM clients c2 WHERE c2.created_at BETWEEN :startDate AND :endDate) AS totalNewClients")
+    @Query(value = "SELECT " +
+            "(SELECT COUNT(*) FROM ClientsEntity c1) AS totalClients, " +
+            "(SELECT COUNT(*) FROM ClientsEntity c2 WHERE c2.createdAt BETWEEN :startDate AND :endDate) AS totalNewClients")
     Object getIndicators(LocalDateTime startDate, LocalDateTime endDate);
-
-
-
 
 
 }

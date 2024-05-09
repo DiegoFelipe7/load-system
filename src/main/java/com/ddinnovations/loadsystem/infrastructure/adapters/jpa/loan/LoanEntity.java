@@ -31,6 +31,9 @@ public class LoanEntity {
     private int numberOfQuotas;
     private int numberOfPayments;
     private String description;
+    private String simplePromissoryNote;
+    private String notarialPromissoryNote;
+    private String specialPower;
     private String searchKey;
     private LoanState loanState;
     private BigDecimal earnings;
@@ -63,7 +66,7 @@ public class LoanEntity {
     public BigDecimal earnings() {
         double interestRate = interest / 100.0;
         return this.amount.multiply(BigDecimal.valueOf(interestRate))
-                .multiply(BigDecimal.valueOf(this.numberOfQuotas));
+                .multiply(BigDecimal.valueOf(this.deadline));
     }
 
 
@@ -87,8 +90,16 @@ public class LoanEntity {
                         .build());
     }
 
-    public BigDecimal balance() {
-        return amount.subtract(valuePaid()).max(BigDecimal.ZERO);
+    public BigDecimal balance(BigDecimal outstandingBalance) {
+        return this.totalLoanAmount()
+                .add(outstandingBalance)
+                .subtract(valuePaid())
+                .max(BigDecimal.ZERO);
+    }
+
+    public BigDecimal totalLoanAmount() {
+        return this.amount
+                .add(this.earnings);
     }
 
 

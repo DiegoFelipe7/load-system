@@ -19,6 +19,8 @@ public class PaymentSchedule {
     private String paymentDate;
     private String paymentReference;
     private BigDecimal amount;
+    private BigDecimal balancePaid;
+    private BigDecimal outstandingBalance;
     private int quotaNumber;
     private Loan loan;
     private PaymentOfPayroll paymentCycle;

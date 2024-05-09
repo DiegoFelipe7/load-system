@@ -1,6 +1,9 @@
 package com.ddinnovations.loadsystem.infrastructure.adapters.jpa.clients.mapper;
 
 import com.ddinnovations.loadsystem.domain.entity.Clients;
+import com.ddinnovations.loadsystem.domain.entity.common.BusinessException;
+import com.ddinnovations.loadsystem.domain.entity.dto.CustomerIndicatorDto;
+import com.ddinnovations.loadsystem.domain.entity.response.ResponseGlobal;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.back.account.BackAccountEntity;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.back.account.mapper.BackAccountMapper;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.clients.ClientsEntity;
@@ -27,6 +30,9 @@ public class ClientMapper {
                 .address(clientEntity.getAddress())
                 .houseNumber(clientEntity.getHouseNumber())
                 .sector(clientEntity.getSector())
+                .identificationCard(clientEntity.getIdentificationCard())
+                .jobLetter(clientEntity.getJobLetter())
+                .payrollStatements(clientEntity.getPayrollStatements())
                 .city(clientEntity.getCity())
                 .typeOfResidence(clientEntity.getTypeOfResidence())
                 .state(clientEntity.isState())
@@ -87,7 +93,7 @@ public class ClientMapper {
                 .interaction(client.getPersonalReference().getInteraction())
                 .referred(client.getPersonalReference().getReferred())
                 .build();
-        personalReference.setReferenceEntity(client.getPersonalReference().getReference().stream().map(ele->ReferenceMapper.referenceAReferenceDto(ele,personalReference)).toList());
+        personalReference.setReferenceEntity(client.getPersonalReference().getReference().stream().map(ele -> ReferenceMapper.referenceAReferenceDto(ele, personalReference)).toList());
 
         return ClientsEntity.builder()
                 .id(client.getId())
@@ -99,6 +105,7 @@ public class ClientMapper {
                 .civilStatus(client.getCivilStatus())
                 .profession(client.getProfession())
                 .address(client.getAddress())
+                .city(client.getCity())
                 .houseNumber(client.getHouseNumber())
                 .sector(client.getSector())
                 .typeOfResidence(client.getTypeOfResidence())
@@ -130,6 +137,14 @@ public class ClientMapper {
                 .build();
     }
 
+    public static CustomerIndicatorDto customerIndicator(Object object) {
+        if (object instanceof Object[] array) {
+            long totalClients = (long) array[0];
+            long totalNewClients = (long) array[1];
+            return new CustomerIndicatorDto(totalClients, totalNewClients);
+        }
+        throw new BusinessException(BusinessException.Type.ERROR_BD);
 
+    }
 
 }

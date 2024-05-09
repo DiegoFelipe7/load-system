@@ -100,6 +100,7 @@ public class ErrorHandler {
                 exception.getMessage(),
                 request.getMethod(),
                 request.getRequestURL().toString());
+        logger.error(exception.getMessage(), exception);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(dto);
     }
 
@@ -110,6 +111,7 @@ public class ErrorHandler {
                 exception.getMessage(),
                 request.getMethod(),
                 request.getRequestURL().toString());
+
         return ResponseEntity.status(500).body(dto);
     }
 

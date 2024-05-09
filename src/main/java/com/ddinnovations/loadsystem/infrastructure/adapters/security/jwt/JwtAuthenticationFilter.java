@@ -51,7 +51,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().write(jsonResponse);
         } catch (Exception e) {
-            String jsonResponse = objectMapper.writeValueAsString(new ErrorResponse("OCURRIO UN ERROR INICIA SESION NUEVAMENTE", e.getMessage(), "", ""));
+            String jsonResponse = objectMapper.writeValueAsString(new ErrorResponse("OCURRIO UN ERROR,INICIA SESION NUEVAMENTE", e.getMessage(), "", ""));
             response.setContentType("application/json");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().write(jsonResponse);

@@ -5,7 +5,8 @@ import com.ddinnovations.loadsystem.domain.entity.PaymentSchedule;
 import com.ddinnovations.loadsystem.domain.entity.common.BusinessException;
 import com.ddinnovations.loadsystem.domain.entity.dto.Id;
 import com.ddinnovations.loadsystem.domain.entity.dto.LoanIndicatorDTO;
-import com.ddinnovations.loadsystem.domain.entity.dto.LoanReportDto;
+import com.ddinnovations.loadsystem.domain.entity.enums.ActionType;
+import com.ddinnovations.loadsystem.domain.entity.enums.FileType;
 import com.ddinnovations.loadsystem.domain.entity.enums.LoanState;
 import com.ddinnovations.loadsystem.domain.entity.enums.PaymentStatus;
 import com.ddinnovations.loadsystem.domain.entity.params.ParamsLoan;
@@ -20,12 +21,13 @@ import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.helpers.Generate
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.loan.mapper.LoanMapper;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.payment.schedule.PaymentScheduleEntity;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.payment.schedule.mapper.PaymentScheduleMapper;
+import com.ddinnovations.loadsystem.infrastructure.adapters.s3.service.S3Service;
 import net.sf.jasperreports.engine.*;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.reactivecommons.utils.ObjectMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -36,9 +38,11 @@ import java.util.*;
 
 @Repository
 public class LoanRepositoryAdapter extends AdapterOperations<Loan, LoanEntity, String, LoanDtoRepository> implements LoanRepository {
+    private final S3Service s3Service;
 
-    protected LoanRepositoryAdapter(LoanDtoRepository repository, ObjectMapper mapper) {
+    protected LoanRepositoryAdapter(LoanDtoRepository repository, ObjectMapper mapper, S3Service s3Service) {
         super(repository, mapper, d -> mapper.map(d, Loan.LoanBuilder.class).build());
+        this.s3Service = s3Service;
     }
 
     @Override
@@ -82,6 +86,7 @@ public class LoanRepositoryAdapter extends AdapterOperations<Loan, LoanEntity, S
 
     }
 
+    @Transactional
     public ResponseGlobal<List<PaymentSchedule>> generatePaymentSchedule(Loan loan) {
         List<PaymentSchedule> paymentSchedules = new ArrayList<>();
         Calendar calendar = GenerateCalendar.generateCalendar(loan.getFirstPaymentDate());
@@ -121,17 +126,7 @@ public class LoanRepositoryAdapter extends AdapterOperations<Loan, LoanEntity, S
     @Override
     public ResponseGlobal<LoanIndicatorDTO> loanIndicators() {
         Object object = repository.getIndicators(GenerateDates.starDateFilter(), GenerateDates.endDateFilter());
-        if (object instanceof Object[] array) {
-            BigDecimal totalInvestedCapital = (BigDecimal) array[0];
-            BigDecimal investedCapital = (BigDecimal) array[1];
-            BigDecimal earnings = (BigDecimal) array[2];
-            Long totalActiveLoans = ((Number) array[3]).longValue();
-            Long activeLoans = ((Number) array[4]).longValue();
-            Long totalLoansPaid = ((Number) array[5]).longValue();
-            Long loansPaid = ((Number) array[6]).longValue();
-            return new ResponseGlobal<>(new LoanIndicatorDTO(totalInvestedCapital, investedCapital, earnings, totalActiveLoans, activeLoans, totalLoansPaid, loansPaid));
-        }
-        return new ResponseGlobal<>(new LoanIndicatorDTO(BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, 0L, 0L, 0L, 0L));
+        return new ResponseGlobal<>(LoanMapper.indicatorDTO(object));
     }
 
     @Override
@@ -139,19 +134,21 @@ public class LoanRepositoryAdapter extends AdapterOperations<Loan, LoanEntity, S
         LoanEntity loanEntity = this.getByIdLoan(id);
         PaymentScheduleEntity paymentSchedule = loanEntity.paymentSchedule(paymentId);
         try {
+            System.out.println(paymentSchedule.getUser().getFirstName());
             Map<String, Object> params = new HashMap<>();
             params.put("PaymentReference", paymentSchedule.getPaymentReference());
             params.put("FullName", loanEntity.getClient().getFullName());
             params.put("Phone", loanEntity.getClient().getPhone());
             params.put("Address", loanEntity.getClient().getAddress());
-            params.put("Balance", loanEntity.balance());
-            params.put("TotalLoan", loanEntity.getAmount());
+            params.put("Balance", loanEntity.balance(paymentSchedule.getOutstandingBalance()));
+            params.put("TotalLoan", loanEntity.totalLoanAmount());
             params.put("ValuePaid", loanEntity.valuePaid());
             params.put("ImageDir", "classpath:/static/images/");
-            params.put("PaymentNumber", loanEntity.getNumberOfPayments() + "/" + loanEntity.getNumberOfQuotas());
+            params.put("PaymentNumber", paymentSchedule.getQuotaNumber() + "/" + loanEntity.getNumberOfQuotas());
             params.put("QuotaValue", paymentSchedule.getAmount());
-            params.put("Total", paymentSchedule.totalPayment());
+            params.put("Total", paymentSchedule.getBalancePaid());
             params.put("OutstandingBalance", paymentSchedule.getOutstandingBalance());
+            params.put("User" , paymentSchedule.getUser().getFirstName()+" " + paymentSchedule.getUser().getLastName());
             InputStream reportStream = getClass().getResourceAsStream("/LoanApplicationReport.jrxml");
             JasperPrint report = JasperFillManager.fillReport(JasperCompileManager.compileReport(reportStream), params, new JREmptyDataSource());
             return JasperExportManager.exportReportToPdf(report);
@@ -167,6 +164,35 @@ public class LoanRepositoryAdapter extends AdapterOperations<Loan, LoanEntity, S
         return new ResponseGlobal<>(new Id(loanEntity.getId()));
     }
 
+    @Transactional
+    @Override
+    public ResponseGlobal<String> documentUpload(String id, FileType fileType, MultipartFile file) {
+        LoanEntity loanEntity = this.getByIdLoan(id);
+        String fileName = s3Service.upload(id, file, ActionType.loan);
+        switch (fileType) {
+            case simple -> loanEntity.setSimplePromissoryNote(fileName);
+            case special -> loanEntity.setSpecialPower(fileName);
+            case notarial -> loanEntity.setNotarialPromissoryNote(fileName);
+        }
+        repository.save(loanEntity);
+        return new ResponseGlobal<>(fileName);
+    }
+
+    @Transactional
+    @Override
+    public ResponseGlobal<String> updateDocumentUpload(String id, FileType fileType, MultipartFile file) {
+        LoanEntity loanEntity = getByIdLoan(id);
+        String oldFileName = switch (fileType) {
+            case simple -> loanEntity.getSimplePromissoryNote();
+            case special -> loanEntity.getSpecialPower();
+            case notarial -> loanEntity.getNotarialPromissoryNote();
+        };
+        if (oldFileName == null || oldFileName.isEmpty()) {
+            throw new BusinessException(BusinessException.Type.ERROR_UPLOAD_FILE);
+        }
+        s3Service.deleteFile(oldFileName);
+        return this.documentUpload(id, fileType, file);
+    }
 
     private LoanEntity getByIdLoan(String id) {
         return repository.findById(id)

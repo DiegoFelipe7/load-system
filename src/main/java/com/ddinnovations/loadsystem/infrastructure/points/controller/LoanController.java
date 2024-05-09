@@ -5,6 +5,7 @@ import com.ddinnovations.loadsystem.domain.entity.Loan;
 import com.ddinnovations.loadsystem.domain.entity.PaymentSchedule;
 import com.ddinnovations.loadsystem.domain.entity.dto.Id;
 import com.ddinnovations.loadsystem.domain.entity.dto.LoanIndicatorDTO;
+import com.ddinnovations.loadsystem.domain.entity.enums.FileType;
 import com.ddinnovations.loadsystem.domain.entity.enums.LoanState;
 import com.ddinnovations.loadsystem.domain.entity.enums.PaymentOfPayroll;
 import com.ddinnovations.loadsystem.domain.entity.params.ParamsLoan;
@@ -16,6 +17,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -24,6 +26,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class LoanController {
     private final LoanService loanService;
+
+    @PostMapping("/{id}/document-upload")
+    public ResponseGlobal<String> documentUpload(@PathVariable("id") String id,
+                                                 @RequestParam("fileType") FileType fileType,
+                                                 @RequestParam("file") MultipartFile file) {
+        return loanService.documentUpload(id, fileType, file);
+    }
+
 
     @PostMapping()
     public ResponseGlobal<Loan> createLoan(@RequestBody Loan loan) {
@@ -72,6 +82,12 @@ public class LoanController {
         return loanService.approveLoan(id, loan);
     }
 
+    @PatchMapping("/{id}/update-document")
+    public ResponseGlobal<String> updateDocumentUpload(@PathVariable("id") String id,
+                                                       @RequestParam("fileType") FileType fileType,
+                                                       @RequestParam("file") MultipartFile file) {
+        return loanService.updateDocumentUpload(id, fileType, file);
+    }
 
     @PatchMapping(path = "/cancel/{id}")
     public ResponseGlobal<Loan> cancelLoan(@PathVariable("id") String id) {

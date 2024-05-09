@@ -37,6 +37,7 @@ dependencies {
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 	implementation 'net.sf.jasperreports:jasperreports:6.21.2'
+	implementation 'software.amazon.awssdk:s3:2.19.31'
 	implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
@@ -46,6 +47,8 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+	testImplementation 'software.amazon.awssdk:s3:2.19.31'
+
 }
 
 tasks.named('test') {

@@ -1,6 +1,7 @@
 package com.ddinnovations.loadsystem.infrastructure.adapters.jpa.user;
 
 import com.ddinnovations.loadsystem.domain.entity.enums.Roles;
+import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.payment.schedule.PaymentScheduleEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -32,10 +33,12 @@ public class UserEntity implements UserDetails {
     private boolean state;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    @OneToMany(targetEntity = PaymentScheduleEntity.class, fetch = FetchType.LAZY, mappedBy = "user")
+    private List<PaymentScheduleEntity> paymentScheduleList;
 
     @PrePersist()
     public void insert() {
-        this.roles= Roles.ADMINISTRADOR;
+        this.roles = Roles.ADMINISTRADOR;
         this.state = true;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();

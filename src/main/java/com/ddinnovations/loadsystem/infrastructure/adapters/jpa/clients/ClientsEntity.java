@@ -21,7 +21,6 @@ import java.util.List;
 @Builder(toBuilder = true)
 @Table(name = "clients")
 @Entity
-@ToString
 public class ClientsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -36,6 +35,9 @@ public class ClientsEntity {
     private String address;
     private String houseNumber;
     private String sector;
+    private String identificationCard;
+    private String jobLetter;
+    private String payrollStatements;
     private String city;
     private TypeOfResidence typeOfResidence;
     private String searchKey;

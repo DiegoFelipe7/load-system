@@ -2,6 +2,7 @@ package com.ddinnovations.loadsystem.application.service;
 
 import com.ddinnovations.loadsystem.application.usecase.PaymentScheduleUseCase;
 import com.ddinnovations.loadsystem.domain.entity.PaymentSchedule;
+import com.ddinnovations.loadsystem.domain.entity.User;
 import com.ddinnovations.loadsystem.domain.entity.dto.PaymentDTO;
 import com.ddinnovations.loadsystem.domain.entity.dto.PaymentIndicatorsDto;
 import com.ddinnovations.loadsystem.domain.entity.response.ResponseGlobal;
@@ -16,10 +17,9 @@ public class PaymentScheduleService implements PaymentScheduleUseCase {
     private final PaymentScheduleRepository paymentScheduleRepository;
 
 
-
     @Override
-    public ResponseGlobal<PaymentSchedule> makePayment(String id, PaymentDTO paymentDTO) {
-        return paymentScheduleRepository.makePayment(id , paymentDTO);
+    public ResponseGlobal<PaymentSchedule> makePayment(String id, PaymentDTO paymentDTO, User user) {
+        return paymentScheduleRepository.makePayment(id, paymentDTO, user);
     }
 
     @Override

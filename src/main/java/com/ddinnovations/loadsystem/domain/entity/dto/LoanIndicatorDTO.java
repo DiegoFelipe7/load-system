@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @Builder(toBuilder = true)
+@ToString
 public class LoanIndicatorDTO {
     private BigDecimal totalInvestedCapital;
     private BigDecimal investedCapital;

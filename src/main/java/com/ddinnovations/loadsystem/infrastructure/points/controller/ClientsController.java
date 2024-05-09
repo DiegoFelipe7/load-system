@@ -3,17 +3,20 @@ package com.ddinnovations.loadsystem.infrastructure.points.controller;
 import com.ddinnovations.loadsystem.application.service.ClientsService;
 import com.ddinnovations.loadsystem.domain.entity.Clients;
 import com.ddinnovations.loadsystem.domain.entity.dto.CustomerIndicatorDto;
+import com.ddinnovations.loadsystem.domain.entity.enums.ClientFileType;
+import com.ddinnovations.loadsystem.domain.entity.enums.FileType;
 import com.ddinnovations.loadsystem.domain.entity.enums.OrderBy;
 import com.ddinnovations.loadsystem.domain.entity.params.ParamsClients;
 import com.ddinnovations.loadsystem.domain.entity.response.ResponseGlobal;
 import com.ddinnovations.loadsystem.domain.entity.response.ResponseGlobalPagination;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "api/clients" )
+@RequestMapping(path = "api/clients")
 @RequiredArgsConstructor
 public class ClientsController {
     private final ClientsService clientsService;
@@ -21,6 +24,13 @@ public class ClientsController {
     @PostMapping()
     public ResponseGlobal<Clients> createClient(@RequestBody Clients clients) {
         return clientsService.createClient(clients);
+    }
+
+    @PostMapping("/{id}/document-upload")
+    public ResponseGlobal<String> documentUpload(@PathVariable("id") String id,
+                                                 @RequestParam("fileType") ClientFileType clientFileType,
+                                                 @RequestParam("file") MultipartFile file) {
+        return clientsService.documentUpload(id, clientFileType, file);
     }
 
     @GetMapping(path = "/indicators")
@@ -49,6 +59,12 @@ public class ClientsController {
         return clientsService.searchById(identification);
     }
 
+    @PatchMapping("/{id}/update-document")
+    public ResponseGlobal<String> updateDocumentUpload(@PathVariable("id") String id,
+                                                       @RequestParam("fileType") ClientFileType clientFileType,
+                                                       @RequestParam("file") MultipartFile file) {
+        return clientsService.updateDocumentUpload(id, clientFileType, file);
+    }
     @PutMapping(path = "/{id}")
     public ResponseGlobal<Clients> update(@PathVariable("id") String id, @RequestBody Clients clients) {
         return clientsService.update(id, clients);

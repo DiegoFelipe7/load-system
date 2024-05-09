@@ -25,6 +25,9 @@ public class Clients {
     private String address;
     private String houseNumber;
     private String sector;
+    private String identificationCard;
+    private String jobLetter;
+    private String payrollStatements;
     private String city;
     private TypeOfResidence typeOfResidence;
     private String searchKey;

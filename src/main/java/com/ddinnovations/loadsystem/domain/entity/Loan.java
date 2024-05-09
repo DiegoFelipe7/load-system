@@ -27,6 +27,9 @@ public class Loan {
     private int numberOfPayments;
     private int numberOfQuotas;
     private String description;
+    private String simplePromissoryNote;
+    private String notarialPromissoryNote;
+    private String specialPower;
     private String searchKey;
     private LoanState loanState;
     private BigDecimal earnings;

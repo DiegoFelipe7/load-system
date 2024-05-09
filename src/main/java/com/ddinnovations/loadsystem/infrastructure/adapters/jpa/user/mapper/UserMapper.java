@@ -14,7 +14,6 @@ public class UserMapper {
                 .firstName(userEntity.getFirstName())
                 .lastName(userEntity.getLastName())
                 .email(userEntity.getEmail())
-                //.password(userEntity.getPassword())
                 .roles(userEntity.getRoles())
                 .state(userEntity.isState())
                 .createdAt(userEntity.getCreatedAt())
@@ -33,6 +32,24 @@ public class UserMapper {
                 .state(user.isState())
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())
+                .build();
+    }
+
+    public static User userLogin(User user) {
+        return User.builder()
+                .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .build();
+    }
+
+    public static UserEntity userLoginEntity(User user) {
+        return UserEntity.builder()
+                .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
                 .build();
     }
 }

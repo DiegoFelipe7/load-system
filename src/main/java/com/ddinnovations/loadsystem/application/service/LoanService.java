@@ -5,12 +5,14 @@ import com.ddinnovations.loadsystem.domain.entity.Loan;
 import com.ddinnovations.loadsystem.domain.entity.PaymentSchedule;
 import com.ddinnovations.loadsystem.domain.entity.dto.Id;
 import com.ddinnovations.loadsystem.domain.entity.dto.LoanIndicatorDTO;
+import com.ddinnovations.loadsystem.domain.entity.enums.FileType;
 import com.ddinnovations.loadsystem.domain.entity.params.ParamsLoan;
 import com.ddinnovations.loadsystem.domain.entity.response.ResponseGlobal;
 import com.ddinnovations.loadsystem.domain.entity.response.ResponseGlobalPagination;
 import com.ddinnovations.loadsystem.domain.repository.LoanRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -63,5 +65,15 @@ public class LoanService implements LoanUseCase {
     @Override
     public ResponseGlobal<Id> removeLoan(String id) {
         return loanRepository.removeLoan(id);
+    }
+
+    @Override
+    public ResponseGlobal<String> documentUpload(String id, FileType fileType, MultipartFile file) {
+        return loanRepository.documentUpload(id, fileType, file);
+    }
+
+    @Override
+    public ResponseGlobal<String> updateDocumentUpload(String id, FileType fileType, MultipartFile file) {
+        return loanRepository.updateDocumentUpload(id,fileType, file);
     }
 }

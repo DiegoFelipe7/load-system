@@ -17,6 +17,7 @@
     <parameter name="ImageDir" class="java.lang.String"/>
     <parameter name="OutstandingBalance" class="java.math.BigDecimal"/>
     <parameter name="Total" class="java.math.BigDecimal"/>
+    <parameter name="User" class="java.lang.String"/>
     <queryString>
         <![CDATA[]]>
     </queryString>
@@ -191,60 +192,74 @@
                                uuid="c0310774-ba81-46e2-b97b-bb5583baacad"/>
             </line>
             <staticText>
-                <reportElement x="196" y="410" width="73" height="31" uuid="4d513668-15a5-40ad-862f-c5a5f917f596"/>
+                <reportElement x="196" y="400" width="73" height="31" uuid="4d513668-15a5-40ad-862f-c5a5f917f596"/>
                 <textElement textAlignment="Left" verticalAlignment="Middle">
                     <font size="14" isBold="true"/>
                 </textElement>
                 <text><![CDATA[Cuota N°:]]></text>
             </staticText>
             <staticText>
-                <reportElement x="196" y="441" width="144" height="31" uuid="b198a93c-9d6d-49ae-9532-ea9f824cf520"/>
+                <reportElement x="196" y="420" width="144" height="31" uuid="b198a93c-9d6d-49ae-9532-ea9f824cf520"/>
                 <textElement textAlignment="Left" verticalAlignment="Middle">
                     <font size="14" isBold="true"/>
                 </textElement>
                 <text><![CDATA[Valor de la couta:]]></text>
             </staticText>
             <staticText>
-                <reportElement x="196" y="471" width="124" height="31" uuid="4978b4c5-5bbe-474b-8434-46c36bd309e0"/>
+                <reportElement x="196" y="450" width="124" height="31" uuid="4978b4c5-5bbe-474b-8434-46c36bd309e0"/>
                 <textElement textAlignment="Left" verticalAlignment="Middle">
                     <font size="14" isBold="true"/>
                 </textElement>
                 <text><![CDATA[Valor Pagado:]]></text>
             </staticText>
             <staticText>
-                <reportElement x="196" y="502" width="164" height="31" uuid="ed3052c6-514c-47f7-95a5-a4fa94d16cd3"/>
+                <reportElement x="196" y="480" width="164" height="31" uuid="ed3052c6-514c-47f7-95a5-a4fa94d16cd3"/>
                 <textElement textAlignment="Left" verticalAlignment="Middle">
                     <font size="14" isBold="true"/>
                 </textElement>
                 <text><![CDATA[Pendiente de couta:]]></text>
             </staticText>
+            <staticText>
+                <reportElement x="196" y="510" width="78" height="31" uuid="ed3058c6-514c-47f7-95a5-a4fa94d16cd3"/>
+                <textElement textAlignment="Left" verticalAlignment="Middle">
+                    <font size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Atendido por:]]></text>
+            </staticText>
             <textField>
-                <reportElement x="269" y="411" width="171" height="31" uuid="571bf129-f088-4148-b3ae-dfb3e5dd731b"/>
+                <reportElement x="269" y="400" width="171" height="31" uuid="571bf129-f088-4148-b3ae-dfb3e5dd731b"/>
                 <textElement textAlignment="Left" verticalAlignment="Middle">
                     <font size="14"/>
                 </textElement>
                 <textFieldExpression><![CDATA[$P{PaymentNumber}]]></textFieldExpression>
             </textField>
             <textField>
-                <reportElement x="340" y="441" width="171" height="31" uuid="338df7a6-32b0-4e06-94cf-d3821059a260"/>
+                <reportElement x="340" y="420" width="171" height="31" uuid="338df7a6-32b0-4e06-94cf-d3821059a260"/>
                 <textElement textAlignment="Left" verticalAlignment="Middle">
                     <font size="14"/>
                 </textElement>
                 <textFieldExpression><![CDATA[$P{QuotaValue}]]></textFieldExpression>
             </textField>
             <textField>
-                <reportElement x="325" y="471" width="171" height="31" uuid="92e03964-c0d1-4f26-b98c-2769cf66cd15"/>
+                <reportElement x="325" y="450" width="171" height="31" uuid="92e03964-c0d1-4f26-b98c-2769cf66cd15"/>
                 <textElement textAlignment="Left" verticalAlignment="Middle">
                     <font size="14"/>
                 </textElement>
                 <textFieldExpression><![CDATA[$P{Total}]]></textFieldExpression>
             </textField>
             <textField>
-                <reportElement x="360" y="502" width="171" height="31" uuid="9b3f99ab-b416-40d8-be57-3193d0e4355f"/>
+                <reportElement x="360" y="480" width="171" height="31" uuid="9b3f99ab-b416-40d8-be57-3193d0e4355f"/>
                 <textElement textAlignment="Left" verticalAlignment="Middle">
                     <font size="14"/>
                 </textElement>
                 <textFieldExpression><![CDATA[$P{OutstandingBalance}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="360" y="510" width="78" height="31" uuid="9b3f98ab-b416-40d8-be57-3193d0e4355f"/>
+                <textElement verticalAlignment="Middle">
+                    <font size="14"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{User}]]></textFieldExpression>
             </textField>
         </band>
     </detail>

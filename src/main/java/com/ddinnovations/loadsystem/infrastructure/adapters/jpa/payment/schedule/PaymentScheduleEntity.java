@@ -3,6 +3,7 @@ package com.ddinnovations.loadsystem.infrastructure.adapters.jpa.payment.schedul
 import com.ddinnovations.loadsystem.domain.entity.enums.PaymentOfPayroll;
 import com.ddinnovations.loadsystem.domain.entity.enums.PaymentStatus;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.loan.LoanEntity;
+import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.user.UserEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.*;
@@ -27,14 +28,19 @@ public class PaymentScheduleEntity {
     private String paymentDate;
     private String paymentReference;
     private BigDecimal amount;
+    private BigDecimal balancePaid;
     private BigDecimal outstandingBalance;
     private BigDecimal earnings;
+    private BigDecimal interests;
     private int quotaNumber;
     @ManyToOne(targetEntity = LoanEntity.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "loan_id")
     private LoanEntity loan;
     private PaymentOfPayroll paymentCycle;
     private PaymentStatus paymentStatus;
+    @ManyToOne(targetEntity = UserEntity.class, fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
     private String searchKey;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -43,7 +49,9 @@ public class PaymentScheduleEntity {
     @PrePersist()
     public void insert() {
         this.createdAt = LocalDateTime.now();
+        this.balancePaid = BigDecimal.ZERO;
         this.outstandingBalance = BigDecimal.ZERO;
+        this.interests = BigDecimal.ZERO;
         this.paymentReference = this.loan.getId().split("-")[0].concat("-N" + this.quotaNumber);
         this.updatedAt = LocalDateTime.now();
         this.searchKey = (this.paymentReference + "|" + this.loan.getClient().getIdentification() + "|" + this.paymentDate + "|" + this.amount + "|" + this.quotaNumber + '|' + this.paymentStatus.name() + '|' + this.paymentCycle.name()).toLowerCase();
@@ -52,11 +60,8 @@ public class PaymentScheduleEntity {
     @PreUpdate()
     public void update() {
         this.updatedAt = LocalDateTime.now();
-        this.searchKey = (this.paymentDate + "|" + this.amount + "|" + this.quotaNumber + '|' + this.paymentStatus.name() + '|' + this.paymentCycle.name()).toLowerCase();
+        this.searchKey = (this.paymentReference + "|" + this.loan.getClient().getIdentification() + "|" + this.paymentDate + "|" + this.amount + "|" + this.quotaNumber + '|' + this.paymentStatus.name() + '|' + this.paymentCycle.name()).toLowerCase();
     }
 
 
-    public BigDecimal totalPayment() {
-        return this.amount.subtract(this.outstandingBalance);
-    }
 }

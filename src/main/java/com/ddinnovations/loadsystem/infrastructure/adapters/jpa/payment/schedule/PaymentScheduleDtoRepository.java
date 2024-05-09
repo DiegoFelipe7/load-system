@@ -1,5 +1,6 @@
 package com.ddinnovations.loadsystem.infrastructure.adapters.jpa.payment.schedule;
 
+import com.ddinnovations.loadsystem.domain.entity.enums.PaymentStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -22,13 +23,13 @@ public interface PaymentScheduleDtoRepository extends JpaRepository<PaymentSched
             "    COALESCE(main.overduePayments, 0) AS overduePayments " +
             "FROM ( " +
             "    SELECT " +
-            "        SUM(CASE WHEN ps.paymentStatus = 1 THEN ps.amount ELSE 0 END) AS totalBalance, " +
+            "        SUM(CASE WHEN ps.paymentStatus = 1 THEN ps.balancePaid ELSE 0 END) AS totalBalance, " +
             "        SUM(CASE WHEN ps.paymentStatus = 2 THEN 1 ELSE 0 END) AS overduePayments " +
             "    FROM PaymentScheduleEntity ps " +
             ") AS main, " +
             "( " +
             "    SELECT " +
-            "        SUM(CASE WHEN ps.paymentStatus = 1 THEN ps.amount ELSE 0 END) AS raisedMoney, " +
+            "        SUM(CASE WHEN ps.paymentStatus = 1 THEN ps.balancePaid ELSE 0 END) AS raisedMoney, " +
             "        SUM(CASE WHEN ps.paymentStatus = 1 THEN 1 ELSE 0 END) AS paymentsMade " +
             "    FROM PaymentScheduleEntity ps " +
             "    WHERE ps.createdAt BETWEEN :startDate AND :endDate " +
@@ -36,4 +37,7 @@ public interface PaymentScheduleDtoRepository extends JpaRepository<PaymentSched
     Object getIndicators(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
 
     List<PaymentScheduleEntity> findAllByPaymentDate(String paymentDate);
+
+    Long countByPaymentStatus(PaymentStatus paymentStatus);
+
 }

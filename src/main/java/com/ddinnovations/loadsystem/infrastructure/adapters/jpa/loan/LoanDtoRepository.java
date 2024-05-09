@@ -36,7 +36,7 @@ public interface LoanDtoRepository extends JpaRepository<LoanEntity, String>, Qu
            " WHERE l.createdAt BETWEEN :startDate AND :endDate ) AS sub,(" +
            "SELECT " +
             "COALESCE(SUM(CASE WHEN ps.paymentStatus = 1 THEN ps.earnings ELSE 0 END), 0) AS earnings," +
-            "COALESCE(SUM(CASE WHEN ps.paymentStatus = 1 THEN ps.amount ELSE 0 END), 0) AS totalPayments " +
+            "COALESCE(SUM(CASE WHEN ps.paymentStatus = 1 THEN ps.balancePaid ELSE 0 END), 0) AS totalPayments " +
            "FROM PaymentScheduleEntity ps) AS extra")
    Object getIndicators(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
 
@@ -56,7 +56,7 @@ public interface LoanDtoRepository extends JpaRepository<LoanEntity, String>, Qu
                 "FROM LoanEntity l) AS main, " +
                     "(SELECT " +
                         "COALESCE(SUM(CASE WHEN ps.paymentStatus = 1 THEN ps.earnings ELSE 0 END), 0) AS totalProfits," +
-                        "COALESCE(SUM(CASE WHEN ps.paymentStatus = 1 THEN ps.amount ELSE 0 END), 0) AS totalPayments " +
+                        "COALESCE(SUM(CASE WHEN ps.paymentStatus = 1 THEN ps.balancePaid ELSE 0 END), 0) AS totalPayments " +
                 "FROM PaymentScheduleEntity ps) AS sub")
     Object getLoanStatistics();
 

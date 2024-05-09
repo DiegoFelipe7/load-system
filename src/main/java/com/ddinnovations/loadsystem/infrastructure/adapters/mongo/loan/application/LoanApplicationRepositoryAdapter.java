@@ -30,13 +30,11 @@ import java.util.List;
 public class LoanApplicationRepositoryAdapter extends AdapterOperations<LoanApplication, LoanApplicationEntity, String, LoanApplicationDtoRepository> implements LoanApplicationRepository {
     private final ClientsDtoRepository clientsDtoRepository;
     private final LoanRepositoryAdapter loanRepositoryAdapter;
-    private final MongoOperations mongoOperations;
 
     protected LoanApplicationRepositoryAdapter(LoanApplicationDtoRepository repository, ObjectMapper mapper, ClientsDtoRepository clientsDtoRepository, ClientsRepositoryAdapter clientsRepositoryAdapter, LoanRepositoryAdapter loanRepositoryAdapter, MongoTemplate mongoTemplate, MongoOperations mongoOperations) {
         super(repository, mapper, d -> mapper.map(d, LoanApplication.LoanApplicationBuilder.class).build());
         this.clientsDtoRepository = clientsDtoRepository;
         this.loanRepositoryAdapter = loanRepositoryAdapter;
-        this.mongoOperations = mongoOperations;
     }
 
     @Override

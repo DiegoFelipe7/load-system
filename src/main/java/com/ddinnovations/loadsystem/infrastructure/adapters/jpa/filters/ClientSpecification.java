@@ -19,7 +19,6 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 public class ClientSpecification implements Specification<ClientsEntity> {
     private String filterCriteriaText;
     private OrderBy orderBy;
@@ -38,8 +37,8 @@ public class ClientSpecification implements Specification<ClientsEntity> {
 
         if (getOrderBy() != null) {
             query.orderBy(orderBy.equals(OrderBy.DESC) ?
-                    criteriaBuilder.desc(root.<LocalDateTime>get("createdAt")) :
-                    criteriaBuilder.asc(root.<LocalDateTime>get("createdAt")));
+                    criteriaBuilder.desc(root.<LocalDateTime>get(createdAt)) :
+                    criteriaBuilder.asc(root.<LocalDateTime>get(createdAt)));
         }
 
         if (StringUtils.hasText(getStartDate()) && StringUtils.hasText(getEndDate())) {
