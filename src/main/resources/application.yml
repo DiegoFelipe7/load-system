@@ -29,10 +29,7 @@ load-system:
   email:
     sender: Cashrdmoney@gmail.com
     password: aesweghbwgkkkxmk
-aws:
-  bucketName: ""
-  accessKey: "AKIAU6GDUR2DTWSOSVGM"
-  secretKey: "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"
+
 
 
 
