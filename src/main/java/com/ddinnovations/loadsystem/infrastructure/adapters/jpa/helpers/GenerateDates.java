@@ -32,6 +32,8 @@ public class GenerateDates {
 
     }
 
+
+
     public static LocalDateTime endDateFilter() {
         return LocalDateTime.now()
                 .withHour(23)

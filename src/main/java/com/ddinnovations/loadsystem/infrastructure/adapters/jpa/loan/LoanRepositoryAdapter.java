@@ -64,6 +64,7 @@ public class LoanRepositoryAdapter extends AdapterOperations<Loan, LoanEntity, S
         loanEntity.setFirstPaymentDate(loan.getFirstPaymentDate());
         loanEntity.setLoanState(LoanState.Aprobado);
         loanEntity.setEarnings(loanEntity.earnings());
+        loanEntity.setLegalExpenses(loanEntity.legalExpenses());
         BigDecimal earnings = loanEntity.getEarnings().divide(BigDecimal.valueOf(loanEntity.getNumberOfQuotas()), RoundingMode.HALF_UP);
         generatePaymentSchedule(loan).getBody().forEach(ele -> {
             PaymentScheduleEntity paymentSchedule = PaymentScheduleMapper.paymentScheduleAPaymentScheduleDto(earnings, ele, loanEntity);
@@ -148,7 +149,7 @@ public class LoanRepositoryAdapter extends AdapterOperations<Loan, LoanEntity, S
             params.put("QuotaValue", paymentSchedule.getAmount());
             params.put("Total", paymentSchedule.getBalancePaid());
             params.put("OutstandingBalance", paymentSchedule.getOutstandingBalance());
-            params.put("User" , paymentSchedule.getUser().getFirstName()+" " + paymentSchedule.getUser().getLastName());
+            params.put("User", paymentSchedule.getUser().getFirstName() + " " + paymentSchedule.getUser().getLastName());
             InputStream reportStream = getClass().getResourceAsStream("/LoanApplicationReport.jrxml");
             JasperPrint report = JasperFillManager.fillReport(JasperCompileManager.compileReport(reportStream), params, new JREmptyDataSource());
             return JasperExportManager.exportReportToPdf(report);

@@ -7,6 +7,7 @@ import com.ddinnovations.loadsystem.domain.repository.ControlPanelRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.concurrent.CompletableFuture;
 
 @Service
@@ -15,7 +16,12 @@ public class ControlPanelService implements ControlPanelUseCase {
     private final ControlPanelRepository controlPanelRepository;
 
     @Override
-    public ResponseGlobal<ControlPanel>  generateControlPanelReport() {
+    public ResponseGlobal<ControlPanel> generateControlPanelReport() {
         return controlPanelRepository.generateControlPanelReport();
+    }
+
+    @Override
+    public ResponseGlobal<BigDecimal> generateLegalExpenses(String startDate, String endDate) {
+        return controlPanelRepository.generateLegalExpenses(startDate, endDate);
     }
 }

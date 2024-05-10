@@ -30,6 +30,7 @@ public class Loan {
     private String simplePromissoryNote;
     private String notarialPromissoryNote;
     private String specialPower;
+    private BigDecimal legalExpenses;
     private String searchKey;
     private LoanState loanState;
     private BigDecimal earnings;

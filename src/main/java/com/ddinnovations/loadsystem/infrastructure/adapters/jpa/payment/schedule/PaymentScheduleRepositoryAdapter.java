@@ -36,8 +36,8 @@ public class PaymentScheduleRepositoryAdapter extends AdapterOperations<PaymentS
     @Transactional
     public ResponseGlobal<PaymentSchedule> makePayment(String id, PaymentDTO paymentDTO, User user) {
         PaymentScheduleEntity paymentSchedule = this.getByIdPaymentSchedule(id);
-        paymentSchedule.setInterests(paymentSchedule.getInterests());
-        paymentSchedule.setAmount(paymentSchedule.getAmount().add(paymentSchedule.getAmount()));
+        paymentSchedule.setInterests(paymentDTO.interests());
+        paymentSchedule.setAmount(paymentSchedule.getAmount().add(paymentDTO.interests()));
         if (paymentSchedule.getPaymentStatus().equals(PaymentStatus.Pagado)) {
             throw new BusinessException(BusinessException.Type.PAYMENT_MADE);
         }

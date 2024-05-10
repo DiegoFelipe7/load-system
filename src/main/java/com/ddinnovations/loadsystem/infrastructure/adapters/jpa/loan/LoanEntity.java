@@ -5,6 +5,7 @@ import com.ddinnovations.loadsystem.domain.entity.enums.PaymentOfPayroll;
 import com.ddinnovations.loadsystem.domain.entity.enums.PaymentStatus;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.clients.ClientsEntity;
 import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.payment.schedule.PaymentScheduleEntity;
+import com.ddinnovations.loadsystem.infrastructure.adapters.jpa.user.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -34,6 +35,7 @@ public class LoanEntity {
     private String simplePromissoryNote;
     private String notarialPromissoryNote;
     private String specialPower;
+    private BigDecimal legalExpenses;
     private String searchKey;
     private LoanState loanState;
     private BigDecimal earnings;
@@ -50,6 +52,7 @@ public class LoanEntity {
     public void insert() {
         this.interest = 0;
         this.numberOfPayments = 0;
+        this.legalExpenses = BigDecimal.ZERO;
         this.earnings = BigDecimal.ZERO;
         this.loanState = LoanState.Pendiente;
         this.searchKey = (this.client.getFullName() + "|" + this.client.getIdentification() + "|" + this.amount.toString() + '|' + this.paymentCycle.name() + '|' + this.deadline).toLowerCase();
@@ -83,6 +86,7 @@ public class LoanEntity {
                 .filter(ele -> ele.getId().equals(id))
                 .findFirst()
                 .orElseGet(() -> PaymentScheduleEntity.builder()
+                        .user(UserEntity.builder().firstName("N").lastName("N").build())
                         .paymentReference("0")
                         .amount(BigDecimal.ZERO)
                         .outstandingBalance(BigDecimal.ZERO)
@@ -100,6 +104,10 @@ public class LoanEntity {
     public BigDecimal totalLoanAmount() {
         return this.amount
                 .add(this.earnings);
+    }
+
+    public BigDecimal legalExpenses() {
+        return this.amount.multiply(new BigDecimal("0.05"));
     }
 
 
