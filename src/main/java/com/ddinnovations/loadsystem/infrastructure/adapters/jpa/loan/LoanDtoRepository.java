@@ -63,6 +63,6 @@ public interface LoanDtoRepository extends JpaRepository<LoanEntity, String>, Qu
 
 
 
-    @Query("SELECT COALESCE(SUM(l.legalExpenses),0) FROM LoanEntity l WHERE l.createdAt BETWEEN :startDate AND :endDate  AND l.loanState IN (1,3)")
-    BigDecimal findByLegalExpensesSum(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
+    @Query("SELECT COALESCE(SUM(l.legalExpenses), 0) FROM LoanEntity l WHERE l.createdAt BETWEEN :startDate AND :endDate")
+    BigDecimal getLoanLegalExpenses(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
 }

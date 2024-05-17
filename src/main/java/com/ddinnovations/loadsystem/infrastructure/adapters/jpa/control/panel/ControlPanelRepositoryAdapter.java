@@ -29,7 +29,7 @@ public class ControlPanelRepositoryAdapter implements ControlPanelRepository {
         Long totalClients = clientsDtoRepository.count();
         Long totalRequest = loanApplicationDtoRepository.count();
         Long totalLoansInArrears = paymentScheduleDtoRepository.countByPaymentStatus(PaymentStatus.Mora);
-        BigDecimal legalExpensesTotal = loanDtoRepository.findByLegalExpensesSum(GenerateDates.starDateFilter(), GenerateDates.endDateFilter());
+        BigDecimal legalExpensesTotal = loanDtoRepository.getLoanLegalExpenses(GenerateDates.starDateFilter(), GenerateDates.endDateFilter());
         Object object = loanDtoRepository.getLoanStatistics();
         return new ResponseGlobal<>(ControlPanelMapper.controlPanelDto(totalClients, totalRequest, totalLoansInArrears, legalExpensesTotal, object));
 
@@ -37,6 +37,7 @@ public class ControlPanelRepositoryAdapter implements ControlPanelRepository {
 
     @Override
     public ResponseGlobal<BigDecimal> generateLegalExpenses(String startDate, String endDate) {
-        return new ResponseGlobal<>(this.loanDtoRepository.findByLegalExpensesSum(GenerateDates.starDate(startDate), GenerateDates.endDate(startDate)));
+        return new ResponseGlobal<>(this.loanDtoRepository.getLoanLegalExpenses(GenerateDates.starDate(startDate), GenerateDates.endDate(endDate)));
+
     }
 }

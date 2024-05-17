@@ -2,7 +2,6 @@ package com.ddinnovations.loadsystem.infrastructure.adapters.jpa.control.panel.m
 
 import com.ddinnovations.loadsystem.domain.entity.ControlPanel;
 import com.ddinnovations.loadsystem.domain.entity.common.BusinessException;
-import com.ddinnovations.loadsystem.domain.entity.response.ResponseGlobal;
 
 import java.math.BigDecimal;
 
