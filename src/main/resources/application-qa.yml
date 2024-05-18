@@ -6,7 +6,7 @@ spring:
   application:
     name: "load-system"
   datasource:
-    url: "jdbc:postgresql://database-1.cn8see6oisrh.us-east-1.rds.amazonaws.com:5432/pruebas"
+    url: "${DATA_SOURCE}"
     username: "postgres"
     password: "S7k~kOo|I,02:,z9]841"
     driverClassName: "org.postgresql.Driver"
@@ -21,7 +21,6 @@ spring:
   data:
     mongodb:
       uri: "mongodb+srv://cashrdmoney:vrD4bENZuVzIEI7T@cluster0.emcecbh.mongodb.net/cashrdmoney?retryWrites=true&w=majority"
-      #uri: "mongodb+srv://dbuser:6QlIDZsMqrPkP8NZ@cluster0.s4e6i.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
 jwt:
   secret: secretsecretsecretsecretsecretsecretsecretsecretsecret
 load-system:

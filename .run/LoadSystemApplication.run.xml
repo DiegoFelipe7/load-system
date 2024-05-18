@@ -1,11 +1,17 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="LoadSystemApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
     <option name="ALTERNATIVE_JRE_PATH" value="/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home" />
+    <envs>
+      <env name="DATABASE" value="jdbc:postgresql://database-1.cn8see6oisrh.us-east-1.rds.amazonaws.com:5432/postgres" />
+      <env name="USER" value="postgres" />
+      <env name="PASSWORD" value="S7k~kOo|I,02:,z9]841" />
+      <env name="BUCKET" value="cash-money-s3" />
+      <env name="ACCESS" value="AKIAU6GDUR2DTWSOSVGM" />
+      <env name="SECRET" value="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" />
+      <env name="MONGO" value="mongodb+srv://cashrdmoney:vrD4bENZuVzIEI7T@cluster0.emcecbh.mongodb.net/cashrdmoney?retryWrites=true&amp;w=majorit" />
+    </envs>
     <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
     <module name="load-system.main" />
-    <selectedOptions>
-      <option name="environmentVariables" />
-    </selectedOptions>
     <option name="SPRING_BOOT_MAIN_CLASS" value="com.ddinnovations.loadsystem.LoadSystemApplication" />
     <extension name="coverage">
       <pattern>

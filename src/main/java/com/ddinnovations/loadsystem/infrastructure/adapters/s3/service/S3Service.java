@@ -4,6 +4,7 @@ import com.ddinnovations.loadsystem.domain.entity.common.BusinessException;
 import com.ddinnovations.loadsystem.domain.entity.enums.ActionType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,13 +22,15 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Slf4j
 public class S3Service {
+    @Value("${aws.bucketName}")
+    private String bucket;
     private final S3Client s3Client;
 
     public String upload(String idFolder, MultipartFile file, ActionType actionType) {
         try {
             String key = getString(idFolder, file, actionType);
             PutObjectRequest putObjectRequest = PutObjectRequest.builder()
-                    .bucket("cash-money-s3")
+                    .bucket(bucket)
                     .contentType("application/pdf")
                     .key(key)
                     .build();
@@ -58,7 +61,7 @@ public class S3Service {
         try {
             HeadObjectRequest headObjectRequest = HeadObjectRequest
                     .builder()
-                    .bucket("cash-money-s3")
+                    .bucket(bucket)
                     .key(filename)
                     .build();
             s3Client.headObject(headObjectRequest);
@@ -79,7 +82,7 @@ public class S3Service {
         }
         try {
             DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
-                    .bucket("cash-money-s3")
+                    .bucket(bucket)
                     .key(name)
                     .build();
             s3Client.deleteObject(deleteObjectRequest);

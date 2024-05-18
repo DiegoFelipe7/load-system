@@ -6,9 +6,9 @@ spring:
   application:
     name: "load-system"
   datasource:
-    url: "jdbc:postgresql://database-1.cn8see6oisrh.us-east-1.rds.amazonaws.com:5432/postgres"
-    username: "postgres"
-    password: "S7k~kOo|I,02:,z9]841"
+    url: "${DATABASE}"
+    username: "${USER}"
+    password: "${PASSWORD}"
     driverClassName: "org.postgresql.Driver"
   jpa:
     properties:
@@ -20,17 +20,17 @@ spring:
     open-in-view: false
   data:
     mongodb:
-      uri: "mongodb+srv://cashrdmoney:vrD4bENZuVzIEI7T@cluster0.emcecbh.mongodb.net/cashrdmoney?retryWrites=true&w=majority"
+      uri: "${MONGO}"
 jwt:
-  secret: secretsecretsecretsecretsecretsecretsecretsecretsecret
+  secret: e9f5c7e85b1f6d9df7d8e8d4c3b5a1a0e6f9d7c2e4b5a8d3f6b1e3c7a4d2f9b8
 load-system:
   email:
     sender: Cashrdmoney@gmail.com
     password: aesweghbwgkkkxmk
 aws:
-  bucketName: ""
-  accessKey: "AKIAU6GDUR2DTWSOSVGM"
-  secretKey: "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"
+  bucketName: "${BUCKET}"
+  accessKey: "${ACCESS}"
+  secretKey: "${SECRET}"
 
 
 
